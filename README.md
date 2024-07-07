@@ -18,7 +18,7 @@ To install the Fodoole Analytics SDK, add the following script tag to your HTML 
 <script src="https://cdn.qeen.ai/analytics-sdk.js"></script>
 ```
 
-##Initialization
+## Initialization
 To initialize the SDK, call the FodooleAnalyticsInit function after rendering the content on each page. This function creates a new page session and sets up event tracking.
 
 ```javascript
@@ -32,10 +32,10 @@ FodooleAnalyticsInit({
 
 ### Parameters
 
-- contentServingId: The ID of the content serving request. Use null or 0 if no optimized content was rendered.
-- contentId: The ID of the content being displayed.
-- clickEvents: An array of custom click event configurations.
-- scrollEvents: An array of custom scroll event configurations.
+- `contentServingId`: The ID of the content serving request. Use null or 0 if no optimized content was rendered.
+- `contentId`: The ID of the content being displayed.
+- `clickEvents`: An array of custom click event configurations.
+- `scrollEvents`: An array of custom scroll event configurations.
 
 ### EventConfig Object
 
@@ -49,7 +49,7 @@ FodooleAnalyticsInit({
 - **label:** A unique identifier for the event.
 - **value:** A CSS selector that targets the element(s) to track.
 
-#### Example
+#### Basic Usage Example
 ```
 function renderPage(pageData) {
   // Render your page content here
@@ -72,6 +72,78 @@ function renderPage(pageData) {
       {label: 'SCROLL_ASYNC', value: '.async'},
     ]
   });
+}
+```
+#### Example with ReactJS
+
+```jsx
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+function AnalyticsWrapper({ children }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Function to initialize Fodoole Analytics
+    const initializeAnalytics = (pageData) => {
+      FodooleAnalyticsInit({
+        contentServingId: pageData.contentServingId,
+        contentId: pageData.contentId,
+        clickEvents: [
+          {label: 'CLICK_NAV_HOME', value: 'nav .home-link'},
+          {label: 'CLICK_NAV_PRODUCTS', value: 'nav .products-link'},
+          {label: 'CLICK_ADD_TO_CART', value: '.add-to-cart-button'},
+        ],
+        scrollEvents: [
+          {label: 'SCROLL_PRODUCT_DETAILS', value: '.product-details'},
+          {label: 'SCROLL_REVIEWS', value: '.reviews-section'},
+          {label: 'SCROLL_FOOTER', value: 'footer'},
+        ]
+      });
+    };
+
+    // Simulating an API call to get page data
+    const fetchPageData = async () => {
+      // In a real application, this would be an actual API call
+      return {
+        contentServingId: `serving_${location.pathname}`,
+        contentId: `content_${location.pathname}`,
+        // other page-specific data
+      };
+    };
+
+    const handlePageView = async () => {
+      const pageData = await fetchPageData();
+      
+      // First, render your page content
+      // This is where you'd typically update your React components
+
+      // Then, initialize analytics
+      initializeAnalytics(pageData);
+    };
+
+    handlePageView();
+
+    // Clean-up function
+    return () => {
+      // Signal EXIT event when component unmounts (page change)
+      FodooleAnalyticsExit();
+    };
+  }, [location]); // Re-run effect when location changes
+
+  return <>{children}</>;
+}
+
+// Usage in your app
+function App() {
+  return (
+    <Router>
+      <AnalyticsWrapper>
+        {/* Your routes and components */}
+      </AnalyticsWrapper>
+    </Router>
+  );
 }
 ```
 
