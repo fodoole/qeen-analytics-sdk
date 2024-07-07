@@ -124,12 +124,6 @@ function AnalyticsWrapper({ children }) {
     };
 
     handlePageView();
-
-    // Clean-up function
-    return () => {
-      // Signal EXIT event when component unmounts (page change)
-      FodooleAnalyticsExit();
-    };
   }, [location]); // Re-run effect when location changes
 
   return <>{children}</>;
