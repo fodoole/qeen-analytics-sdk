@@ -50,7 +50,7 @@ FodooleAnalyticsInit({
 - **value:** A CSS selector that targets the element(s) to track.
 
 #### Basic Usage Example
-```
+```js
 function renderPage(pageData) {
   // Render your page content here
   displayContent(pageData);
