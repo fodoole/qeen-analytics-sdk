@@ -21,7 +21,7 @@ To install the Fodoole Analytics SDK, add the following script tag to your HTML 
 ## Initialization
 To initialize the SDK, call the FodooleAnalyticsInit function after rendering the content on each page. This function creates a new page session and sets up event tracking.
 
-```javascript
+```js
 FodooleAnalyticsInit({
   contentServingId: string | number,
   contentId: string | number,
@@ -39,7 +39,7 @@ FodooleAnalyticsInit({
 
 ### EventConfig Object
 
-```javascript
+```js
 {
   label: string,
   value: string
