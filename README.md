@@ -32,7 +32,7 @@ FodooleAnalyticsInit({
 
 ### Parameters
 
-- `contentServingId`: The ID of the content serving request. Use `null` if no optimized content was rendered.
+- `contentServingId`: The ID of the content serving request. Use `"0"` if no optimized content was rendered.
 - `contentId`: The ID of the content being displayed.
 - `clickEvents`: An array of custom click event configurations.
 - `scrollEvents`: An array of custom scroll event configurations.
@@ -156,10 +156,10 @@ When navigating to a new page in your SPA, make sure to call `FodooleAnalyticsIn
 
 The SDK automatically tracks the following events:
 
-- **`PAGE_VIEW`:** Fired when a session is intialized regardless if it has content or not.
+- **`PAGE_VIEW`:** Fired when a session is initialized regardless if it has content or not.
 - **`CONTENT_SERVED`:** Fired when a session is initialized with valid `contentId` and `contentServingId`.
-- **`TAB_SWITCH:`:** Fired when the tab or browser is defocused or refocused with two possible lables: `EXIT` and `RETURN`.
-- **`PAGE_EXIT`:** Fired when navigating away from a page or closing the browser. Note that most mobile browers will fire `TAB_SWITCH:EXIT` instead of `PAGE_EXIT`.
+- **`TAB_SWITCH:`:** Fired when the tab or browser is defocused or refocused with two possible labels: `EXIT` and `RETURN`.
+- **`PAGE_EXIT`:** Fired when navigating away from a page or closing the browser. Note that most mobile browsers will fire `TAB_SWITCH:EXIT` instead of `PAGE_EXIT`.
 
 #### Custom Click and Scroll Events
 
@@ -176,7 +176,7 @@ The SDK will automatically track these custom events based on the configuration 
 
 2. SPA Navigation: Re-initialize the SDK on every page navigation in your SPA to properly track new sessions and exit events.
 
-3. Content Serving ID: Use `null` for the `contentServingId` when no optimized content is rendered.
+3. Content Serving ID: Use `"0"` for the `contentServingId` when no optimized content is rendered.
 
 4. Custom Event Configuration:
 
@@ -187,7 +187,6 @@ Click events should always start with `CLICK_`, e.g., `CLICK_ADD_TO_CART`
 Scroll events should always start with `SCROLL_`, e.g., `SCROLL_PRODUCT_DESCRIPTION`
 
 Be specific with your CSS selectors to target exactly the elements you want to track.
-Consider the performance impact of tracking too many elements, especially for scroll events.
 
 5. Naming Convention Examples:
 
