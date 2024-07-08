@@ -63,14 +63,14 @@ function renderPage(pageData) {
     contentId: pageData.contentId,
     idleTime: 300000, 
     clickEvents: [
-      {label: 'CLICK_NAV_HOME', value: 'nav .home-link'},
-      {label: 'CLICK_NAV_PRODUCTS', value: 'nav .products-link'},
-      {label: 'CLICK_ADD_TO_CART', value: '.add-to-cart-button'},
+      {label: 'NAV_HOME', value: 'nav .home-link'},
+      {label: 'NAV_PRODUCTS', value: 'nav .products-link'},
+      {label: 'ADD_TO_CART', value: '.add-to-cart-button'},
     ],
     scrollEvents: [
-      {label: 'SCROLL_PRODUCT_DETAILS', value: '.product-details'},
-      {label: 'SCROLL_REVIEWS', value: '.reviews-section'},
-      {label: 'SCROLL_FOOTER', value: 'footer'},
+      {label: 'PRODUCT_DETAILS', value: '.product-details'},
+      {label: 'REVIEWS', value: '.reviews-section'},
+      {label: 'FOOTER', value: 'footer'},
     ]
   });
 }
@@ -93,26 +93,27 @@ function AnalyticsWrapper({ children }) {
         contentId: pageData.contentId,
         idleTime: 300000, 
         clickEvents: [
-          {label: 'CLICK_NAV_HOME', value: 'nav .home-link'},
-          {label: 'CLICK_NAV_PRODUCTS', value: 'nav .products-link'},
-          {label: 'CLICK_ADD_TO_CART', value: '.add-to-cart-button'},
+          {label: 'NAV_HOME', value: 'nav .home-link'},
+          {label: 'NAV_PRODUCTS', value: 'nav .products-link'},
+          {label: 'ADD_TO_CART', value: '.add-to-cart-button'},
         ],
         scrollEvents: [
-          {label: 'SCROLL_PRODUCT_DETAILS', value: '.product-details'},
-          {label: 'SCROLL_REVIEWS', value: '.reviews-section'},
-          {label: 'SCROLL_FOOTER', value: 'footer'},
+          {label: 'PRODUCT_DETAILS', value: '.product-details'},
+          {label: 'REVIEWS', value: '.reviews-section'},
+          {label: 'FOOTER', value: 'footer'},
         ]
       });
     };
 
     const handlePageView = async () => {
-      // Calling the API for content.
-      const pageData = await fetchPageData();
+      // Calling the API for content. User device ID must be passed in from the frontend
+      const pageData = await fetchPageData(userDeviceId);
       
       // First, render your page content
       // This is where you'd typically update your React components
 
       // Then, render optimised content; you may handle errors here
+      // This is implemented on your end
       renderContent(pageData);
 
       // Finally, initialize analytics
@@ -180,19 +181,11 @@ The SDK will automatically track these custom events based on the configuration 
 4. Custom Event Configuration:
 
 Use clear and descriptive labels for your custom events to make analysis easier.
-Follow the specific naming convention for click and scroll events:
-
-Click events should always start with `CLICK_`, e.g., `CLICK_ADD_TO_CART`
-Scroll events should always start with `SCROLL_`, e.g., `SCROLL_PRODUCT_DESCRIPTION`
+> [!NOTE]  
+> `ADD_TO_CART` is a special click label that is used for analytics.
 
 Be specific with your CSS selectors to target exactly the elements you want to track.
 
-5. Naming Convention Examples:
-
-- For a newsletter signup button: `CLICK_NEWSLETTER_SIGNUP`
-- For scrolling to the reviews section: `SCROLL_PRODUCT_REVIEWS`
-- For clicking a product image: `CLICK_PRODUCT_IMAGE`
-- For scrolling to the footer: `SCROLL_PAGE_FOOTER`
 
 6. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
 
