@@ -25,6 +25,7 @@ To initialize the SDK, call the FodooleAnalyticsInit function after rendering th
 FodooleAnalyticsInit({
   contentServingId: string,
   contentId: string,
+  idleTime: number,
   clickEvents: Array<EventConfig>,
   scrollEvents: Array<EventConfig>,
 });
@@ -34,6 +35,7 @@ FodooleAnalyticsInit({
 
 - `contentServingId`: The ID of the content serving request. Use `"0"` if no optimized content was rendered.
 - `contentId`: The ID of the content being displayed.
+- `idleTime`: The maximum time before a session is reset due to user inactivitiy in milliseconds. Defaults to 5 minutes and can be up to 10 minutes.
 - `clickEvents`: An array of custom click event configurations.
 - `scrollEvents`: An array of custom scroll event configurations.
 
@@ -59,6 +61,7 @@ function renderPage(pageData) {
   FodooleAnalyticsInit({
     contentServingId: pageData.contentServingId,
     contentId: pageData.contentId,
+    idleTime: 300000, 
     clickEvents: [
       {label: 'CLICK_NAV_HOME', value: 'nav .home-link'},
       {label: 'CLICK_NAV_PRODUCTS', value: 'nav .products-link'},
@@ -88,6 +91,7 @@ function AnalyticsWrapper({ children }) {
       FodooleAnalyticsInit({
         contentServingId: pageData.contentServingId,
         contentId: pageData.contentId,
+        idleTime: 300000, 
         clickEvents: [
           {label: 'CLICK_NAV_HOME', value: 'nav .home-link'},
           {label: 'CLICK_NAV_PRODUCTS', value: 'nav .products-link'},
@@ -101,23 +105,17 @@ function AnalyticsWrapper({ children }) {
       });
     };
 
-    // Simulating an API call to get page data
-    const fetchPageData = async () => {
-      // In a real application, this would be an actual API call
-      return {
-        contentServingId: `serving_${location.pathname}`,
-        contentId: `content_${location.pathname}`,
-        // other page-specific data
-      };
-    };
-
     const handlePageView = async () => {
+      // Calling the API for content.
       const pageData = await fetchPageData();
       
       // First, render your page content
       // This is where you'd typically update your React components
 
-      // Then, initialize analytics
+      // Then, render optimised content; you may handle errors here
+      renderContent(pageData);
+
+      // Finally, initialize analytics
       initializeAnalytics(pageData);
     };
 
@@ -159,6 +157,7 @@ The SDK automatically tracks the following events:
 - **`PAGE_VIEW`:** Fired when a session is initialized regardless if it has content or not.
 - **`CONTENT_SERVED`:** Fired when a session is initialized with valid `contentId` and `contentServingId`.
 - **`TAB_SWITCH:`:** Fired when the tab or browser is defocused or refocused with two possible labels: `EXIT` and `RETURN`.
+- **`IDLE`:** Fired if a user does nothing on the page and the session exceeds `idleTime`. This will also create a new session. Defocsuing the tab for a time longer than `idleTime` will also cause the session to be reset.
 - **`PAGE_EXIT`:** Fired when navigating away from a page or closing the browser. Note that most mobile browsers will fire `TAB_SWITCH:EXIT` instead of `PAGE_EXIT`.
 
 #### Custom Click and Scroll Events
