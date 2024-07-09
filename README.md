@@ -35,7 +35,7 @@ FodooleAnalyticsInit({
 
 - `contentServingId`: The ID of the content serving request. Use `"0"` if no optimized content was rendered.
 - `contentId`: The ID of the content being displayed.
-- `idleTime`: The maximum time before a session is reset due to user inactivitiy in milliseconds. Defaults to 5 minutes and can be up to 10 minutes.
+- `idleTime`: The maximum time before a session is reset due to user inactivity in milliseconds. Defaults to 5 minutes and can be up to 10 minutes.
 - `clickEvents`: An array of custom click event configurations.
 - `scrollEvents`: An array of custom scroll event configurations.
 
@@ -158,7 +158,7 @@ The SDK automatically tracks the following events:
 - **`PAGE_VIEW`:** Fired when a session is initialized regardless if it has content or not.
 - **`CONTENT_SERVED`:** Fired when a session is initialized with valid `contentId` and `contentServingId`.
 - **`TAB_SWITCH:`:** Fired when the tab or browser is defocused or refocused with two possible labels: `EXIT` and `RETURN`.
-- **`IDLE`:** Fired if a user does nothing on the page and the session exceeds `idleTime`. This will also create a new session. Defocsuing the tab for a time longer than `idleTime` will also cause the session to be reset.
+- **`IDLE`:** Fired if a user does nothing on the page and the session exceeds `idleTime`. This will also create a new session. Defocusing the tab for a time longer than `idleTime` will also cause the session to be reset.
 - **`PAGE_EXIT`:** Fired when navigating away from a page or closing the browser. Note that most mobile browsers will fire `TAB_SWITCH:EXIT` instead of `PAGE_EXIT`.
 
 #### Custom Click and Scroll Events
@@ -187,6 +187,6 @@ Use clear and descriptive labels for your custom events to make analysis easier.
 Be specific with your CSS selectors to target exactly the elements you want to track.
 
 
-6. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
+5. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
 
 By following these guidelines and best practices, you'll be able to effectively integrate the Fodoole Analytics SDK into your single-page application, configure custom click and scroll events precisely, and gather valuable insights about user behavior and content performance.
