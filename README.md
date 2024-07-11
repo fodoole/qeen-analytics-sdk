@@ -25,6 +25,7 @@ To initialize the SDK, call the FodooleAnalyticsInit function after rendering th
 FodooleAnalyticsInit({
   contentServingId: string,
   contentId: string,
+  isPdp: boolean,
   idleTime: number,
   clickEvents: Array<EventConfig>,
   scrollEvents: Array<EventConfig>,
@@ -35,6 +36,7 @@ FodooleAnalyticsInit({
 
 - `contentServingId`: The ID of the content serving request. Use `"0"` if no optimized content was rendered.
 - `contentId`: The ID of the content being displayed.
+- `isPdp`: A boolean value indicating whether the page is a product detail page (PDP). Defaults to `true`.
 - `idleTime`: The maximum time before a session is reset due to user inactivity in milliseconds. Defaults to 5 minutes and can be up to 10 minutes.
 - `clickEvents`: An array of custom click event configurations.
 - `scrollEvents`: An array of custom scroll event configurations.
@@ -61,6 +63,7 @@ function renderPage(pageData) {
   FodooleAnalyticsInit({
     contentServingId: pageData.contentServingId,
     contentId: pageData.contentId,
+    isPdp: true,
     idleTime: 300000, 
     clickEvents: [
       {label: 'NAV_HOME', value: 'nav .home-link'},
@@ -91,6 +94,7 @@ function AnalyticsWrapper({ children }) {
       FodooleAnalyticsInit({
         contentServingId: pageData.contentServingId,
         contentId: pageData.contentId,
+        isPdp: true,
         idleTime: 300000, 
         clickEvents: [
           {label: 'NAV_HOME', value: 'nav .home-link'},
@@ -142,13 +146,14 @@ function App() {
 
 The SDK automatically manages the following:
 
-- User ID
 - Page Session ID
 
 When navigating to a new page in your SPA, make sure to call `FodooleAnalyticsInit`  again. This will:
 
 1. Signal a `PAGE_EXIT` event for the previous session.
 2. Initialize a new session for the current page.
+
+User device ID creation and storage is the responsibility of the application. This ID should be passed to the API when fetching content data.
 
 ### Event Tracking
 #### Automatic Events
