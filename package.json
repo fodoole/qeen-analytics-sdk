@@ -1,0 +1,28 @@
+{
+  "name": "fodoole-analytics-sdk",
+  "version": "1.0.0",
+  "description": "Fodoole Analytics SDK",
+  "main": "core.js",
+  "scripts": {
+    "test": "npx jest test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fodoole/fodoole-analytics-sdk.git"
+  },
+  "keywords": [
+    "fodoole",
+    "fodoole-js",
+    "analytics",
+    "ai"
+  ],
+  "author": "Fodoole Fodoole LLC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fodoole/fodoole-analytics-sdk/issues"
+  },
+  "homepage": "https://github.com/fodoole/fodoole-analytics-sdk#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
