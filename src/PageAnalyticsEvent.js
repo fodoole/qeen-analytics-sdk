@@ -31,9 +31,7 @@ fodoole.PageAnalyticsEvent = class {
     if (!this.endpoint) {
       return;
     }
-
-    const pageHashtags = window.location.hash;
-    if (pageHashtags === '#fodoole-dev') {
+    if (window.location.hash.includes('fodoole-dev')) {
       console.log(this);
     }
 

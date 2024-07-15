@@ -13,9 +13,4 @@ fodoole.prepareSelectors = function () {
       }
     }
   }
-  if (fodoole.state.recommendationContent[fodoole.state.languageCode]) {
-    fodoole.state.recommendationSelectors = fodoole.state.recommendationContent[fodoole.state.languageCode];
-  } else {
-    fodoole.state.recommendationSelectors = fodoole.state.recommendationContent;
-  }
 };

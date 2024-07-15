@@ -1,6 +1,6 @@
 /**
    * Callback function for binding click events to dom elements.
-   * @param {Array} elements Array of click event selectors
+   * @param {Array} elements - Array of click event objects
    */
 fodoole.bindClickEventsToElements = function (elements) {
   elements.forEach(function (element) {
@@ -23,7 +23,7 @@ fodoole.bindClickEventsToElements = function (elements) {
 
 /**
  * Function for binding click events to dom elements. 
- * @param {Array} boundElements - Array of click event selectors
+ * @param {Array} boundElements - Array of click event objects
  */
 fodoole.bindClickEvents = function (boundElements) {
   // Use a mutation observer to bind events to new elements.

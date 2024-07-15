@@ -15,9 +15,7 @@ fodoole.resetIdleTimer = function (idleThreshold) {
       const idleTimeExceeded = Date.now() - fodoole.state.lastIdleTime >= idleThreshold;
       if (!document.hidden && idleTimeExceeded) {
         event.pushEvent();
-
         fodoole.state.lastIdleTime = Date.now();
-
         // Reset the session
         fodoole.resetSession();
       }
