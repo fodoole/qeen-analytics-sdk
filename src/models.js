@@ -1,5 +1,3 @@
-import { fodoole } from './fodoole.js';
-
 /**
  * Class that handles page-level analytics.
  * @class PageAnalyticsEvent
@@ -8,7 +6,7 @@ import { fodoole } from './fodoole.js';
  * @param {string} label The label of the event (e.g. 'ADD_TO_CART')
  * @param {string} domPath The DOM path of the element that triggered the event
  */
-fodoole.PageAnalyticsEvent = class {
+export class PageAnalyticsEvent {
   constructor(type, value, label, domPath) {
     this.ts = Date.now();
     this.pid = fodoole.state.sessionId;
@@ -22,9 +20,10 @@ fodoole.PageAnalyticsEvent = class {
     this.p = fodoole.config.projectId;
     this.csrvid = fodoole.config.contentServingId;
     this.cid = fodoole.config.contentId;
-    this.uid = fodoole.getUserDeviceId();
+    this.uid = fodoole.state.fodooleDeviceId;
 
     this.endpoint = fodoole.config.analyticsEndpoint;
+    // FIXME: this will be its own property
     this.npdp = !fodoole.config.enableContentGeneration;
   };
 
@@ -43,6 +42,6 @@ fodoole.PageAnalyticsEvent = class {
     const payload = JSON.stringify(payloadObject);
     navigator.sendBeacon(this.endpoint, payload);
   };
-};
+}
 
-export { fodoole };
+export { PageAnalyticsEvent };

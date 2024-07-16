@@ -1,38 +1,39 @@
-import { fodoole } from './fodoole.js';
+import { PageAnalyticsEvent } from './models.js';
+import { BodyMutationObserverManager, Debouncer } from './utils.js';
 
 /**
-   * Callback function for binding click events to dom elements.
-   * @param {Array} elements - Array of click event objects
-   */
-fodoole.bindClickEventsToElements = function (elements) {
-  elements.forEach(function (element) {
-    const elementLabel = element.label;
-    const elementPath = element.value;
-    const domElements = document.querySelectorAll(elementPath);
+ * Callback function for binding click events to dom elements.
+ * @param {Array} clickEvents - Array of click event objects
+ */
+function bindClickEventsToElements(clickEvents) {
+  clickEvents.forEach(function (event) {
+    const label = event.label;
+    const path = event.value;
+    const domElements = document.querySelectorAll(path);
 
-    for (let i = 0; i < domElements.length; i++) {
+    domElements.forEach(element => {
       // Only bind the event if it hasn't been bound before
-      if (!domElements[i].hasAttribute('data-fodoole-click-bound')) {
-        domElements[i].setAttribute('data-fodoole-click-bound', 'true');
-        domElements[i].addEventListener('click', fodoole.debounce(function () {
-          const event = new fodoole.PageAnalyticsEvent('CLICK', null, elementLabel, elementPath);
+      if (!element.hasAttribute('data-fodoole-click-bound')) {
+        element.setAttribute('data-fodoole-click-bound', 'true');
+        element.addEventListener('click', Debouncer(function () {
+          const event = new PageAnalyticsEvent('CLICK', null, label, path);
           event.pushEvent();
         }, fodoole.state.debounceTime).debounced);
       }
-    }
+    });
   });
-};
+}
 
 /**
  * Function for binding click events to dom elements. 
- * @param {Array} boundElements - Array of click event objects
+ * @param {Array} clickEvents - Array of click event objects
  */
-fodoole.bindClickEvents = function (boundElements) {
+export function bindClickEvents(clickEvents) {
   // Use a mutation observer to bind events to new elements.
-  fodoole.BodyMutationObserverManager.addCallback(function () { fodoole.bindClickEventsToElements(boundElements); }, 'click');
+  BodyMutationObserverManager.addCallback(function () { bindClickEventsToElements(clickEvents); }, 'click');
 
   // Bind to existing elements.
-  fodoole.bindClickEventsToElements(boundElements);
-};
+  bindClickEventsToElements(clickEvents);
+}
 
-export { fodoole };
+export { bindClickEvents };

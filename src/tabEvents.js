@@ -1,32 +1,32 @@
-import { fodoole } from './fodoole.js';
+import { PageAnalyticsEvent } from './models.js';
 
 /**
  * This function checks if the tab switch causes a session reset.
  * @return {boolean} - True if the tab switch causes a session reset, false otherwise.
  */
-fodoole.tabSwitchCausesReset = function () {
+function tabSwitchCausesReset() {
   const exitReturnDiff = Date.now() - fodoole.state.lastTabExitTime;
   return exitReturnDiff >= fodoole.config.idleTime;
-};
+}
 
 /**
  * This function binds tab switch events to the document object.
  */
-fodoole.bindTabEvents = function () {
+export function bindTabEvents() {
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
       fodoole.state.lastTabExitTime = Date.now();
-      const event = new fodoole.PageAnalyticsEvent('TAB_SWITCH', null, 'EXIT', null);
+      const event = new PageAnalyticsEvent('TAB_SWITCH', null, 'EXIT', null);
       event.pushEvent();
     } else {
-      if (fodoole.tabSwitchCausesReset()) {
-        fodoole.resetSession();
+      if (tabSwitchCausesReset()) {
+        fodoole.resetSession(); // FIXME
       } else {
-        const event = new fodoole.PageAnalyticsEvent('TAB_SWITCH', null, 'RETURN', null);
+        const event = new PageAnalyticsEvent('TAB_SWITCH', null, 'RETURN', null);
         event.pushEvent();
       }
     }
   });
-};
+}
 
-export { fodoole };
+export { bindTabEvents };
