@@ -25,13 +25,13 @@ export function beforeUnload(fn) {
 /**
  * Prepare selectors for the content rendering or replacement.
  */
-export function prepareSelectors() { // FIXME: config, move
+function prepareSelectors() { // FIXME: config, move
   if (fodoole.config.rawContentSelectors.length > 0) {
     const rawContentSelectors = fodoole.config.rawContentSelectors;
     for (let i = 0; i < rawContentSelectors.length; i++) {
       if (rawContentSelectors[i].path === 'html > head > title' || rawContentSelectors[i].path === 'head > title') {
         // Special case for title to stay consistent
-        // FIXME
+        // FIXME: reconsider the format of the following
         fodoole.config.titleContent = rawContentSelectors[i].value;
       } else {
         fodoole.config.contentSelectors[rawContentSelectors[i].path] = rawContentSelectors[i].value;
@@ -92,14 +92,13 @@ export class BodyMutationObserverManager {
  * @property {function} clear - the function to clear the timeout
  * @property {function} cancel - the function to cancel the debouncer
  * @property @static {function} flushAll - the function to flush all pending debounced events
- * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function. The debouncer can be cancelled by calling the cancel function. If the debouncer triggers forcefully or gets cancelled, it cannot be triggered again through any means.
+ * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function. The debouncer can be cancelled by calling the cancel function.
  */
 export class Debouncer {
   static debouncedEvents = [];
   timer = null;
   context = null;
   args = null;
-  triggered = false;
 
   constructor(fn, delay) {
     this.fn = fn;
@@ -108,9 +107,6 @@ export class Debouncer {
 
   // Clear function is used to clear the timeout
   clear = () => {
-    if (this.triggered) {
-      return;
-    }
     clearTimeout(this.timer);
     this.context = null;
     this.args = null;
@@ -123,14 +119,10 @@ export class Debouncer {
   // Cancel function is used to cancel the debouncer
   cancel = () => {
     this.clear();
-    this.triggered = true;
   }
 
   // Debounced function is a holder for the timeout function and will exhibit debounce behavior
   debounced = (...args) => {
-    if (this.triggered) {
-      return;
-    }
     this.context = this;
     this.args = args;
     let clearFunc = this.clear;
@@ -147,10 +139,6 @@ export class Debouncer {
 
   // Trigger function is used to invoke the function immediately
   trigger = () => {
-    if (this.triggered) {
-      return;
-    }
-    this.triggered = true;
     if (this.context && this.args) {
       this.fn.apply(this.context, this.args);
     }

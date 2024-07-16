@@ -94,14 +94,14 @@ export function resetSession() {
  */
 export function initFodooleAnalytics(config)
 {
-  Config.analyticsEndpoint = config.analyticsEndpoint; // FIXME: this should be from the fetch function
-  Config.projectId = config.projectId; // FIXME: this should be from the fetch function
-  Config.contentServingId = config.contentServingId;
-  Config.contentId = config.contentId;
-  Config.isPdp = config.isPdp;
-  Config.idleTime = config.idleTime;
-  Config.clickEvents = config.clickEvents; // FIXME: maybe make this manual
-  Config.scrollEvents = config.scrollEvents; // FIXME: maybe make this manual
-  BodyMutationObserverManager.init();
+  Config.analyticsEndpoint = config.analyticsEndpoint || ''; // FIXME: this should be from the fetch function
+  Config.projectId = config.projectId || '0'; // FIXME: this should be from the fetch function
+  Config.contentServingId = config.contentServingId || '0';
+  Config.contentId = config.contentId || '-';
+  Config.isPdp = config.isPdp || false;
+  Config.idleTime = config.idleTime || 300_000; // TODO: limit between 1m and 10m
+  Config.clickEvents = config.clickEvents || []; // FIXME: maybe make this manual
+  Config.scrollEvents = config.scrollEvents || []; // FIXME: maybe make this manual
+  BodyMutationObserverManager.init(); // FIXME: maybe remove
   initSession();
 }

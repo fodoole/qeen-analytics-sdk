@@ -1,6 +1,7 @@
 import { Config, State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { resetSession } from './sessionManager.js';
+import { Debouncer } from './utils.js';
 
 /**
  * This function checks if the tab switch causes a session reset.
@@ -19,6 +20,8 @@ export function bindTabEvents() {
     if (document.hidden) {
       State.lastTabExitTime = Date.now();
       new PageAnalyticsEvent('TAB_SWITCH', null, 'EXIT', null);
+      // Flush any debounced events
+      Debouncer.flushAll();
     } else {
       if (tabSwitchCausesReset()) {
         resetSession();
