@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
  * Callback function for binding scroll events to dom elements.
  * @param {Array} elements - Array of scroll event selectors
@@ -44,3 +46,5 @@ fodoole.bindScrollEvents = function (boundElements) {
   // Bind to existing elements.
   fodoole.bindScrollEventsToElements(boundElements);
 };
+
+export { fodoole };

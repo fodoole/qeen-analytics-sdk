@@ -6,7 +6,8 @@ fodoole.prepareSelectors = function () {
     const rawContentSelectors = fodoole.config.rawContentSelectors;
     for (let i = 0; i < rawContentSelectors.length; i++) {
       if (rawContentSelectors[i].path === 'html > head > title' || rawContentSelectors[i].path === 'head > title') {
-        // Special case for title to stay consistent
+        // Special case for title to stay consistent // TODO
+        // FIXME
         fodoole.config.titleContent = rawContentSelectors[i].value;
       } else {
         fodoole.config.contentSelectors[rawContentSelectors[i].path] = rawContentSelectors[i].value;

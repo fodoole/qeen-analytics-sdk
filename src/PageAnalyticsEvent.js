@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
  * Class that handles page-level analytics.
  * @class PageAnalyticsEvent
@@ -42,3 +44,5 @@ fodoole.PageAnalyticsEvent = class {
     navigator.sendBeacon(this.endpoint, payload);
   };
 };
+
+export { fodoole };

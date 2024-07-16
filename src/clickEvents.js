@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
    * Callback function for binding click events to dom elements.
    * @param {Array} elements - Array of click event objects
@@ -32,3 +34,5 @@ fodoole.bindClickEvents = function (boundElements) {
   // Bind to existing elements.
   fodoole.bindClickEventsToElements(boundElements);
 };
+
+export { fodoole };

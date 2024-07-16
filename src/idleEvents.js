@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
  * This function instantiates and resets the idle timer when a user interacts
  * with the page. 
@@ -28,19 +30,7 @@ fodoole.resetIdleTimer = function (idleThreshold) {
  * @param {number} idleThreshold - the time in milliseconds before the user is considered idle
  */
 fodoole.bindIdleTimeEvents = function (idleThreshold) {
-  // Resets the idle timer to 0
-  function resetIdleTimer() {
-    fodoole.resetIdleTimer(idleThreshold);
-  }
-
-  // these events are considered user activity
-  document.addEventListener('mousemove', resetIdleTimer);
-  document.addEventListener('keypress', resetIdleTimer);
-  document.addEventListener('touchmove', resetIdleTimer);
-  document.addEventListener('scroll', resetIdleTimer);
-  document.addEventListener('click', resetIdleTimer);
-  document.addEventListener('keyup', resetIdleTimer);
-  document.addEventListener('touchstart', resetIdleTimer);
-  document.addEventListener('touchend', resetIdleTimer);
-  document.addEventListener('visibilitychange', resetIdleTimer);
+  ['mousemove', 'keypress', 'touchmove', 'scroll', 'click', 'keyup', 'touchstart', 'touchend', 'visibilitychange'].forEach(function (event) { document.addEventListener(event, function () { fodoole.resetIdleTimer(idleThreshold); }); });
 };
+
+export { fodoole };

@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
  * This function checks if the tab switch causes a session reset.
  * @return {boolean} - True if the tab switch causes a session reset, false otherwise.
@@ -26,3 +28,5 @@ fodoole.bindTabEvents = function () {
     }
   });
 };
+
+export { fodoole };

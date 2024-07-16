@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
  * Prevent too many firings of the same event e.g. clicks to avoid spam clicks
  * @param {function} fn - the function to be debounced
@@ -76,3 +78,5 @@ fodoole.throttle = function (func, wait) {
 
   setTimeout(interv, wait);
 };
+
+export { fodoole };

@@ -1,3 +1,5 @@
+import { fodoole } from './fodoole.js';
+
 /**
  * Class for managing a single instance of a mutation observer for the body element.
  * @class BodyMutationObserverManager
@@ -39,3 +41,5 @@ fodoole.BodyMutationObserverManager = class {
     fodoole.BodyMutationObserverManager.callbackQueue = fodoole.BodyMutationObserverManager.callbackQueue.filter(item => item.id !== id);
   }
 };
+
+export { fodoole };
