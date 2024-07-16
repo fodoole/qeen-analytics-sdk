@@ -1,9 +1,7 @@
-import { config, state } from './config.js';
+import { initFodooleAnalytics } from './sessionManager.js';
+import { Config, State } from './config.js';
 import { bindClickEvents } from './clickEvents.js';
-import { resetIdleTimer, bindIdleTimeEvents } from './idleEvents.js';
 import { bindScrollEvents } from './scrollEvents.js';
-import { bindTabEvents } from './tabEvents.js';
-
 import { randInt } from './utils.js';
 
 /**
@@ -11,16 +9,14 @@ import { randInt } from './utils.js';
  * @description The main namespace for the Fodoole Analytics SDK.
  */
 window.fodoole = window.fodoole || {};
-// FIXME all this goes in init function
-fodoole.config = config;
-fodoole.state = state;
-
+fodoole.initFodooleAnalytics = initFodooleAnalytics;
+fodoole.config = Config;
+fodoole.state = State;
 fodoole.bindClickEvents = bindClickEvents;
-fodoole.resetIdleTimer = resetIdleTimer;
-fodoole.bindIdleTimeEvents = bindIdleTimeEvents;
 fodoole.bindScrollEvents = bindScrollEvents;
-fodoole.bindTabEvents = bindTabEvents;
-
 fodoole.randInt = randInt;
+
+// fodoole.prepareSelectors();
+// TODO: fetch function
 
 // export { fodoole };

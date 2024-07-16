@@ -1,4 +1,4 @@
-import { state } from './config.js';
+import { State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { BodyMutationObserverManager } from './utils.js';
 
@@ -20,9 +20,9 @@ function bindScrollEventsToElements(scrollEvents) {
                possible for the website owner to select the same element multiple
                times for a single event.
             */
-            if (!state.scrollObservedElements.includes(label)) {
+            if (!State.scrollObservedElements.has(label)) {
               new PageAnalyticsEvent('SCROLL', null, label, path);
-              state.scrollObservedElements.push(label);
+              State.scrollObservedElements.add(label);
             }
             observer.unobserve(entry.target);
             observer = null;

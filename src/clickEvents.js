@@ -1,4 +1,4 @@
-import { state } from './config.js';
+import { State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { BodyMutationObserverManager, Debouncer } from './utils.js';
 
@@ -15,7 +15,7 @@ function bindClickEventsToElements(clickEvents) {
         element.setAttribute('data-fodoole-click-bound', 'true');
         element.addEventListener('click', new Debouncer(function () {
           new PageAnalyticsEvent('CLICK', null, event.label, event.value);
-        }, state.debounceTime).debounced);
+        }, State.debounceTime).debounced);
       }
     });
   });

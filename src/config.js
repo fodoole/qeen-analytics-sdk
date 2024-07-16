@@ -1,23 +1,28 @@
-// TODO
-export const config = {
-  clickEvents: [{ 'label': 'H1', 'value': 'h1' }],
-  scrollEvents: [{ 'label': 'BODY', 'value': 'body' }],
-  idleTime: 10_000,
-  projectId: '123',
-  contentServingId: '0',
-  contentId: '-',
-  analyticsEndpoint: '/log',
-  isPdp: true,
-};
+export class Config {
+  static analyticsEndpoint = '/log';
+  static projectId = '123';
+  static contentServingId = '0';
+  static contentId = '-';
+  static isPdp = true;
+  static idleTime = 10_000;
+  // static clickEvents = [{ 'label': 'H1', 'value': 'h1' }];
+  // static scrollEvents = [{ 'label': 'BODY', 'value': 'body' }];
+  // FIXME
+  // static rawContentSelectors = [{ 'uid': '0001', 'path': '.title', 'value': 'TITLE REPLACED' }];
+  // static contentSelectors = {};
+  // static titleContent = '';
+}
 
-export const state = {
-  sessionId: null,
-  contentServed: false,
-  debounceTime: 500,
-  idleTimer: null,
-  lastIdleTime: Date.now(),
-  fodooleDeviceId: null,
-  lastTabExitTime: 0,
-  scrollObservedElements: [],
-  debouncedEvents: [],
-};
+export class State {
+  static reset() {
+    State.contentServed = false;
+    State.sessionId = null;
+    State.isResetSession = false;
+    State.debounceTime = 500;
+    State.idleTimer = null;
+    State.lastIdleTime = Date.now();
+    State.fodooleDeviceId = null;
+    State.lastTabExitTime = 0;
+    State.scrollObservedElements = new Set();
+  }
+}

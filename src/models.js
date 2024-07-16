@@ -1,4 +1,4 @@
-import { config, state } from './config.js';
+import { Config, State } from './config.js';
 
 /**
  * Class that handles page-level analytics.
@@ -9,16 +9,16 @@ import { config, state } from './config.js';
  * @param {string} domPath The DOM path of the element that triggered the event
  */
 export class PageAnalyticsEvent {
-  ts = Date.now()
-  pid = state.sessionId
-  u = window.location.href
-  ua = navigator.userAgent
-  r = document.referrer
-  p = config.projectId
-  csrvid = config.contentServingId
-  cid = config.contentId
-  uid = state.fodooleDeviceId
-  npdp = !config.isPdp
+  ts = Date.now();
+  pid = State.sessionId;
+  u = window.location.href;
+  ua = navigator.userAgent;
+  r = document.referrer;
+  p = Config.projectId;
+  csrvid = Config.contentServingId;
+  cid = Config.contentId;
+  uid = State.fodooleDeviceId;
+  npdp = !Config.isPdp;
 
   constructor(type, value, label, domPath) {
     this.t = type;
@@ -39,6 +39,6 @@ export class PageAnalyticsEvent {
       event: this
     };
     const payload = JSON.stringify(payloadObject);
-    navigator.sendBeacon(config.analyticsEndpoint, payload);
+    navigator.sendBeacon(Config.analyticsEndpoint, payload);
   };
 }

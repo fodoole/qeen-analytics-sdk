@@ -45,8 +45,8 @@ export function prepareSelectors() { // FIXME: config, move
  * @class BodyMutationObserverManager
  */
 export class BodyMutationObserverManager {
-  static observer = null
-  static callbackQueue = []
+  static observer = null;
+  static callbackQueue = [];
 
   // Initialise the mutation observer by creating a new instance and observing the body element
   static init() {
@@ -87,18 +87,19 @@ export class BodyMutationObserverManager {
  * @param {function} fn - the function to be debounced
  * @param {number} delay - the time in milliseconds to wait before calling the function
  * @returns {object} - an object containing the debounced function, a trigger function, and a clear function
- * @property {function} clear - the function to clear the timeout
  * @property {function} debounced - the function to debounce the function
  * @property {function} trigger - the function to trigger the function immediately
+ * @property {function} clear - the function to clear the timeout
  * @property {function} cancel - the function to cancel the debouncer
+ * @property @static {function} flushAll - the function to flush all pending debounced events
  * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function. The debouncer can be cancelled by calling the cancel function. If the debouncer triggers forcefully or gets cancelled, it cannot be triggered again through any means.
  */
 export class Debouncer {
-  static debouncedEvents = []
-  timer = null
-  context = null
-  args = null
-  triggered = false
+  static debouncedEvents = [];
+  timer = null;
+  context = null;
+  args = null;
+  triggered = false;
 
   constructor(fn, delay) {
     this.fn = fn;
@@ -154,6 +155,13 @@ export class Debouncer {
       this.fn.apply(this.context, this.args);
     }
     this.clear();
+  }
+
+  // Flushes all pending debounced events
+  static flushAll = () => {
+    Debouncer.debouncedEvents.forEach(debouncer => {
+      debouncer.trigger();
+    });
   }
 }
 
