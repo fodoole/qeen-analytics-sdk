@@ -1,3 +1,5 @@
+import { config, state } from './config.js';
+
 /**
  * Class that handles page-level analytics.
  * @class PageAnalyticsEvent
@@ -7,31 +9,28 @@
  * @param {string} domPath The DOM path of the element that triggered the event
  */
 export class PageAnalyticsEvent {
+  ts = Date.now()
+  pid = state.sessionId
+  u = window.location.href
+  ua = navigator.userAgent
+  r = document.referrer
+  p = config.projectId
+  csrvid = config.contentServingId
+  cid = config.contentId
+  uid = state.fodooleDeviceId
+  npdp = !config.isPdp
+
   constructor(type, value, label, domPath) {
-    this.ts = Date.now();
-    this.pid = fodoole.state.sessionId;
     this.t = type;
     this.v = value;
     this.l = label;
     this.edp = domPath;
-    this.u = window.location.href;
-    this.ua = navigator.userAgent;
-    this.r = document.referrer;
-    this.p = fodoole.config.projectId;
-    this.csrvid = fodoole.config.contentServingId;
-    this.cid = fodoole.config.contentId;
-    this.uid = fodoole.state.fodooleDeviceId;
 
-    this.endpoint = fodoole.config.analyticsEndpoint;
-    // FIXME: this will be its own property
-    this.npdp = !fodoole.config.enableContentGeneration;
+    this.pushEvent();
   };
 
   // Pushes the event to the analytics endpoint.
   pushEvent() {
-    if (!this.endpoint) {
-      return;
-    }
     if (window.location.hash.includes('fodoole-dev')) {
       console.log(this);
     }
@@ -40,8 +39,6 @@ export class PageAnalyticsEvent {
       event: this
     };
     const payload = JSON.stringify(payloadObject);
-    navigator.sendBeacon(this.endpoint, payload);
+    navigator.sendBeacon(config.analyticsEndpoint, payload);
   };
 }
-
-export { PageAnalyticsEvent };

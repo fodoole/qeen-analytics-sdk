@@ -1,3 +1,4 @@
+import { state } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 
 /**
@@ -6,19 +7,17 @@ import { PageAnalyticsEvent } from './models.js';
  * @param {number} idleThreshold - the time in milliseconds before the user is considered idle
  */
 export function resetIdleTimer(idleThreshold) {
-  clearTimeout(fodoole.state.idleTimer);
+  clearTimeout(state.idleTimer);
   if (!document.hidden) {
-    fodoole.state.idleTimer = setTimeout(function () {
-      // Register an idle event
-      const event = new PageAnalyticsEvent('IDLE', idleThreshold, null, null);
+    state.idleTimer = setTimeout(function () {
       /* sometimes the timer can be created while the page is in view, but fires
          after the page is hidden; this should ensure that tab switches don't
          trigger a session to reset twice
       */
-      const idleTimeExceeded = Date.now() - fodoole.state.lastIdleTime >= idleThreshold;
+      const idleTimeExceeded = Date.now() - state.lastIdleTime >= idleThreshold;
       if (!document.hidden && idleTimeExceeded) {
-        event.pushEvent();
-        fodoole.state.lastIdleTime = Date.now();
+        new PageAnalyticsEvent('IDLE', idleThreshold, null, null);
+        state.lastIdleTime = Date.now();
         // Reset the session
         fodoole.resetSession(); // FIXME
       }
@@ -33,5 +32,3 @@ export function resetIdleTimer(idleThreshold) {
 export function bindIdleTimeEvents(idleThreshold) {
   ['mousemove', 'keypress', 'touchmove', 'scroll', 'click', 'keyup', 'touchstart', 'touchend', 'visibilitychange'].forEach(function (event) { document.addEventListener(event, function () { resetIdleTimer(idleThreshold); }); });
 }
-
-export { resetIdleTimer, bindIdleTimeEvents };

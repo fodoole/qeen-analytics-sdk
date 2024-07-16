@@ -1,3 +1,4 @@
+import { state } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { BodyMutationObserverManager, Debouncer } from './utils.js';
 
@@ -7,18 +8,14 @@ import { BodyMutationObserverManager, Debouncer } from './utils.js';
  */
 function bindClickEventsToElements(clickEvents) {
   clickEvents.forEach(function (event) {
-    const label = event.label;
-    const path = event.value;
-    const domElements = document.querySelectorAll(path);
-
+    const domElements = document.querySelectorAll(event.value);
     domElements.forEach(element => {
       // Only bind the event if it hasn't been bound before
       if (!element.hasAttribute('data-fodoole-click-bound')) {
         element.setAttribute('data-fodoole-click-bound', 'true');
-        element.addEventListener('click', Debouncer(function () {
-          const event = new PageAnalyticsEvent('CLICK', null, label, path);
-          event.pushEvent();
-        }, fodoole.state.debounceTime).debounced);
+        element.addEventListener('click', new Debouncer(function () {
+          new PageAnalyticsEvent('CLICK', null, event.label, event.value);
+        }, state.debounceTime).debounced);
       }
     });
   });
@@ -35,5 +32,3 @@ export function bindClickEvents(clickEvents) {
   // Bind to existing elements.
   bindClickEventsToElements(clickEvents);
 }
-
-export { bindClickEvents };

@@ -4,14 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Fodoole Test</title>
+  <script type="module" src="/fodoole.js"></script>
 </head>
 
 <body>
-  <script type="module" src="/fodoole.js"></script>
+  <h1>Fodoole Test</h1>
   <script type="module">
-    import { fodoole } from '/fodoole.js';
+    import '/fodoole.js';
 
-    console.log(fodoole);
+    fodoole.bindClickEvents(fodoole.config.clickEvents);
+    fodoole.bindScrollEvents(fodoole.config.scrollEvents);
+    fodoole.resetIdleTimer(fodoole.config.idleTime);
+    fodoole.bindIdleTimeEvents(fodoole.config.idleTime);
+    fodoole.bindTabEvents();
+
   </script>
 </body>
 

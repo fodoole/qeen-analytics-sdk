@@ -1,3 +1,4 @@
+import { state } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { randInt } from './utils.js';
 
@@ -7,14 +8,11 @@ import { randInt } from './utils.js';
  * This function is called when the content is served to the user.
  */
 export function contentServingCallback() {
-  if (!fodoole.state.contentServed) {
-    if (!fodoole.state.sessionId) {
-      fodoole.state.sessionId = String(randInt());
+  if (!state.contentServed) {
+    if (!state.sessionId) {
+      state.sessionId = String(randInt());
     }
-    const event = new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
-    event.pushEvent();
-    fodoole.state.contentServed = true;
+    new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
+    state.contentServed = true;
   }
 }
-
-export { contentServingCallback };

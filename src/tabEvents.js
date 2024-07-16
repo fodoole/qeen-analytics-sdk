@@ -1,3 +1,4 @@
+import { config, state } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 
 /**
@@ -5,8 +6,8 @@ import { PageAnalyticsEvent } from './models.js';
  * @return {boolean} - True if the tab switch causes a session reset, false otherwise.
  */
 function tabSwitchCausesReset() {
-  const exitReturnDiff = Date.now() - fodoole.state.lastTabExitTime;
-  return exitReturnDiff >= fodoole.config.idleTime;
+  const exitReturnDiff = Date.now() - state.lastTabExitTime;
+  return exitReturnDiff >= config.idleTime;
 }
 
 /**
@@ -15,18 +16,14 @@ function tabSwitchCausesReset() {
 export function bindTabEvents() {
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
-      fodoole.state.lastTabExitTime = Date.now();
-      const event = new PageAnalyticsEvent('TAB_SWITCH', null, 'EXIT', null);
-      event.pushEvent();
+      state.lastTabExitTime = Date.now();
+      new PageAnalyticsEvent('TAB_SWITCH', null, 'EXIT', null);
     } else {
       if (tabSwitchCausesReset()) {
         fodoole.resetSession(); // FIXME
       } else {
-        const event = new PageAnalyticsEvent('TAB_SWITCH', null, 'RETURN', null);
-        event.pushEvent();
+        new PageAnalyticsEvent('TAB_SWITCH', null, 'RETURN', null);
       }
     }
   });
 }
-
-export { bindTabEvents };
