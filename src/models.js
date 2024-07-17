@@ -36,6 +36,9 @@ export class PageAnalyticsEvent {
 
   // Pushes the event to the analytics endpoint.
   pushEvent() {
+    if (!Config.analyticsEndpoint) {
+      return;
+    }
     if (window.location.hash.includes('fodoole-dev')) {
       console.log(this);
     }

@@ -3,14 +3,14 @@
  * @description The session manager script for Fodoole Analytics SDK.
  */
 
-import { Config, State } from './config.js';
+import { Config, State, getContentEndpoint } from './config.js';
 import { PageAnalyticsEvent, fetchContentParams } from './models.js';
 import { bindClickEvents } from './clickEvents.js';
 import { bindIdleTimeEvents } from './idleEvents.js';
 import { bindScrollEvents } from './scrollEvents.js';
 import { bindTabEvents } from './tabEvents.js';
 import { resetIdleTimer } from './idleEvents.js';
-import { onLoad, beforeUnload, randInt, Debouncer, BodyMutationObserverManager } from './utils.js';
+import { onLoad, beforeUnload, randInt, limit, Debouncer, BodyMutationObserverManager } from './utils.js';
 
 /**
   * Function that implements common logic for resetting the session state.
@@ -120,19 +120,27 @@ function prepareSelectors(rawContent) {
  * @property {Object} contentSelectors - The content selectors and content.
  */
 export async function fetchContent(userDeviceId) {
-  const params = new fetchContentParams(userDeviceId);
   try {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts?${params.toString()}`); // FIXME: endpoint
+    if (!userDeviceId) {
+      throw new Error('User device ID is required.');
+    }
+    if (window.location.href.includes('#no-fodoole')) {
+      throw new Error('Fodoole is disabled; URL contains #no-fodoole');
+    }
+
+    const params = new fetchContentParams(userDeviceId);
+    const response = await fetch(`${getContentEndpoint}?${params.toString()}`);
     if (!response.ok) {
-      throw new Error(response.statusText); // TODO: error message
+      throw new Error(response.statusText);
     }
     const data = await response.json();
     const { titleContent, contentSelectors } = prepareSelectors(data); // FIXME: reconsider title
     data.titleContent = titleContent; // FIXME: reconsider title
     data.contentSelectors = contentSelectors;
-    Config.rawContentSelectors = data.rawContentSelectors; // FIXME maybe
-    Config.contentSelectors = data.contentSelectors; // FIXME maybe
-    Config.titleContent = data.titleContent; // FIXME maybe
+    // Save the content in the config object for frontend investigation and debugging
+    Config.rawContentSelectors = data.rawContentSelectors;
+    Config.contentSelectors = data.contentSelectors;
+    Config.titleContent = data.titleContent;
     return data;
   } catch (error) {
     console.error('Failed to get Fodoole content:', error);
@@ -144,14 +152,13 @@ export async function fetchContent(userDeviceId) {
  * Function that initializes the Fodoole Analytics SDK.
  * @param {Object} config - The configuration object for the Fodoole Analytics SDK.
  */
-export function initFodooleAnalytics(config)
-{
-  Config.analyticsEndpoint = config.analyticsEndpoint || ''; // FIXME: this should be from the fetch function
-  Config.projectId = config.projectId || '0'; // FIXME: this should be from the fetch function
-  Config.contentServingId = config.contentServingId || '0'; // FIXME: this should be from the fetch function
-  Config.contentId = config.contentId || '-'; // FIXME: this should be from the fetch function
-  Config.isPdp = config.isPdp || false; // FIXME: this should be from the fetch function
-  Config.idleTime = config.idleTime || 300_000; // TODO: limit between 1m and 10m
+export function initFodooleAnalytics(config) {
+  Config.analyticsEndpoint = config.analyticsEndpoint || '';
+  Config.projectId = config.projectId || '0';
+  Config.contentServingId = config.contentServingId || '0';
+  Config.contentId = config.contentId || '-';
+  Config.isPdp = config.isPdp || false;
+  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
   Config.clickEvents = config.clickEvents || []; // FIXME: maybe make this manual
   Config.scrollEvents = config.scrollEvents || []; // FIXME: maybe make this manual
   BodyMutationObserverManager.init(); // FIXME: maybe remove

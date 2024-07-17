@@ -1,7 +1,12 @@
 /**
  * @file config.js
- * @description The configuration script for Fodoole Analytics SDK.
+ * @description The configuration objects for Fodoole Analytics SDK.
  */
+
+/**
+ * @constant {string} getContentEndpoint - The endpoint to fetch content.
+ */
+export const getContentEndpoint = ''; // FIXME: add the endpoint
 
 /**
  * @class Config

@@ -36,7 +36,7 @@ function scrollToTarget(domPath, offset) {
  * @param {object} event - The event object.
  * @description Used when running in demo mode via iframe.
  */
-receiveMessage = (event) => {
+const receiveMessage = (event) => {
   if (event) {
     if (event.data.action === 'renderDemoContent') {
       renderDemoContent(event.data.domPath, event.data.content);
@@ -44,5 +44,5 @@ receiveMessage = (event) => {
       scrollToTarget(event.data.domPath, 100);
     }
   }
-}
+};
 export { receiveMessage };
