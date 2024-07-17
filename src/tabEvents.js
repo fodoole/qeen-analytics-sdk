@@ -1,3 +1,8 @@
+/**
+ * @file tabEvents.js
+ * @description The tab events script for Fodoole Analytics SDK.
+ */
+
 import { Config, State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { resetSession } from './sessionManager.js';

@@ -1,10 +1,15 @@
+/**
+ * @file clickEvents.js
+ * @description The click events script for Fodoole Analytics SDK.
+ */
+
 import { State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { BodyMutationObserverManager, Debouncer } from './utils.js';
 
 /**
  * Callback function for binding click events to dom elements.
- * @param {Array} clickEvents - Array of click event objects
+ * @param {Array} clickEvents - Array of click event objects.
  */
 function bindClickEventsToElements(clickEvents) {
   clickEvents.forEach(function (event) {
@@ -23,7 +28,7 @@ function bindClickEventsToElements(clickEvents) {
 
 /**
  * Function for binding click events to dom elements. 
- * @param {Array} clickEvents - Array of click event objects
+ * @param {Array} clickEvents - Array of click event objects.
  */
 export function bindClickEvents(clickEvents) {
   // Use a mutation observer to bind events to new elements.

@@ -1,3 +1,8 @@
+/**
+ * @file sessionManager.js
+ * @description The session manager script for Fodoole Analytics SDK.
+ */
+
 import { Config, State } from './config.js';
 import { PageAnalyticsEvent, fetchContentParams } from './models.js';
 import { bindClickEvents } from './clickEvents.js';

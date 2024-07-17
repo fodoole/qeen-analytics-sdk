@@ -1,11 +1,15 @@
+/**
+ * @file idleEvents.js
+ * @description The idle events script for Fodoole Analytics SDK.
+ */
+
 import { State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { resetSession } from './sessionManager.js';
 
 /**
- * This function instantiates and resets the idle timer when a user interacts
- * with the page. 
- * @param {number} idleThreshold - the time in milliseconds before the user is considered idle
+ * This function instantiates and resets the idle timer when a user interacts with the page. 
+ * @param {number} idleThreshold - the time in milliseconds before the user is considered idle.
  */
 export function resetIdleTimer(idleThreshold) {
   clearTimeout(State.idleTimer);
@@ -28,7 +32,7 @@ export function resetIdleTimer(idleThreshold) {
 
 /**
  * This function binds idle time events to the document object.
- * @param {number} idleThreshold - the time in milliseconds before the user is considered idle
+ * @param {number} idleThreshold - the time in milliseconds before the user is considered idle.
  */
 export function bindIdleTimeEvents(idleThreshold) {
   ['mousemove', 'keypress', 'touchmove', 'scroll', 'click', 'keyup', 'touchstart', 'touchend', 'visibilitychange'].forEach(function (event) { document.addEventListener(event, function () { resetIdleTimer(idleThreshold); }); });

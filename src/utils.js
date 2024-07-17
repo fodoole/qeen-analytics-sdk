@@ -1,6 +1,11 @@
 /**
- * Wrapper for the onload event
- * @param {function} fn - function to be executed on load
+ * @file utils.js
+ * @description Utility functions for Fodoole Analytics SDK.
+ */
+
+/**
+ * Wrapper for the onload event.
+ * @param {function} fn - function to be executed on load.
  */
 export function onLoad(fn) {
   if (document.body === null) {
@@ -13,8 +18,8 @@ export function onLoad(fn) {
 }
 
 /**
- * Wrapper for beforeunload event
- * @param {function} fn - function to be executed before the page is unloaded
+ * Wrapper for beforeunload event.
+ * @param {function} fn - function to be executed before the page is unloaded.
  */
 export function beforeUnload(fn) {
   window.addEventListener('beforeunload', function () {
@@ -66,14 +71,14 @@ export class BodyMutationObserverManager {
 
 /**
  * @class Debouncer
- * @param {function} fn - the function to be debounced
- * @param {number} delay - the time in milliseconds to wait before calling the function
- * @returns {object} - an object containing the debounced function, a trigger function, and a clear function
- * @property {function} debounced - the function to debounce the function
- * @property {function} trigger - the function to trigger the function immediately
- * @property {function} clear - the function to clear the timeout
- * @property {function} cancel - the function to cancel the debouncer
- * @property @static {function} flushAll - the function to flush all pending debounced events
+ * @param {function} fn - the function to be debounced.
+ * @param {number} delay - the time in milliseconds to wait before calling the function.
+ * @returns {object} - an object containing the debounced function, a trigger function, and a clear function.
+ * @property {function} debounced - the function to debounce the function.
+ * @property {function} trigger - the function to trigger the function immediately.
+ * @property {function} clear - the function to clear the timeout.
+ * @property {function} cancel - the function to cancel the debouncer.
+ * @property @static {function} flushAll - the function to flush all pending debounced events.
  * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function. The debouncer can be cancelled by calling the cancel function.
  */
 export class Debouncer {
@@ -137,7 +142,7 @@ export class Debouncer {
 
 /**
  * Function for generating a random 16-digit number.
- * @returns {number} - A random number between 10^15 and 10^16 - 1
+ * @returns {number} - A random number between `10^15` and `10^16 - 1`.
  */
 export function randInt() {
   const min = 1;

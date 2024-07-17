@@ -1,10 +1,15 @@
+/**
+ * @file scrollEvents.js
+ * @description The scroll events script for Fodoole Analytics SDK.
+ */
+
 import { State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
 import { BodyMutationObserverManager } from './utils.js';
 
 /**
  * Callback function for binding scroll events to dom elements.
- * @param {Array} scrollEvents - Array of scroll event selectors
+ * @param {Array} scrollEvents - Array of scroll event selectors.
  */
 function bindScrollEventsToElements(scrollEvents) {
   scrollEvents.forEach(function (event) {
@@ -35,10 +40,9 @@ function bindScrollEventsToElements(scrollEvents) {
 }
 
 /**
-* Function for binding scroll events to dom elements. This function
-* takes in an array of elements and binds an intersection observer to
-* the event. The observer will fire when the element is 50% visible.
-* @param {Array} boundElements - Array of elements to bind scroll events to
+* Function for binding scroll events to dom elements.
+* @description The observer will fire when the element is 50% visible.
+* @param {Array} boundElements - Array of elements to bind scroll events to.
 */
 export function bindScrollEvents(boundElements) {
   // Use a mutation observer to bind events to new elements.
