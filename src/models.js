@@ -42,3 +42,22 @@ export class PageAnalyticsEvent {
     navigator.sendBeacon(Config.analyticsEndpoint, payload);
   };
 }
+
+/**
+ * Class that handles the parameters for fetching content.
+ * @class fetchContentParams
+ * @extends URLSearchParams
+ * @param {string} userDeviceId - The user device ID.
+ */
+export class fetchContentParams extends URLSearchParams {
+  constructor(userDeviceId) {
+    super({
+      pageUrl: window.location.href,
+      userDeviceId: userDeviceId,
+      referrerUrl: document.referrer,
+      locale: navigator.language,
+      langCode: document.documentElement.lang || 'en',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    });
+  }
+}

@@ -1,5 +1,5 @@
 import { Config, State } from './config.js';
-import { PageAnalyticsEvent } from './models.js';
+import { PageAnalyticsEvent, fetchContentParams } from './models.js';
 import { bindClickEvents } from './clickEvents.js';
 import { bindIdleTimeEvents } from './idleEvents.js';
 import { bindScrollEvents } from './scrollEvents.js';
@@ -115,15 +115,7 @@ function prepareSelectors(rawContent) {
  * @property {Object} contentSelectors - The content selectors and content.
  */
 export async function fetchContent(userDeviceId) {
-  const params = new URLSearchParams({
-    pageUrl: window.location.href,
-    userDeviceId: userDeviceId,
-    referrerUrl: document.referrer,
-    locale: navigator.language,
-    langCode: document.documentElement.lang || 'en',
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-  });
-
+  const params = new fetchContentParams(userDeviceId);
   try {
     const response = await fetch(`https://jsonplaceholder.typicode.com/posts?${params.toString()}`); // FIXME: endpoint
     if (!response.ok) {
@@ -133,6 +125,9 @@ export async function fetchContent(userDeviceId) {
     const { titleContent, contentSelectors } = prepareSelectors(data); // FIXME: reconsider title
     data.titleContent = titleContent; // FIXME: reconsider title
     data.contentSelectors = contentSelectors;
+    Config.rawContentSelectors = data.rawContentSelectors; // FIXME maybe
+    Config.contentSelectors = data.contentSelectors; // FIXME maybe
+    Config.titleContent = data.titleContent; // FIXME maybe
     return data;
   } catch (error) {
     console.error('Failed to get Fodoole content:', error);

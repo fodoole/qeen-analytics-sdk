@@ -36,7 +36,7 @@ FodooleAnalyticsInit({
 
 - `contentServingId`: The ID of the content serving request. Use `"0"` if no optimized content was rendered.
 - `contentId`: The ID of the content being displayed.
-- `isPdp`: A boolean value indicating whether the page is a product detail page (PDP). Defaults to `true`.
+- `isPdp`: A boolean value indicating whether the page is a product detail page (PDP). Defaults to `false`.
 - `idleTime`: The maximum time before a session is reset due to user inactivity in milliseconds. Defaults to 5 minutes and can be up to 10 minutes.
 - `clickEvents`: An array of custom click event configurations.
 - `scrollEvents`: An array of custom scroll event configurations.
