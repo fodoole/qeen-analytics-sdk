@@ -9,7 +9,7 @@ import { BodyMutationObserverManager, Debouncer } from './utils.js';
 
 /**
  * Callback function for binding click events to dom elements.
- * @param {Array} clickEvents - Array of click event objects.
+ * @param {object[]} clickEvents - Array of click event objects.
  */
 function bindClickEventsToElements(clickEvents) {
   clickEvents.forEach(function (event) {
@@ -28,7 +28,7 @@ function bindClickEventsToElements(clickEvents) {
 
 /**
  * Function for binding click events to dom elements. 
- * @param {Array} clickEvents - Array of click event objects.
+ * @param {object[]} clickEvents - Array of click event objects.
  */
 export function bindClickEvents(clickEvents) {
   // Use a mutation observer to bind events to new elements.

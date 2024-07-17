@@ -95,20 +95,16 @@ export function resetSession() {
 
 /**
  * Prepare selectors for the content rendering or replacement.
- * @param {string} rawContent - The raw content to be prepared.
+ * @param {object[]} rawContent - The raw content to be prepared.
+ * @returns {Object} - The content selectors.
  */
 function prepareSelectors(rawContent) {
   let contentSelectors = {};
-  let titleContent = '';
   rawContent.forEach(entry => {
-    if (entry.path === 'html > head > title' || entry.path === 'head > title') { // FIXME: reconsider
-      titleContent = entry.value;
-    } else {
-      contentSelectors[entry.path] = entry.value;
-    }
+    contentSelectors[entry.path] = entry.value;
   });
 
-  return { titleContent, contentSelectors };
+  return contentSelectors;
 }
 
 /**
@@ -116,7 +112,6 @@ function prepareSelectors(rawContent) {
  * @param {string} userDeviceId - The user device ID.
  * @returns {Promise} - The promise object representing the response.
  * @throws {Error} - The error message.
- * @property {string} titleContent - The document title content.
  * @property {Object} contentSelectors - The content selectors and content.
  */
 export async function fetchContent(userDeviceId) {
@@ -134,13 +129,10 @@ export async function fetchContent(userDeviceId) {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-    const { titleContent, contentSelectors } = prepareSelectors(data); // FIXME: reconsider title
-    data.titleContent = titleContent; // FIXME: reconsider title
-    data.contentSelectors = contentSelectors;
+    data.contentSelectors = prepareSelectors(data.rawContentSelectors)
     // Save the content in the config object for frontend investigation and debugging
     Config.rawContentSelectors = data.rawContentSelectors;
     Config.contentSelectors = data.contentSelectors;
-    Config.titleContent = data.titleContent;
     return data;
   } catch (error) {
     console.error('Failed to get Fodoole content:', error);

@@ -9,7 +9,7 @@ import { BodyMutationObserverManager } from './utils.js';
 
 /**
  * Callback function for binding scroll events to dom elements.
- * @param {Array} scrollEvents - Array of scroll event selectors.
+ * @param {object[]} scrollEvents - Array of scroll event selectors.
  */
 function bindScrollEventsToElements(scrollEvents) {
   scrollEvents.forEach(function (event) {
@@ -42,7 +42,7 @@ function bindScrollEventsToElements(scrollEvents) {
 /**
 * Function for binding scroll events to dom elements.
 * @description The observer will fire when the element is 50% visible.
-* @param {Array} boundElements - Array of elements to bind scroll events to.
+* @param {object[]} boundElements - Array of elements to bind scroll events to.
 */
 export function bindScrollEvents(boundElements) {
   // Use a mutation observer to bind events to new elements.
