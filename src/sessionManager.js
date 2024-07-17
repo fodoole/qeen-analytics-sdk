@@ -52,7 +52,7 @@ function initResetCommon(label) {
  * Function that initializes a page session.
  * This function is called when the page is loaded.
  */
-export function initSession() {
+function initSession() {
   // Reset session data
   State.reset();
   State.sessionId = String(randInt());
@@ -89,6 +89,58 @@ export function resetSession() {
 }
 
 /**
+ * Prepare selectors for the content rendering or replacement.
+ * @param {string} rawContent - The raw content to be prepared.
+ */
+function prepareSelectors(rawContent) {
+  let contentSelectors = {};
+  let titleContent = '';
+  rawContent.forEach(entry => {
+    if (entry.path === 'html > head > title' || entry.path === 'head > title') { // FIXME: reconsider
+      titleContent = entry.value;
+    } else {
+      contentSelectors[entry.path] = entry.value;
+    }
+  });
+
+  return { titleContent, contentSelectors };
+}
+
+/**
+ * Function to fetch Fodoole content.
+ * @param {string} userDeviceId - The user device ID.
+ * @returns {Promise} - The promise object representing the response.
+ * @throws {Error} - The error message.
+ * @property {string} titleContent - The document title content.
+ * @property {Object} contentSelectors - The content selectors and content.
+ */
+export async function fetchContent(userDeviceId) {
+  const params = new URLSearchParams({
+    pageUrl: window.location.href,
+    userDeviceId: userDeviceId,
+    referrerUrl: document.referrer,
+    locale: navigator.language,
+    langCode: document.documentElement.lang || 'en',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  });
+
+  try {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts?${params.toString()}`); // FIXME: endpoint
+    if (!response.ok) {
+      throw new Error(response.statusText); // TODO: error message
+    }
+    const data = await response.json();
+    const { titleContent, contentSelectors } = prepareSelectors(data); // FIXME: reconsider title
+    data.titleContent = titleContent; // FIXME: reconsider title
+    data.contentSelectors = contentSelectors;
+    return data;
+  } catch (error) {
+    console.error('Failed to get Fodoole content:', error);
+    throw error;
+  }
+}
+
+/**
  * Function that initializes the Fodoole Analytics SDK.
  * @param {Object} config - The configuration object for the Fodoole Analytics SDK.
  */
@@ -96,9 +148,9 @@ export function initFodooleAnalytics(config)
 {
   Config.analyticsEndpoint = config.analyticsEndpoint || ''; // FIXME: this should be from the fetch function
   Config.projectId = config.projectId || '0'; // FIXME: this should be from the fetch function
-  Config.contentServingId = config.contentServingId || '0';
-  Config.contentId = config.contentId || '-';
-  Config.isPdp = config.isPdp || false;
+  Config.contentServingId = config.contentServingId || '0'; // FIXME: this should be from the fetch function
+  Config.contentId = config.contentId || '-'; // FIXME: this should be from the fetch function
+  Config.isPdp = config.isPdp || false; // FIXME: this should be from the fetch function
   Config.idleTime = config.idleTime || 300_000; // TODO: limit between 1m and 10m
   Config.clickEvents = config.clickEvents || []; // FIXME: maybe make this manual
   Config.scrollEvents = config.scrollEvents || []; // FIXME: maybe make this manual
