@@ -39,7 +39,7 @@ export class BodyMutationObserverManager {
   static init() {
     if (!BodyMutationObserverManager.observer) {
       BodyMutationObserverManager.observer = new MutationObserver(BodyMutationObserverManager.handleMutations);
-      document.addEventListener('DOMContentLoaded', function () {
+      onLoad(function () {
         BodyMutationObserverManager.observer.observe(document.body, { childList: true, subtree: true });
       });
     }

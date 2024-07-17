@@ -42,12 +42,12 @@ function bindScrollEventsToElements(scrollEvents) {
 /**
 * Function for binding scroll events to dom elements.
 * @description The observer will fire when the element is 50% visible.
-* @param {object[]} boundElements - Array of elements to bind scroll events to.
+* @param {object[]} scrollEvents - Array of elements to bind scroll events to.
 */
-export function bindScrollEvents(boundElements) {
+export function bindScrollEvents(scrollEvents) {
   // Use a mutation observer to bind events to new elements.
-  BodyMutationObserverManager.addCallback(function () { bindScrollEventsToElements(boundElements); }, 'scroll');
+  BodyMutationObserverManager.addCallback(function () { bindScrollEventsToElements(scrollEvents); }, 'scroll');
 
   // Bind to existing elements.
-  bindScrollEventsToElements(boundElements);
+  bindScrollEventsToElements(scrollEvents);
 }
