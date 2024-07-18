@@ -146,7 +146,7 @@ export function initPageSession(config) {
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.isPdp = config.isPdp || false;
-  // Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000); // FIXME: debug testing 
+  // Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000); 
   Config.idleTime = limit(config.idleTime, 1_000, 599_000, 300_000); // FIXME: debug testing 
   Config.clickEvents = Config.clickEvents || new Set();
   Config.scrollEvents = Config.scrollEvents || new Set();

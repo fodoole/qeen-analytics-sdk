@@ -125,3 +125,16 @@ export function bindIdleTimeEvents(idleThreshold) {
     .forEach(function (event) { document.addEventListener(event, function () { resetIdleTimer(idleThreshold); }); });
 }
 
+/**
+ * This function sends a checkout event to the analytics endpoint.
+ * @param {string} currency - The currency of the transaction.
+ * @param {number} value - The value of the transaction.
+ * @description Checkout events may only be sent on non-product detail pages.
+ */
+export function sendCheckoutEvent(currency, value) {
+  if (!currency || !value || Config.isPdp) {
+    // TODO: throw error
+    return;
+  }
+  new PageAnalyticsEvent('CHECKOUT', value, currency, null);
+}

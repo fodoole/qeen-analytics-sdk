@@ -5,7 +5,7 @@
 
 import { fetchContent, initPageSession } from './sessionManager.js';
 import { Config, State } from './config.js';
-import { bindClickEvents, bindScrollEvents } from './pageEvents.js';
+import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents.js';
 import { randInt } from './utils.js';
 import { receiveMessage } from './demoMode.js';
 
@@ -26,6 +26,7 @@ if (window.location.href.includes('#no-fodoole')) {
   fodoole.state = State;
   fodoole.bindClickEvents = bindClickEvents;
   fodoole.bindScrollEvents = bindScrollEvents;
+  fodoole.sendCheckoutEvent = sendCheckoutEvent;
   fodoole.randInt = randInt;
 }
 

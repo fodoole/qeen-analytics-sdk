@@ -22,14 +22,6 @@ export const getContentEndpoint = ''; // FIXME: add the endpoint
  */
 export class Config {
   // FIXME: create a local testing config file
-  // static analyticsEndpoint = '/log';
-  // static projectId = '123';
-  // static contentServingId = '0';
-  // static contentId = '-';
-  // static isPdp = true;
-  // static idleTime = 10_000;
-  // static clickEvents = [{ 'label': 'H1', 'value': 'h1' }];
-  // static scrollEvents = [{ 'label': 'BODY', 'value': 'body' }];
 }
 
 /**

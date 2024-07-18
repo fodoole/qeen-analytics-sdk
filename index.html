@@ -17,12 +17,13 @@
       projectId: '123',
       contentServingId: '0',
       contentId: '-',
-      isPdp: true,
+      isPdp: false,
       idleTime: 10_000
     });
 
     fodoole.bindClickEvents([{ 'label': 'CLICK_H1', 'value': 'h1' }]);
     fodoole.bindScrollEvents([{ 'label': 'SCROLL_H1', 'value': 'h1' }]);
+    fodoole.sendCheckoutEvent('USD', 100);
 
   </script>
 </body>

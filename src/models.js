@@ -39,6 +39,7 @@ export class PageAnalyticsEvent {
    */
   pushEvent() {
     if (!Config.analyticsEndpoint) {
+      // TODO: throw error
       return;
     }
     if (window.location.hash.includes('fodoole-dev')) {
@@ -71,3 +72,6 @@ export class fetchContentParams extends URLSearchParams {
     });
   }
 }
+
+
+// TODO: add factory/class for click and scroll events
