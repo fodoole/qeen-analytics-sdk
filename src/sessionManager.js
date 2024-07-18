@@ -105,28 +105,29 @@ function prepareSelectors(rawContent) {
 
 /**
  * Function to fetch Fodoole content.
- * @param {string} userDeviceId - The user device ID.
+ * @param {string} fodooleDeviceId - The user device ID.
  * @returns {Promise} - The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
  * @throws {URLContainsNoFodooleError} - Throws an error if the URL contains #no-fodoole.
  */
-export async function fetchContent(userDeviceId) {
+export async function fetchContent(fodooleDeviceId) {
   try {
-    if (!userDeviceId) {
-      return Promise.reject(new InvalidParameterError('User device ID is required.'));
+    if (!fodooleDeviceId) {
+      return Promise.reject(new InvalidParameterError('Fodoole user device ID is required.'));
     }
     if (window.location.hash.includes('no-fodoole')) {
       return Promise.reject(new URLContainsNoFodooleError('Fodoole is disabled; URL contains #no-fodoole'));
     }
 
-    const params = new fetchContentParams(userDeviceId);
+    const params = new fetchContentParams(fodooleDeviceId);
     const response = await fetch(`${getContentEndpoint}?${params.toString()}`);
     if (!response.ok) {
       return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
     }
     const data = await response.json();
+    data.fodooleDeviceId = fodooleDeviceId; 
     data.contentSelectors = prepareSelectors(data.rawContentSelectors)
     // Save the content in the config object for frontend investigation and debugging
     Config.rawContentSelectors = data.rawContentSelectors;
@@ -142,11 +143,17 @@ export async function fetchContent(userDeviceId) {
  * Function that initializes the Fodoole Analytics SDK.
  * @param {Object} config - The configuration object for the Fodoole Analytics SDK.
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
+ * @throws {InvalidParameterError} Throws an the user device ID is not set.
  */
 export function initPageSession(config) {
+  // FIXME: kneecap user if user device id not set
   if (Config.noFodoole) {
     return;
   }
+  if (!config.fodooleDeviceId) {
+    throw new InvalidParameterError('User device ID is required.');
+  }
+  State.fodooleDeviceId = config.fodooleDeviceId;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';

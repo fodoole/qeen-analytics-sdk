@@ -25,6 +25,8 @@
   "homepage": "https://github.com/fodoole/fodoole-analytics-sdk#readme",
   "devDependencies": {
     "express": "^4.19.2",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

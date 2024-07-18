@@ -11,7 +11,8 @@ import { Debouncer } from './utils.js';
 
 /**
  * Callback function for binding click events to DOM elements.
- * @param {Object[]} clickEvents - Array of click event objects.
+ * Accepts a single click event object or an array of click event objects.
+ * @param {Object|Object[]} clickEvents - A click event object or an array of click event objects.
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
@@ -19,7 +20,9 @@ export function bindClickEvents(clickEvents) {
   if (Config.noFodoole) {
     return;
   }
-  clickEvents.forEach(function (event) {
+  // Ensure clickEvents is always an array
+  const eventsArray = Array.isArray(clickEvents) ? clickEvents : [clickEvents];
+  eventsArray.forEach(function (event) {
     const domElements = document.querySelectorAll(event.value);
     if (domElements.length === 0) {
       throw new InvalidParameterError(`No elements found with the selector: ${event.value}`);
@@ -42,7 +45,7 @@ export function bindClickEvents(clickEvents) {
 
 /**
  * Callback function for binding scroll events to DOM elements.
- * @param {Object[]} scrollEvents - Array of scroll event selectors.
+ * @param {Object|Object[]} scrollEvents - A scroll event object or an array of scroll event objects.
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
@@ -50,7 +53,9 @@ export function bindScrollEvents(scrollEvents) {
   if (Config.noFodoole) {
     return;
   }
-  scrollEvents.forEach(function (event) {
+  // Ensure scrollEvents is always an array
+  const eventsArray = Array.isArray(scrollEvents) ? scrollEvents : [scrollEvents];
+  eventsArray.forEach(function (event) {
     const label = event.label;
     const path = event.value;
     const domElements = document.querySelectorAll(path);

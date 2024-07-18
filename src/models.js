@@ -60,13 +60,13 @@ export class PageAnalyticsEvent {
  * Class that handles the parameters for fetching content.
  * @class fetchContentParams
  * @extends URLSearchParams
- * @param {string} userDeviceId - The user device ID.
+ * @param {string} fodooleDeviceId - The Fodoole user device ID.
  */
 export class fetchContentParams extends URLSearchParams {
-  constructor(userDeviceId) {
+  constructor(fodooleDeviceId) {
     super({
       pageUrl: window.location.href,
-      userDeviceId: userDeviceId,
+      userDeviceId: fodooleDeviceId,
       referrerUrl: document.referrer,
       locale: navigator.language,
       langCode: document.documentElement.lang || 'en',

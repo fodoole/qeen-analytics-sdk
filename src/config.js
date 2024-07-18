@@ -20,9 +20,7 @@ export const getContentEndpoint = ''; // FIXME: add the endpoint
  * @property {Array} clickEvents - The click events array.
  * @property {Array} scrollEvents - The scroll events array.
  */
-export class Config {
-  // FIXME: create a local testing config file
-}
+export class Config { }
 
 /**
  * @class State

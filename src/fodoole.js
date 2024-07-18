@@ -7,6 +7,7 @@ import { fetchContent, initPageSession } from './sessionManager.js';
 import { Config, State } from './config.js';
 import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents.js';
 import { randInt } from './utils.js';
+import { InteractionEvent } from './models.js';
 import { receiveMessage } from './demoMode.js';
 import { InvalidParameterError, AnalyticsEndpointError, ResponseNotOkError, URLContainsNoFodooleError } from './errors.js';
 
@@ -25,6 +26,7 @@ fodoole.bindScrollEvents = bindScrollEvents;
 fodoole.sendCheckoutEvent = sendCheckoutEvent;
 fodoole.config = Config;
 fodoole.state = State;
+fodoole.InteractionEvent = InteractionEvent;
 fodoole.InvalidParameterError = InvalidParameterError;
 fodoole.AnalyticsEndpointError = AnalyticsEndpointError;
 fodoole.ResponseNotOkError = ResponseNotOkError;
