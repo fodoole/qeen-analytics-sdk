@@ -113,21 +113,18 @@ function prepareSelectors(rawContent) {
  * @throws {URLContainsNoFodooleError} - Throws an error if the URL contains #no-fodoole.
  */
 export async function fetchContent(userDeviceId) {
-  if (Config.noFodoole) {
-    return;
-  }
   try {
     if (!userDeviceId) {
-      throw new InvalidParameterError('User device ID is required.');
+      return Promise.reject(new InvalidParameterError('User device ID is required.'));
     }
     if (window.location.hash.includes('no-fodoole')) {
-      throw new URLContainsNoFodooleError('Fodoole is disabled; URL contains #no-fodoole');
+      return Promise.reject(new URLContainsNoFodooleError('Fodoole is disabled; URL contains #no-fodoole'));
     }
 
     const params = new fetchContentParams(userDeviceId);
     const response = await fetch(`${getContentEndpoint}?${params.toString()}`);
     if (!response.ok) {
-      throw new ResponseNotOkError(response.status, response.statusText, response.url);
+      return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
     }
     const data = await response.json();
     data.contentSelectors = prepareSelectors(data.rawContentSelectors)
@@ -137,7 +134,7 @@ export async function fetchContent(userDeviceId) {
     return data;
   } catch (error) {
     console.error('Failed to get Fodoole content:', error);
-    throw error;
+    return Promise.reject(error);
   }
 }
 

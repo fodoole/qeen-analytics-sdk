@@ -7,8 +7,8 @@ import { fetchContent, initPageSession } from './sessionManager.js';
 import { Config, State } from './config.js';
 import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents.js';
 import { randInt } from './utils.js';
-import './demoMode.js';
-import './errors.js';
+import { receiveMessage } from './demoMode.js';
+import { InvalidParameterError, AnalyticsEndpointError, ResponseNotOkError, URLContainsNoFodooleError } from './errors.js';
 
 /**
  * @namespace fodoole
@@ -28,7 +28,7 @@ fodoole.state = State;
 fodoole.InvalidParameterError = InvalidParameterError;
 fodoole.AnalyticsEndpointError = AnalyticsEndpointError;
 fodoole.ResponseNotOkError = ResponseNotOkError;
-fodoole.NoFodooleError = NoFodooleError;
+fodoole.URLContainsNoFodooleError = URLContainsNoFodooleError;
 
 if (window.location.hash.includes('no-fodoole')) {
   Config.noFodoole = true;
