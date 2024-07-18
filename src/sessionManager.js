@@ -5,7 +5,7 @@
 
 import { Config, State, getContentEndpoint } from './config.js';
 import { PageAnalyticsEvent, fetchContentParams } from './models.js';
-import { InvalidParameterError, NoFodooleError, ResponseNotOkError } from './errors.js';
+import { InvalidParameterError, URLContainsNoFodooleError, ResponseNotOkError } from './errors.js';
 import { bindScrollEvents, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
 import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
 
@@ -110,15 +110,18 @@ function prepareSelectors(rawContent) {
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
- * @throws {NoFodooleError} - Throws an error if the URL contains #no-fodoole.
+ * @throws {URLContainsNoFodooleError} - Throws an error if the URL contains #no-fodoole.
  */
 export async function fetchContent(userDeviceId) {
+  if (Config.noFodoole) {
+    return;
+  }
   try {
     if (!userDeviceId) {
       throw new InvalidParameterError('User device ID is required.');
     }
     if (window.location.hash.includes('no-fodoole')) {
-      throw new NoFodooleError('Fodoole is disabled; URL contains #no-fodoole');
+      throw new URLContainsNoFodooleError('Fodoole is disabled; URL contains #no-fodoole');
     }
 
     const params = new fetchContentParams(userDeviceId);
@@ -144,6 +147,9 @@ export async function fetchContent(userDeviceId) {
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
  */
 export function initPageSession(config) {
+  if (Config.noFodoole) {
+    return;
+  }
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';

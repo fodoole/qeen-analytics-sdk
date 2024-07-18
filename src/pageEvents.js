@@ -16,6 +16,9 @@ import { Debouncer } from './utils.js';
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 export function bindClickEvents(clickEvents) {
+  if (Config.noFodoole) {
+    return;
+  }
   clickEvents.forEach(function (event) {
     const domElements = document.querySelectorAll(event.value);
     if (domElements.length === 0) {
@@ -44,6 +47,9 @@ export function bindClickEvents(clickEvents) {
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 export function bindScrollEvents(scrollEvents) {
+  if (Config.noFodoole) {
+    return;
+  }
   scrollEvents.forEach(function (event) {
     const label = event.label;
     const path = event.value;
@@ -145,6 +151,9 @@ export function bindIdleTimeEvents(idleThreshold) {
  * @description Checkout events may only be sent on non-product detail pages.
  */
 export function sendCheckoutEvent(currency, value) {
+  if (Config.noFodoole) {
+    return;
+  }
   if (!currency || !value) {
     throw new InvalidParameterError('Currency and value are required for checkout events.');
   }

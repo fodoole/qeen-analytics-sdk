@@ -35,10 +35,10 @@ export class AnalyticsEndpointError extends Error {
  * @extends Error
  * @param {string} message - The error message.
  */
-export class NoFodooleError extends Error {
+export class URLContainsNoFodooleError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'NoFodooleError';
+    this.name = 'URLContainsNoFodooleError';
   }
 }
 
