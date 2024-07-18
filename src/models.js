@@ -32,9 +32,11 @@ export class PageAnalyticsEvent {
     this.edp = domPath;
 
     this.pushEvent();
-  };
+  }
 
-  // Pushes the event to the analytics endpoint.
+  /**
+   * Push the event to the analytics endpoint.
+   */
   pushEvent() {
     if (!Config.analyticsEndpoint) {
       return;
@@ -48,7 +50,7 @@ export class PageAnalyticsEvent {
     };
     const payload = JSON.stringify(payloadObject);
     navigator.sendBeacon(Config.analyticsEndpoint, payload);
-  };
+  }
 }
 
 /**

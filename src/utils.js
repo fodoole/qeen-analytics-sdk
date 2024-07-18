@@ -35,7 +35,9 @@ export class BodyMutationObserverManager {
   static observer = null;
   static callbackQueue = [];
 
-  // Initialise the mutation observer by creating a new instance and observing the body element
+  /**
+   * Initialize the mutation observer for the body element.
+   */
   static init() {
     if (!BodyMutationObserverManager.observer) {
       BodyMutationObserverManager.observer = new MutationObserver(BodyMutationObserverManager.handleMutations);
@@ -45,7 +47,10 @@ export class BodyMutationObserverManager {
     }
   }
 
-  // Handle mutations by calling each callback in the callback queue
+  /**
+   * Handle mutations on the body element.
+   * @param {array} _ - array of mutations.
+   */
   static handleMutations(_) {
     _.forEach(__ => {
       BodyMutationObserverManager.callbackQueue.forEach(item => {
@@ -54,7 +59,13 @@ export class BodyMutationObserverManager {
     });
   }
 
-  // Add a callback to the callback queue
+  // Add a callback to the callback queue.
+  /**
+   * Add a callback to the callback queue.
+   * @param {function} callback - the callback function to be added.
+   * @param {string} id - the id of the callback.
+   * @description Function have to be added by id to prevent duplicate callbacks. Attempting to add a callback with the same id won't add it to the queue.
+   */
   static addCallback(callback, id = null) {
     // Only add the callback if it is a function and has not been added before
     let exists = BodyMutationObserverManager.callbackQueue.some(item => item.id === id);
@@ -63,7 +74,10 @@ export class BodyMutationObserverManager {
     }
   }
 
-  // Remove a callback from the callback queue
+  /**
+   * Remove a callback from the callback queue.
+   * @param {string} id - the id of the callback to be removed.
+   */
   static removeCallback(id) {
     BodyMutationObserverManager.callbackQueue = BodyMutationObserverManager.callbackQueue.filter(item => item.id !== id);
   }
@@ -77,9 +91,8 @@ export class BodyMutationObserverManager {
  * @property {function} debounced - the function to debounce the function.
  * @property {function} trigger - the function to trigger the function immediately.
  * @property {function} clear - the function to clear the timeout.
- * @property {function} cancel - the function to cancel the debouncer.
  * @property @static {function} flushAll - the function to flush all pending debounced events.
- * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function. The debouncer can be cancelled by calling the cancel function.
+ * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function.
  */
 export class Debouncer {
   static debouncedEvents = [];
@@ -92,7 +105,9 @@ export class Debouncer {
     this.delay = delay;
   }
 
-  // Clear function is used to clear the timeout
+  /**
+   * Clear the timeout.
+   */
   clear = () => {
     clearTimeout(this.timer);
     this.context = null;
@@ -103,12 +118,10 @@ export class Debouncer {
     }
   }
 
-  // Cancel function is used to cancel the debouncer
-  cancel = () => {
-    this.clear();
-  }
-
-  // Debounced function is a holder for the timeout function and will exhibit debounce behavior
+  /**
+   * Debounce the function.
+   * @param {...any} args - arguments to be passed to the function.
+   */
   debounced = (...args) => {
     this.context = this;
     this.args = args;
@@ -124,7 +137,9 @@ export class Debouncer {
     }
   }
 
-  // Trigger function is used to invoke the function immediately
+  /**
+   * Trigger the function immediately.
+   */
   trigger = () => {
     if (this.context && this.args) {
       this.fn.apply(this.context, this.args);
@@ -132,7 +147,9 @@ export class Debouncer {
     this.clear();
   }
 
-  // Flushes all pending debounced events
+  /**
+   * Flush all pending debounced events.
+   */
   static flushAll = () => {
     Debouncer.debouncedEvents.forEach(debouncer => {
       debouncer.trigger();
