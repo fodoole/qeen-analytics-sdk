@@ -5,12 +5,8 @@
 
 import { Config, State, getContentEndpoint } from './config.js';
 import { PageAnalyticsEvent, fetchContentParams } from './models.js';
-import { bindClickEvents } from './clickEvents.js';
-import { bindIdleTimeEvents } from './idleEvents.js';
-import { bindScrollEvents } from './scrollEvents.js';
-import { bindTabEvents } from './tabEvents.js';
-import { resetIdleTimer } from './idleEvents.js';
-import { onLoad, beforeUnload, randInt, limit, Debouncer, BodyMutationObserverManager } from './utils.js';
+import { bindScrollEvents,bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
+import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
 
 /**
   * Function that implements common logic for resetting the session state.
@@ -27,7 +23,8 @@ function initResetCommon(label) {
   // Instantiate idle timer
   resetIdleTimer(Config.idleTime);
 
-  // Bind scroll events
+  // Reset scroll observed elements
+  State.scrollObservedElements.clear();
   bindScrollEvents(Config.scrollEvents);
 
   // Log the page view and content served events
@@ -66,10 +63,9 @@ function initSession() {
     // Common initialization logic
     initResetCommon('INIT');
 
-    // Bind non-scroll events
-    bindClickEvents(Config.clickEvents);
-    bindIdleTimeEvents(Config.idleTime);
+    // Bind tab and idle time events
     bindTabEvents();
+    bindIdleTimeEvents(Config.idleTime);
 
     // Fire any debounced events on page exit and send PAGE_EXIT event
     beforeUnload(function (_) {
@@ -144,15 +140,15 @@ export async function fetchContent(userDeviceId) {
  * Function that initializes the Fodoole Analytics SDK.
  * @param {Object} config - The configuration object for the Fodoole Analytics SDK.
  */
-export function initFodooleAnalytics(config) {
+export function initPageSession(config) {
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.isPdp = config.isPdp || false;
-  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
-  Config.clickEvents = config.clickEvents || []; // FIXME: maybe make this manual
-  Config.scrollEvents = config.scrollEvents || []; // FIXME: maybe make this manual
-  BodyMutationObserverManager.init(); // FIXME: maybe remove
+  // Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000); // FIXME: debug testing 
+  Config.idleTime = limit(config.idleTime, 1_000, 599_000, 300_000); // FIXME: debug testing 
+  Config.clickEvents = Config.clickEvents || new Set();
+  Config.scrollEvents = Config.scrollEvents || new Set();
   initSession();
 }

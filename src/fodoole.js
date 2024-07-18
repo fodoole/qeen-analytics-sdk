@@ -3,10 +3,9 @@
  * @description The main script for Fodoole Analytics SDK.
  */
 
-import { fetchContent, initFodooleAnalytics } from './sessionManager.js';
+import { fetchContent, initPageSession } from './sessionManager.js';
 import { Config, State } from './config.js';
-import { bindClickEvents } from './clickEvents.js';
-import { bindScrollEvents } from './scrollEvents.js';
+import { bindClickEvents, bindScrollEvents } from './pageEvents.js';
 import { randInt } from './utils.js';
 import { receiveMessage } from './demoMode.js';
 
@@ -22,11 +21,11 @@ if (window.location.href.includes('#no-fodoole')) {
   window.addEventListener('message', fodoole.receiveMessage, false);
 } else {
   fodoole.fetchFodooleContent = fetchContent;
-  fodoole.initFodooleAnalytics = initFodooleAnalytics;
+  fodoole.initPageSession = initPageSession;
   fodoole.config = Config;
   fodoole.state = State;
-  fodoole.bindClickEvents = bindClickEvents; // FIXME: maybe unnecessary
-  fodoole.bindScrollEvents = bindScrollEvents; // FIXME: maybe unnecessary
+  fodoole.bindClickEvents = bindClickEvents;
+  fodoole.bindScrollEvents = bindScrollEvents;
   fodoole.randInt = randInt;
 }
 

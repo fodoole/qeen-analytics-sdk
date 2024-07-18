@@ -12,20 +12,17 @@
   <script type="module">
     import '/fodoole.js';
 
-    fodoole.initFodooleAnalytics({
+    fodoole.initPageSession({
       analyticsEndpoint: '/log',
       projectId: '123',
       contentServingId: '0',
       contentId: '-',
       isPdp: true,
-      idleTime: 10_000,
-      clickEvents: [
-        { 'label': 'CLICK_H1', 'value': 'h1' },
-      ],
-      scrollEvents: [
-        { 'label': 'SCROLL_H1', 'value': 'h1' },
-      ]
+      idleTime: 10_000
     });
+
+    fodoole.bindClickEvents([{ 'label': 'CLICK_H1', 'value': 'h1' }]);
+    fodoole.bindScrollEvents([{ 'label': 'SCROLL_H1', 'value': 'h1' }]);
 
   </script>
 </body>

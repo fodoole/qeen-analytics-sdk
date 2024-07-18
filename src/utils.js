@@ -28,62 +28,6 @@ export function beforeUnload(fn) {
 }
 
 /**
- * Class for managing a single instance of a mutation observer for the body element.
- * @class BodyMutationObserverManager
- */
-export class BodyMutationObserverManager {
-  static observer = null;
-  static callbackQueue = [];
-
-  /**
-   * Initialize the mutation observer for the body element.
-   */
-  static init() {
-    if (!BodyMutationObserverManager.observer) {
-      BodyMutationObserverManager.observer = new MutationObserver(BodyMutationObserverManager.handleMutations);
-      onLoad(function () {
-        BodyMutationObserverManager.observer.observe(document.body, { childList: true, subtree: true });
-      });
-    }
-  }
-
-  /**
-   * Handle mutations on the body element.
-   * @param {array} _ - array of mutations.
-   */
-  static handleMutations(_) {
-    _.forEach(__ => {
-      BodyMutationObserverManager.callbackQueue.forEach(item => {
-        item.callback();
-      });
-    });
-  }
-
-  // Add a callback to the callback queue.
-  /**
-   * Add a callback to the callback queue.
-   * @param {function} callback - the callback function to be added.
-   * @param {string} id - the id of the callback.
-   * @description Function have to be added by id to prevent duplicate callbacks. Attempting to add a callback with the same id won't add it to the queue.
-   */
-  static addCallback(callback, id = null) {
-    // Only add the callback if it is a function and has not been added before
-    let exists = BodyMutationObserverManager.callbackQueue.some(item => item.id === id);
-    if (typeof callback === 'function' && id !== null && !exists) {
-      BodyMutationObserverManager.callbackQueue.push({ callback: callback, id: id });
-    }
-  }
-
-  /**
-   * Remove a callback from the callback queue.
-   * @param {string} id - the id of the callback to be removed.
-   */
-  static removeCallback(id) {
-    BodyMutationObserverManager.callbackQueue = BodyMutationObserverManager.callbackQueue.filter(item => item.id !== id);
-  }
-}
-
-/**
  * @class Debouncer
  * @param {function} fn - the function to be debounced.
  * @param {number} delay - the time in milliseconds to wait before calling the function.
