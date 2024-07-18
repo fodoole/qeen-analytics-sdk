@@ -4,6 +4,7 @@
  */
 
 import { Config, State } from './config.js';
+import { AnalyticsEndpointError, InvalidParameterError } from './errors.js';
 
 /**
  * Class that handles page-level analytics.
@@ -12,6 +13,7 @@ import { Config, State } from './config.js';
  * @param {number} value The value of the event (numeric value, if applicable).
  * @param {string} label The label of the event (e.g. 'ADD_TO_CART').
  * @param {string} domPath The DOM path of the element that triggered the event.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
  */
 export class PageAnalyticsEvent {
   ts = Date.now();
@@ -36,11 +38,11 @@ export class PageAnalyticsEvent {
 
   /**
    * Push the event to the analytics endpoint.
+   * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
    */
   pushEvent() {
     if (!Config.analyticsEndpoint) {
-      // TODO: throw error
-      return;
+      throw new AnalyticsEndpointError('Fodoole analytics endpoint not set.');
     }
     if (window.location.hash.includes('fodoole-dev')) {
       console.log(this);
@@ -73,5 +75,19 @@ export class fetchContentParams extends URLSearchParams {
   }
 }
 
-
-// TODO: add factory/class for click and scroll events
+/**
+ * Structure for interaction events (i.e. clicks, scrolls).
+ * @class InteractionEvent
+ * @param {string} label - The label of the event.
+ * @param {number} value - The selector to bind the event to.
+ * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
+ */
+export class InteractionEvent {
+  constructor(label, value) {
+    if (!label || !value) {
+      throw new InvalidParameterError('Label and value are required for interaction events.');
+    }
+    this.label = label;
+    this.value = value;
+  }
+}

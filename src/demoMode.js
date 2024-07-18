@@ -33,7 +33,7 @@ function scrollToTarget(domPath, offset) {
 
 /**
  * Function for receiving messages from the parent window.
- * @param {object} event - The event object.
+ * @param {Object} event - The event object.
  * @description Used when running in demo mode via iframe.
  */
 const receiveMessage = (event) => {

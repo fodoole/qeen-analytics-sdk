@@ -5,7 +5,8 @@
 
 import { Config, State, getContentEndpoint } from './config.js';
 import { PageAnalyticsEvent, fetchContentParams } from './models.js';
-import { bindScrollEvents,bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
+import { InvalidParameterError, NoFodooleError, ResponseNotOkError } from './errors.js';
+import { bindScrollEvents, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
 import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
 
 /**
@@ -22,10 +23,6 @@ function initResetCommon(label) {
 
   // Instantiate idle timer
   resetIdleTimer(Config.idleTime);
-
-  // Reset scroll observed elements
-  State.scrollObservedElements.clear();
-  bindScrollEvents(Config.scrollEvents);
 
   // Log the page view and content served events
   function logPageView() {
@@ -86,12 +83,15 @@ function initSession() {
 export function resetSession() {
   // Reset session id and session data
   State.reset();
+  // Rebind intersection observer for scroll events
+  bindScrollEvents(Config.scrollEvents);
+
   initResetCommon('RESET');
 }
 
 /**
  * Prepare selectors for the content rendering or replacement.
- * @param {object[]} rawContent - The raw content to be prepared.
+ * @param {Object[]} rawContent - The raw content to be prepared.
  * @returns {Object} - The content selectors.
  */
 function prepareSelectors(rawContent) {
@@ -107,22 +107,24 @@ function prepareSelectors(rawContent) {
  * Function to fetch Fodoole content.
  * @param {string} userDeviceId - The user device ID.
  * @returns {Promise} - The promise object representing the response.
- * @throws {Error} - The error message.
  * @property {Object} contentSelectors - The content selectors and content.
+ * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
+ * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
+ * @throws {NoFodooleError} - Throws an error if the URL contains #no-fodoole.
  */
 export async function fetchContent(userDeviceId) {
   try {
     if (!userDeviceId) {
-      throw new Error('User device ID is required.');
+      throw new InvalidParameterError('User device ID is required.');
     }
-    if (window.location.href.includes('#no-fodoole')) {
-      throw new Error('Fodoole is disabled; URL contains #no-fodoole');
+    if (window.location.hash.includes('no-fodoole')) {
+      throw new NoFodooleError('Fodoole is disabled; URL contains #no-fodoole');
     }
 
     const params = new fetchContentParams(userDeviceId);
     const response = await fetch(`${getContentEndpoint}?${params.toString()}`);
     if (!response.ok) {
-      throw new Error(response.statusText);
+      throw new ResponseNotOkError(response.status, response.statusText, response.url);
     }
     const data = await response.json();
     data.contentSelectors = prepareSelectors(data.rawContentSelectors)
@@ -139,6 +141,7 @@ export async function fetchContent(userDeviceId) {
 /**
  * Function that initializes the Fodoole Analytics SDK.
  * @param {Object} config - The configuration object for the Fodoole Analytics SDK.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
  */
 export function initPageSession(config) {
   Config.analyticsEndpoint = config.analyticsEndpoint || '';

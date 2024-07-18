@@ -31,7 +31,7 @@ export function beforeUnload(fn) {
  * @class Debouncer
  * @param {function} fn - the function to be debounced.
  * @param {number} delay - the time in milliseconds to wait before calling the function.
- * @returns {object} - an object containing the debounced function, a trigger function, and a clear function.
+ * @returns {Debouncer} - an object containing the debounced function, a trigger function, and a clear function.
  * @property {function} debounced - the function to debounce the function.
  * @property {function} trigger - the function to trigger the function immediately.
  * @property {function} clear - the function to clear the timeout.

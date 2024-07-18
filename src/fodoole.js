@@ -8,6 +8,7 @@ import { Config, State } from './config.js';
 import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents.js';
 import { randInt } from './utils.js';
 import { receiveMessage } from './demoMode.js';
+import { InvalidParameterError, AnalyticsEndpointError, NoFodooleError, ResponseNotOkError } from './errors.js';
 
 /**
  * @namespace fodoole
@@ -15,19 +16,24 @@ import { receiveMessage } from './demoMode.js';
  */
 window.fodoole = window.fodoole || {};
 
-if (window.location.href.includes('#no-fodoole')) {
+fodoole.randInt = randInt;
+
+if (window.location.hash.includes('no-fodoole')) {
   console.log(`${window.fodooleError = 'Fodoole is disabled; URL contains #no-fodoole'}`);
   fodoole.receiveMessage = receiveMessage;
+  fodoole.NoFodooleError = NoFodooleError;
   window.addEventListener('message', fodoole.receiveMessage, false);
 } else {
   fodoole.fetchFodooleContent = fetchContent;
   fodoole.initPageSession = initPageSession;
-  fodoole.config = Config;
-  fodoole.state = State;
   fodoole.bindClickEvents = bindClickEvents;
   fodoole.bindScrollEvents = bindScrollEvents;
   fodoole.sendCheckoutEvent = sendCheckoutEvent;
-  fodoole.randInt = randInt;
+  fodoole.config = Config;
+  fodoole.state = State;
+  fodoole.InvalidParameterError = InvalidParameterError;
+  fodoole.AnalyticsEndpointError = AnalyticsEndpointError;
+  fodoole.ResponseNotOkError = ResponseNotOkError;
 }
 
 // export { fodoole };

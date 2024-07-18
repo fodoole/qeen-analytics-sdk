@@ -5,16 +5,23 @@
 
 import { Config, State } from './config.js';
 import { PageAnalyticsEvent } from './models.js';
+import { InvalidParameterError } from './errors.js';
 import { resetSession } from './sessionManager.js';
 import { Debouncer } from './utils.js';
 
 /**
  * Callback function for binding click events to DOM elements.
- * @param {object[]} clickEvents - Array of click event objects.
+ * @param {Object[]} clickEvents - Array of click event objects.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 export function bindClickEvents(clickEvents) {
   clickEvents.forEach(function (event) {
     const domElements = document.querySelectorAll(event.value);
+    if (domElements.length === 0) {
+      throw new InvalidParameterError(`No elements found with the selector: ${event.value}`);
+    }
+
     domElements.forEach(element => {
       // Only bind the event if it hasn't been bound before
       if (!element.hasAttribute('data-fodoole-click-bound')) {
@@ -29,17 +36,21 @@ export function bindClickEvents(clickEvents) {
     Config.clickEvents.add(event);
   });
 }
-// TODO: bubble error if failed to bind event
 
 /**
  * Callback function for binding scroll events to DOM elements.
- * @param {object[]} scrollEvents - Array of scroll event selectors.
+ * @param {Object[]} scrollEvents - Array of scroll event selectors.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 export function bindScrollEvents(scrollEvents) {
   scrollEvents.forEach(function (event) {
     const label = event.label;
     const path = event.value;
     const domElements = document.querySelectorAll(path);
+    if (domElements.length === 0) {
+      throw new InvalidParameterError(`No elements found with the selector: ${path}`);
+    }
 
     domElements.forEach(element => {
       let observer = new IntersectionObserver((entries) => {
@@ -62,7 +73,6 @@ export function bindScrollEvents(scrollEvents) {
     Config.scrollEvents.add(event);
   });
 }
-// TODO: bubble error if failed to bind event
 
 /**
  * This function checks if the tab switch causes a session reset.
@@ -129,12 +139,17 @@ export function bindIdleTimeEvents(idleThreshold) {
  * This function sends a checkout event to the analytics endpoint.
  * @param {string} currency - The currency of the transaction.
  * @param {number} value - The value of the transaction.
+ * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
+ * @throws {InvalidParameterError} Throws an error if the event is attempted to be sent on a product detail page.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
  * @description Checkout events may only be sent on non-product detail pages.
  */
 export function sendCheckoutEvent(currency, value) {
-  if (!currency || !value || Config.isPdp) {
-    // TODO: throw error
-    return;
+  if (!currency || !value) {
+    throw new InvalidParameterError('Currency and value are required for checkout events.');
+  }
+  if (Config.isPdp) {
+    throw new InvalidParameterError('Checkout events may only be sent on non-product detail pages.');
   }
   new PageAnalyticsEvent('CHECKOUT', value, currency, null);
 }
