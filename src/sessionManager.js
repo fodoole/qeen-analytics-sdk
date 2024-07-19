@@ -48,6 +48,17 @@ function initResetCommon(label) {
 }
 
 /**
+ * Function that sends a PAGE_EXIT event when the page is closed.
+ */
+function terminateSession() {
+  // trigger any remaining debounced events
+  Debouncer.flushAll();
+
+  // Send a PAGE_EXIT event
+  new PageAnalyticsEvent('PAGE_EXIT', null, null, null);
+}
+
+/**
  * Function that initializes a page session.
  * This function is called when the page is loaded.
  */
@@ -66,11 +77,7 @@ function initSession() {
 
     // Fire any debounced events on page exit and send PAGE_EXIT event
     beforeUnload(function (_) {
-      // trigger any remaining debounced events
-      Debouncer.flushAll();
-
-      // Send a PAGE_EXIT event
-      new PageAnalyticsEvent('PAGE_EXIT', null, null, null);
+      terminateSession();
     });
   });
 }
@@ -127,7 +134,7 @@ export async function fetchContent(fodooleDeviceId) {
       return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
     }
     const data = await response.json();
-    data.fodooleDeviceId = fodooleDeviceId; 
+    data.fodooleDeviceId = fodooleDeviceId;
     data.contentSelectors = prepareSelectors(data.rawContentSelectors)
     // Save the content in the config object for frontend investigation and debugging
     Config.rawContentSelectors = data.rawContentSelectors;
@@ -152,6 +159,12 @@ export function initPageSession(config) {
   if (!config.fodooleDeviceId) {
     throw new InvalidParameterError('User device ID is required.');
   }
+
+  // Terminate previous session
+  if (State.sessionId) {
+    terminateSession();
+  }
+
   State.fodooleDeviceId = config.fodooleDeviceId;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
@@ -162,5 +175,6 @@ export function initPageSession(config) {
   Config.idleTime = limit(config.idleTime, 1_000, 599_000, 300_000); // FIXME: debug testing 
   Config.clickEvents = Config.clickEvents || [];
   Config.scrollEvents = Config.scrollEvents || [];
+
   initSession();
 }
