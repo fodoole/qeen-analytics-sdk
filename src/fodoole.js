@@ -37,6 +37,8 @@ if (window.location.hash.includes('no-fodoole')) {
   console.log(`${window.fodooleError = 'Fodoole is disabled; URL contains #no-fodoole'}`);
   fodoole.receiveMessage = receiveMessage;
   window.addEventListener('message', fodoole.receiveMessage, false);
+} else {
+  Config.noFodoole = false;
 }
 
-// export { fodoole }; // FIXME
+// export { fodoole }; // FIXME: intellisense

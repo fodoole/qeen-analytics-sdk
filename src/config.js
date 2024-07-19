@@ -36,14 +36,14 @@ export class Config { }
  * @property {Set} scrollObservedElements - The set of scroll observed elements.
  */
 export class State {
+  static debounceTime = 500;
+  static fodooleDeviceId = State.fodooleDeviceId || null;
   static reset() {
     State.contentServed = false;
     State.sessionId = null;
     State.isResetSession = false;
-    State.debounceTime = 500;
     State.idleTimer = null;
     State.lastIdleTime = Date.now();
-    State.fodooleDeviceId = State.fodooleDeviceId || null;
     State.lastTabExitTime = 0;
     State.scrollObservedElements = new Set();
   }
