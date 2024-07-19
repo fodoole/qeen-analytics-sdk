@@ -186,7 +186,5 @@ export function initPageSession(config) {
   Config.clickEvents = Config.clickEvents || [];
   Config.scrollEvents = Config.scrollEvents || [];
 
-  console.log(`%c${config.isPdp ? 'PDP ' : 'NPDP '}%c${config.isPdp ? '―' : ''}%c――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――`, 'color: yellow', 'color: white', 'color: white'); // FIXME: debug testing 
-
   initSession();
 }
