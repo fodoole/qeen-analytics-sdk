@@ -28,7 +28,7 @@ function initResetCommon(label) {
   function logPageView() {
     new PageAnalyticsEvent('PAGE_VIEW', null, label, null);
     if (!State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
-      new PageAnalyticsEvent('CONTENT_SERVED', Config.contentServingId, null, null);
+      new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
       State.contentServed = true;
     }
   }
@@ -51,11 +51,28 @@ function initResetCommon(label) {
  * Function that sends a PAGE_EXIT event when the page is closed.
  */
 function terminateSession() {
-  // trigger any remaining debounced events
+  // Trigger any remaining debounced events and send PAGE_EXIT event
   Debouncer.flushAll();
-
-  // Send a PAGE_EXIT event
   new PageAnalyticsEvent('PAGE_EXIT', null, null, null);
+}
+
+/**
+ * Function that binds events that should only be bound once per thread.
+ */
+function bindThreadEvents() {
+  if (State.boundThreadEvents) {
+    return;
+  }
+  State.boundThreadEvents = true;
+
+  // Bind tab and idle time events
+  bindTabEvents();
+  bindIdleTimeEvents(Config.idleTime);
+
+  // Fire any debounced events on page exit and send PAGE_EXIT event
+  beforeUnload(function (_) {
+    terminateSession();
+  });
 }
 
 /**
@@ -71,14 +88,8 @@ function initSession() {
     // Common initialization logic
     initResetCommon('INIT');
 
-    // Bind tab and idle time events
-    bindTabEvents();
-    bindIdleTimeEvents(Config.idleTime);
-
-    // Fire any debounced events on page exit and send PAGE_EXIT event
-    beforeUnload(function (_) {
-      terminateSession();
-    });
+    // Bind general exit events
+    bindThreadEvents();
   });
 }
 
@@ -175,6 +186,8 @@ export function initPageSession(config) {
   Config.idleTime = limit(config.idleTime, 1_000, 599_000, 300_000); // FIXME: debug testing 
   Config.clickEvents = Config.clickEvents || [];
   Config.scrollEvents = Config.scrollEvents || [];
+
+  console.log(`%c${config.isPdp ? 'PDP ' : 'NPDP '}%c${config.isPdp ? '―' : ''}%c――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――`, 'color: yellow', 'color: white', 'color: white'); // FIXME: debug testing 
 
   initSession();
 }
