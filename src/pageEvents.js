@@ -14,6 +14,8 @@ import { Debouncer } from './utils.js';
  * Accepts a single click event object or an array of click event objects.
  * @param {Object|Object[]} clickEvents - A click event object or an array of click event objects.
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 export function bindClickEvents(clickEvents) {
@@ -23,6 +25,10 @@ export function bindClickEvents(clickEvents) {
   // Ensure clickEvents is always an array
   const eventsArray = Array.isArray(clickEvents) ? clickEvents : [clickEvents];
   eventsArray.forEach(function (event) {
+    if (!event.label || !event.value) {
+      throw new InvalidParameterError('Label and path are required for click events.');
+    }
+
     const domElements = document.querySelectorAll(event.value);
     if (domElements.length === 0) {
       throw new InvalidParameterError(`No elements found with the selector: ${event.value}`);
@@ -38,8 +44,10 @@ export function bindClickEvents(clickEvents) {
       }
     });
     // Keep track of the click events
-    Config.clickEvents = Config.clickEvents || new Set();
-    Config.clickEvents.add(event);
+    Config.clickEvents = Config.clickEvents || [];
+    if (!Config.clickEvents.some(e => e.label === event.label && e.value === event.value)) {
+      Config.clickEvents.push(event);
+    }
   });
 }
 
@@ -47,6 +55,8 @@ export function bindClickEvents(clickEvents) {
  * Callback function for binding scroll events to DOM elements.
  * @param {Object|Object[]} scrollEvents - A scroll event object or an array of scroll event objects.
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 export function bindScrollEvents(scrollEvents) {
@@ -56,11 +66,12 @@ export function bindScrollEvents(scrollEvents) {
   // Ensure scrollEvents is always an array
   const eventsArray = Array.isArray(scrollEvents) ? scrollEvents : [scrollEvents];
   eventsArray.forEach(function (event) {
-    const label = event.label;
-    const path = event.value;
-    const domElements = document.querySelectorAll(path);
+    if (!event.label || !event.value) {
+      throw new InvalidParameterError('Label and path are required for scroll events.');
+    }
+    const domElements = document.querySelectorAll(event.value);
     if (domElements.length === 0) {
-      throw new InvalidParameterError(`No elements found with the selector: ${path}`);
+      throw new InvalidParameterError(`No elements found with the selector: ${event.value}`);
     }
 
     domElements.forEach(element => {
@@ -68,9 +79,9 @@ export function bindScrollEvents(scrollEvents) {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             // Only log the event if it hasn't been logged before
-            if (!State.scrollObservedElements.has(label)) {
-              new PageAnalyticsEvent('SCROLL', null, label, path);
-              State.scrollObservedElements.add(label);
+            if (!State.scrollObservedElements.has(event.label)) {
+              new PageAnalyticsEvent('SCROLL', null, event.label, event.value);
+              State.scrollObservedElements.add(event.label);
             }
             observer.unobserve(entry.target);
             observer = null;
@@ -80,8 +91,10 @@ export function bindScrollEvents(scrollEvents) {
       observer.observe(element);
     });
     // Keep track of the scroll events
-    Config.scrollEvents = Config.scrollEvents || new Set();
-    Config.scrollEvents.add(event);
+    Config.scrollEvents = Config.scrollEvents || [];
+    if (!Config.scrollEvents.some(e => e.label === event.label && e.value === event.value)) {
+      Config.scrollEvents.push(event);
+    }
   });
 }
 
@@ -96,6 +109,8 @@ function tabSwitchCausesReset() {
 
 /**
  * This function binds tab switch events to the document object.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set when sending the event.
  */
 export function bindTabEvents() {
   document.addEventListener('visibilitychange', function () {
@@ -117,8 +132,14 @@ export function bindTabEvents() {
 /**
  * This function instantiates and resets the idle timer when a user interacts with the page. 
  * @param {number} idleThreshold - the time in milliseconds before the user is considered idle.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export function resetIdleTimer(idleThreshold) {
+  if (!idleThreshold) {
+    throw new InvalidParameterError('Idle threshold is required to reset the idle timer.');
+  }
   clearTimeout(State.idleTimer);
   if (!document.hidden) {
     State.idleTimer = setTimeout(function () {
@@ -140,6 +161,9 @@ export function resetIdleTimer(idleThreshold) {
 /**
  * This function binds idle time events to the document object.
  * @param {number} idleThreshold - the time in milliseconds before the user is considered idle.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set when sending the event.
+ * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export function bindIdleTimeEvents(idleThreshold) {
   ['mousemove', 'keypress', 'touchmove', 'scroll', 'click', 'keyup', 'touchstart', 'touchend', 'visibilitychange']
@@ -150,9 +174,10 @@ export function bindIdleTimeEvents(idleThreshold) {
  * This function sends a checkout event to the analytics endpoint.
  * @param {string} currency - The currency of the transaction.
  * @param {number} value - The value of the transaction.
+ * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set when sending the event.
  * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  * @throws {InvalidParameterError} Throws an error if the event is attempted to be sent on a product detail page.
- * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
  * @description Checkout events may only be sent on non-product detail pages.
  */
 export function sendCheckoutEvent(currency, value) {

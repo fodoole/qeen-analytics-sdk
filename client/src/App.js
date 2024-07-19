@@ -13,6 +13,7 @@ function AnalyticsWrapper({ children }) {
     // fodoole.fetchFodooleContent();
 
     fodoole.initPageSession({
+      fodooleDeviceId: 'dev',
       analyticsEndpoint: '/log',
       projectId: '123',
       contentServingId: '0',

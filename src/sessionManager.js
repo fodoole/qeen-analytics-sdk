@@ -146,7 +146,6 @@ export async function fetchContent(fodooleDeviceId) {
  * @throws {InvalidParameterError} Throws an the user device ID is not set.
  */
 export function initPageSession(config) {
-  // FIXME: kneecap user if user device id not set
   if (Config.noFodoole) {
     return;
   }
@@ -161,7 +160,7 @@ export function initPageSession(config) {
   Config.isPdp = config.isPdp || false;
   // Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000); 
   Config.idleTime = limit(config.idleTime, 1_000, 599_000, 300_000); // FIXME: debug testing 
-  Config.clickEvents = Config.clickEvents || new Set();
-  Config.scrollEvents = Config.scrollEvents || new Set();
+  Config.clickEvents = Config.clickEvents || [];
+  Config.scrollEvents = Config.scrollEvents || [];
   initSession();
 }

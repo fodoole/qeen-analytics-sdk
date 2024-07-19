@@ -39,4 +39,4 @@ if (window.location.hash.includes('no-fodoole')) {
   window.addEventListener('message', fodoole.receiveMessage, false);
 }
 
-// export { fodoole };
+// export { fodoole }; // FIXME

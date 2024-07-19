@@ -14,6 +14,7 @@ import { AnalyticsEndpointError, InvalidParameterError } from './errors.js';
  * @param {string} label The label of the event (e.g. 'ADD_TO_CART').
  * @param {string} domPath The DOM path of the element that triggered the event.
  * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
+ * @throws {InvalidParameterError} Throws an error if the user device ID is not set.
  */
 export class PageAnalyticsEvent {
   ts = Date.now();
@@ -43,6 +44,9 @@ export class PageAnalyticsEvent {
   pushEvent() {
     if (!Config.analyticsEndpoint) {
       throw new AnalyticsEndpointError('Fodoole analytics endpoint not set.');
+    }
+    if (!State.fodooleDeviceId) {
+      throw new InvalidParameterError('Fodoole user device ID is required.');
     }
     if (window.location.hash.includes('fodoole-dev')) {
       console.log(this);

@@ -43,7 +43,7 @@ export class State {
     State.debounceTime = 500;
     State.idleTimer = null;
     State.lastIdleTime = Date.now();
-    State.fodooleDeviceId = null;
+    State.fodooleDeviceId = State.fodooleDeviceId || null;
     State.lastTabExitTime = 0;
     State.scrollObservedElements = new Set();
   }
