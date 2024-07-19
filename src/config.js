@@ -37,7 +37,8 @@ export class Config { }
  */
 export class State {
   static debounceTime = 500;
-  static fodooleDeviceId = State.fodooleDeviceId || null;
+  static fodooleDeviceId = null;
+  static boundThreadEvents = false;
   static reset() {
     State.contentServed = false;
     State.sessionId = null;
