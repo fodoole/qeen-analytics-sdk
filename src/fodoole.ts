@@ -11,32 +11,39 @@ import { InteractionEvent } from './models.js';
 import { receiveMessage } from './demoMode.js';
 import { InvalidParameterError, AnalyticsEndpointError, ResponseNotOkError, URLContainsNoFodooleError } from './errors.js';
 
+declare global {
+  interface Window {
+    fodoole: any;
+    fodooleError: string;
+  }
+}
+
 /**
  * @namespace fodoole
  * @description The main namespace for the Fodoole Analytics SDK.
  */
 window.fodoole = window.fodoole || {};
 
-fodoole.randInt = randInt;
+window.fodoole.randInt = randInt;
 
-fodoole.fetchFodooleContent = fetchContent;
-fodoole.initPageSession = initPageSession;
-fodoole.bindClickEvents = bindClickEvents;
-fodoole.bindScrollEvents = bindScrollEvents;
-fodoole.sendCheckoutEvent = sendCheckoutEvent;
-fodoole.config = Config;
-fodoole.state = State;
-fodoole.InteractionEvent = InteractionEvent;
-fodoole.InvalidParameterError = InvalidParameterError;
-fodoole.AnalyticsEndpointError = AnalyticsEndpointError;
-fodoole.ResponseNotOkError = ResponseNotOkError;
-fodoole.URLContainsNoFodooleError = URLContainsNoFodooleError;
+window.fodoole.fetchFodooleContent = fetchContent;
+window.fodoole.initPageSession = initPageSession;
+window.fodoole.bindClickEvents = bindClickEvents;
+window.fodoole.bindScrollEvents = bindScrollEvents;
+window.fodoole.sendCheckoutEvent = sendCheckoutEvent;
+window.fodoole.config = Config;
+window.fodoole.state = State;
+window.fodoole.InteractionEvent = InteractionEvent;
+window.fodoole.InvalidParameterError = InvalidParameterError;
+window.fodoole.AnalyticsEndpointError = AnalyticsEndpointError;
+window.fodoole.ResponseNotOkError = ResponseNotOkError;
+window.fodoole.URLContainsNoFodooleError = URLContainsNoFodooleError;
 
 if (window.location.hash.includes('no-fodoole')) {
   Config.noFodoole = true;
   console.log(`${window.fodooleError = 'Fodoole is disabled; URL contains #no-fodoole'}`);
-  fodoole.receiveMessage = receiveMessage;
-  window.addEventListener('message', fodoole.receiveMessage, false);
+  window.fodoole.receiveMessage = receiveMessage;
+  window.addEventListener('message', window.fodoole.receiveMessage, false);
 } else {
   Config.noFodoole = false;
 }

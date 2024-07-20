@@ -4,9 +4,9 @@
  */
 
 import { Config, State, getContentEndpoint } from './config.js';
-import { PageAnalyticsEvent, fetchContentParams } from './models.js';
+import { InteractionEvent, PageAnalyticsEvent, fetchContentParams } from './models.js';
 import { InvalidParameterError, URLContainsNoFodooleError, ResponseNotOkError } from './errors.js';
-import { bindScrollEvents, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
+import { bindScrollEventsToElements, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
 import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
 
 /**
@@ -14,7 +14,7 @@ import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
   * This function is called when a session is initialised or reset.
   * @param {string} label The label for the page view event.
   */
-function initResetCommon(label) {
+function initResetCommon(label: string): void {
   // Manage state
   if (label === 'RESET') {
     State.isResetSession = true;
@@ -25,7 +25,7 @@ function initResetCommon(label) {
   resetIdleTimer(Config.idleTime);
 
   // Log the page view and content served events
-  function logPageView() {
+  function logPageView(): void {
     new PageAnalyticsEvent('PAGE_VIEW', null, label, null);
     if (!State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
       new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
@@ -50,7 +50,7 @@ function initResetCommon(label) {
 /**
  * Function that sends a PAGE_EXIT event when the page is closed.
  */
-function terminateSession() {
+function terminateSession(): void {
   // Trigger any remaining debounced events and send PAGE_EXIT event
   Debouncer.flushAll();
   new PageAnalyticsEvent('PAGE_EXIT', null, null, null);
@@ -59,7 +59,7 @@ function terminateSession() {
 /**
  * Function that binds events that should only be bound once per thread.
  */
-function bindThreadEvents() {
+function bindThreadEvents(): void {
   if (State.boundThreadEvents) {
     return;
   }
@@ -70,7 +70,7 @@ function bindThreadEvents() {
   bindIdleTimeEvents(Config.idleTime);
 
   // Fire any debounced events on page exit and send PAGE_EXIT event
-  beforeUnload(function (_) {
+  beforeUnload(function () {
     terminateSession();
   });
 }
@@ -79,12 +79,12 @@ function bindThreadEvents() {
  * Function that initializes a page session.
  * This function is called when the page is loaded.
  */
-function initSession() {
+function initSession(): void {
   // Reset session data
   State.reset();
   State.sessionId = String(randInt());
 
-  onLoad(function (_) {
+  onLoad(function () {
     // Common initialization logic
     initResetCommon('INIT');
 
@@ -98,39 +98,63 @@ function initSession() {
  * returns to the page after a long period of time or when idle time is hit
  * while user is still on the page.
  */
-export function resetSession() {
+export function resetSession(): void {
   // Reset session id and session data
   State.reset();
   // Rebind intersection observer for scroll events
-  bindScrollEvents(Config.scrollEvents);
+  bindScrollEventsToElements(Config.scrollEvents);
 
   initResetCommon('RESET');
 }
 
 /**
  * Prepare selectors for the content rendering or replacement.
- * @param {Object[]} rawContent - The raw content to be prepared.
+ * @param {any[]} rawContent - The raw content to be prepared.
  * @returns {Object} - The content selectors.
  */
-function prepareSelectors(rawContent) {
-  let contentSelectors = {};
+function prepareSelectors(rawContent: any[]): any {
+  let contentSelectors: any = {};
   rawContent.forEach(entry => {
-    contentSelectors[entry.path] = entry.value;
+    contentSelectors[entry?.path] = entry?.value;
   });
 
   return contentSelectors;
 }
 
 /**
+ * @interface ContentResponse
+ * @property {string} fodooleDeviceId - The Fodoole device ID.
+ * @property {string} analyticsEndpoint - The endpoint for the analytics server.
+ * @property {string} projectId - The project ID.
+ * @property {string} contentServingId - The content serving ID.
+ * @property {string} contentId - The content ID.
+ * @property {boolean} isPdp - The product detail page flag.
+ * @property {number} idleTime - The idle time in milliseconds.
+ * @property {any[]} rawContentSelectors - The raw content selectors.
+ * @property {Object} contentSelectors - The content selectors and content.
+ */
+interface ContentResponse {
+  fodooleDeviceId: string;
+  analyticsEndpoint: string;
+  projectId: string;
+  contentServingId: string;
+  contentId: string;
+  isPdp: boolean;
+  idleTime: number;
+  rawContentSelectors: any[];
+  contentSelectors: Object;
+}
+
+/**
  * Function to fetch Fodoole content.
  * @param {string} fodooleDeviceId - The user device ID.
- * @returns {Promise} - The promise object representing the response.
+ * @returns {Promise<Object>} - The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
  * @throws {URLContainsNoFodooleError} - Throws an error if the URL contains #no-fodoole.
  */
-export async function fetchContent(fodooleDeviceId) {
+export async function fetchContent(fodooleDeviceId: string): Promise<ContentResponse> {
   try {
     if (!fodooleDeviceId) {
       return Promise.reject(new InvalidParameterError('Fodoole user device ID is required.'));
@@ -139,12 +163,12 @@ export async function fetchContent(fodooleDeviceId) {
       return Promise.reject(new URLContainsNoFodooleError('Fodoole is disabled; URL contains #no-fodoole'));
     }
 
-    const params = new fetchContentParams(fodooleDeviceId);
-    const response = await fetch(`${getContentEndpoint}?${params.toString()}`);
+    const params: fetchContentParams = new fetchContentParams(fodooleDeviceId);
+    const response: Response = await fetch(`${getContentEndpoint}?${params.toString()}`);
     if (!response.ok) {
       return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
     }
-    const data = await response.json();
+    const data: ContentResponse = await response.json();
     data.fodooleDeviceId = fodooleDeviceId;
     data.contentSelectors = prepareSelectors(data.rawContentSelectors)
     // Save the content in the config object for frontend investigation and debugging
@@ -158,12 +182,36 @@ export async function fetchContent(fodooleDeviceId) {
 }
 
 /**
- * Function that initializes the Fodoole Analytics SDK.
- * @param {Object} config - The configuration object for the Fodoole Analytics SDK.
- * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
- * @throws {InvalidParameterError} Throws an the user device ID is not set.
+ * Function that cleans up stale events that are no longer present on the page.
  */
-export function initPageSession(config) {
+function cleanUpStaleEvents(): void {
+  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event.value));
+  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event.value));
+}
+
+/**
+ * Class that represents a queue item for binding events.
+ * @class BindQueueItem
+ * @param {Function} fn - The function to be called.
+ * @param {any[]} args - The arguments to be passed to the function.
+ * @property {Function} fn - The function to be called.
+ * @property {any[]} args - The arguments to be passed to the function.
+ */
+export class BindQueueItem {
+  public fn: Function;
+  public args: any[];
+
+  constructor(fn: Function, args: any[]) {
+    this.fn = fn;
+    this.args = args;
+  }
+}
+
+/**
+ * Function that initializes the Fodoole Analytics SDK.
+ * @param {any} config - The configuration object for the Fodoole Analytics SDK.
+ */
+export function initPageSession(config: ContentResponse): void {
   if (Config.noFodoole) {
     return;
   }
@@ -182,9 +230,18 @@ export function initPageSession(config) {
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.isPdp = config.isPdp || false;
-  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000); 
+  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
+
+  // Ensure interaction events don't leak through different routes
   Config.clickEvents = Config.clickEvents || [];
   Config.scrollEvents = Config.scrollEvents || [];
+  cleanUpStaleEvents();
 
   initSession();
+
+  // Apply pending bindings
+  State.bindQueue.forEach(item => {
+    item.fn(...item.args);
+  });
+  State.bindQueue = [];
 }

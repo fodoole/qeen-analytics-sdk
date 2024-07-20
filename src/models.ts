@@ -17,18 +17,23 @@ import { AnalyticsEndpointError, InvalidParameterError } from './errors.js';
  * @throws {InvalidParameterError} Throws an error if the user device ID is not set.
  */
 export class PageAnalyticsEvent {
-  ts = Date.now();
-  pid = State.sessionId;
-  u = window.location.href;
-  ua = navigator.userAgent;
-  r = document.referrer;
-  p = Config.projectId;
-  csrvid = Config.contentServingId;
-  cid = Config.contentId;
-  uid = State.fodooleDeviceId;
-  npdp = !Config.isPdp;
+  public ts: number = Date.now();
+  public pid: string = State.sessionId;
+  public u: string = window.location.href;
+  public ua: string = navigator.userAgent;
+  public r: string = document.referrer;
+  public p: string = Config.projectId;
+  public csrvid: string = Config.contentServingId;
+  public cid: string = Config.contentId;
+  public uid: string = State.fodooleDeviceId;
+  public npdp: boolean = !Config.isPdp;
 
-  constructor(type, value, label, domPath) {
+  public t: string;
+  public v: number | null;
+  public l: string | null;
+  public edp: string | null;
+
+  constructor(type: string, value: number | null, label: string | null, domPath: string | null) {
     this.t = type;
     this.v = value;
     this.l = label;
@@ -41,7 +46,7 @@ export class PageAnalyticsEvent {
    * Push the event to the analytics endpoint.
    * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
    */
-  pushEvent() {
+  pushEvent(): void {
     if (!Config.analyticsEndpoint) {
       throw new AnalyticsEndpointError('Fodoole analytics endpoint not set.');
     }
@@ -67,7 +72,7 @@ export class PageAnalyticsEvent {
  * @param {string} fodooleDeviceId - The Fodoole user device ID.
  */
 export class fetchContentParams extends URLSearchParams {
-  constructor(fodooleDeviceId) {
+  constructor(fodooleDeviceId: string) {
     super({
       pageUrl: window.location.href,
       userDeviceId: fodooleDeviceId,
@@ -83,11 +88,14 @@ export class fetchContentParams extends URLSearchParams {
  * Structure for interaction events (i.e. clicks, scrolls).
  * @class InteractionEvent
  * @param {string} label - The label of the event.
- * @param {number} value - The selector to bind the event to.
+ * @param {string} value - The selector to bind the event to.
  * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export class InteractionEvent {
-  constructor(label, value) {
+  public label: string;
+  public value: string;
+
+  constructor(label: string, value: string) {
     if (!label || !value) {
       throw new InvalidParameterError('Label and value are required for interaction events.');
     }

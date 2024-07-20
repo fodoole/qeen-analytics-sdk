@@ -10,7 +10,7 @@
  * @param {string} message - The error message.
  */
 export class InvalidParameterError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = 'InvalidParameterError';
   }
@@ -23,7 +23,7 @@ export class InvalidParameterError extends Error {
  * @param {string} message - The error message.
  */
 export class AnalyticsEndpointError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = 'AnalyticsEndpointError';
   }
@@ -36,7 +36,7 @@ export class AnalyticsEndpointError extends Error {
  * @param {string} message - The error message.
  */
 export class URLContainsNoFodooleError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = 'URLContainsNoFodooleError';
   }
@@ -51,7 +51,11 @@ export class URLContainsNoFodooleError extends Error {
  * @param {string} url - The URL of the request.
  */
 export class ResponseNotOkError extends Error {
-  constructor(status, statusText, url) {
+  public status: number;
+  public statusText: string;
+  public url: string;
+
+  constructor(status: number, statusText: string, url: string) {
     super(`Request to ${url} failed with status ${status}: ${statusText}`);
     this.name = "ResponseNotOkError";
     this.status = status;

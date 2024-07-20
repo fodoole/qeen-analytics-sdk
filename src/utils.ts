@@ -5,11 +5,11 @@
 
 /**
  * Wrapper for the onload event.
- * @param {function} fn - function to be executed on load.
+ * @param {Function} fn - function to be executed on load.
  */
-export function onLoad(fn) {
+export function onLoad(fn: Function): void {
   if (document.body === null) {
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function (): void {
       fn();
     }, false);
   } else {
@@ -19,32 +19,36 @@ export function onLoad(fn) {
 
 /**
  * Wrapper for beforeunload event.
- * @param {function} fn - function to be executed before the page is unloaded.
+ * @param {Function} fn - function to be executed before the page is unloaded.
  */
-export function beforeUnload(fn) {
-  window.addEventListener('beforeunload', function () {
+export function beforeUnload(fn: Function): void {
+  window.addEventListener('beforeunload', function (): void {
     fn();
   }, false);
 }
 
 /**
  * @class Debouncer
- * @param {function} fn - the function to be debounced.
+ * @param {Function} fn - the function to be debounced.
  * @param {number} delay - the time in milliseconds to wait before calling the function.
  * @returns {Debouncer} - an object containing the debounced function, a trigger function, and a clear function.
- * @property {function} debounced - the function to debounce the function.
- * @property {function} trigger - the function to trigger the function immediately.
- * @property {function} clear - the function to clear the timeout.
- * @property @static {function} flushAll - the function to flush all pending debounced events.
+ * @property {Function} debounced - the function to debounce the function.
+ * @property {Function} trigger - the function to trigger the function immediately.
+ * @property {Function} clear - the function to clear the timeout.
+ * @property {Function} flushAll - the function to flush all pending debounced events.
+ * @property {Debouncer[]} debouncedEvents - an array of all debounced events.
  * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function.
  */
 export class Debouncer {
-  static debouncedEvents = [];
-  timer = null;
-  context = null;
-  args = null;
+  public fn: Function;
+  public delay: number;
 
-  constructor(fn, delay) {
+  static debouncedEvents: Debouncer[] = [];
+  private timer: number = 0;
+  private context: any | null = null;
+  private args: any[] | null = null;
+
+  constructor(fn: Function, delay: number) {
     this.fn = fn;
     this.delay = delay;
   }
@@ -52,11 +56,11 @@ export class Debouncer {
   /**
    * Clear the timeout.
    */
-  clear = () => {
-    clearTimeout(this.timer);
+  clear = (): void => {
+    window.clearTimeout(this.timer);
     this.context = null;
     this.args = null;
-    let index = Debouncer.debouncedEvents.indexOf(this);
+    const index: number = Debouncer.debouncedEvents.indexOf(this);
     if (index !== -1) {
       Debouncer.debouncedEvents.splice(index, 1);
     }
@@ -66,16 +70,16 @@ export class Debouncer {
    * Debounce the function.
    * @param {...any} args - arguments to be passed to the function.
    */
-  debounced = (...args) => {
+  debounced = (...args: any[]): void => {
     this.context = this;
     this.args = args;
-    let clearFunc = this.clear;
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
+    const clearFunc: Function = this.clear;
+    window.clearTimeout(this.timer);
+    this.timer = window.setTimeout(() => {
       this.fn.apply(this.context, this.args);
       clearFunc();
     }, this.delay);
-    let index = Debouncer.debouncedEvents.indexOf(this);
+    const index: number = Debouncer.debouncedEvents.indexOf(this);
     if (index === -1) {
       Debouncer.debouncedEvents.push(this);
     }
@@ -84,7 +88,7 @@ export class Debouncer {
   /**
    * Trigger the function immediately.
    */
-  trigger = () => {
+  trigger = (): void => {
     if (this.context && this.args) {
       this.fn.apply(this.context, this.args);
     }
@@ -94,7 +98,7 @@ export class Debouncer {
   /**
    * Flush all pending debounced events.
    */
-  static flushAll = () => {
+  static flushAll = (): void => {
     Debouncer.debouncedEvents.forEach(debouncer => {
       debouncer.trigger();
     });
@@ -105,9 +109,9 @@ export class Debouncer {
  * Function for generating a random 16-digit number.
  * @returns {number} - A random number between `10^15` and `10^16 - 1`.
  */
-export function randInt() {
-  const min = 1;
-  const max = Math.pow(10, 16) - 1;
+export function randInt(): number {
+  const min: number = 1;
+  const max: number = Math.pow(10, 16) - 1;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -119,6 +123,6 @@ export function randInt() {
  * @param {number} defaultValue - The default value.
  * @returns {number} - The limited value.
  */
-export function limit(value, min, max, defaultValue = 0) {
+export function limit(value: number, min: number, max: number, defaultValue: number = 0): number {
   return Math.min(Math.max(value, min), max) || defaultValue;
 }
