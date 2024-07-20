@@ -27,7 +27,7 @@ function logRawBody(req, _, next) {
 }
 
 // Serve static files from the src directory
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Serve React testing app
 app.use(express.static(path.join(__dirname, 'client/build')));
