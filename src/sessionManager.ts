@@ -148,7 +148,7 @@ interface ContentResponse {
 /**
  * Function to fetch Fodoole content.
  * @param {string} fodooleDeviceId - The user device ID.
- * @returns {Promise<Object>} - The promise object representing the response.
+ * @returns {Promise<ContentResponse>} The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.

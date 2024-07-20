@@ -24,13 +24,12 @@ declare global {
  */
 window.fodoole = window.fodoole || {};
 
-window.fodoole.randInt = randInt;
-
 window.fodoole.fetchFodooleContent = fetchContent;
 window.fodoole.initPageSession = initPageSession;
 window.fodoole.bindClickEvents = bindClickEvents;
 window.fodoole.bindScrollEvents = bindScrollEvents;
 window.fodoole.sendCheckoutEvent = sendCheckoutEvent;
+window.fodoole.randInt = randInt;
 window.fodoole.config = Config;
 window.fodoole.state = State;
 window.fodoole.InteractionEvent = InteractionEvent;
