@@ -1,15 +1,15 @@
 /**
- * @file Qeen Analytics SDK
+ * @file qeen.ts
  * @description The main script for Qeen Analytics SDK.
  */
 
-import { fetchContent, initPageSession } from './sessionManager.js';
-import { Config, State } from './config.js';
-import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents.js';
-import { randInt } from './utils.js';
-import { InteractionEvent } from './models.js';
-import { receiveMessage } from './demoMode.js';
-import { InvalidParameterError, AnalyticsEndpointError, ResponseNotOkError, URLContainsNoQeenError } from './errors.js';
+import { fetchContent, initPageSession } from './sessionManager';
+import { Config, State } from './config';
+import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents';
+import { randInt } from './utils';
+import { InteractionEvent } from './models';
+import { receiveMessage } from './demoMode';
+import { InvalidParameterError, AnalyticsEndpointError, ResponseNotOkError, URLContainsNoQeenError } from './errors';
 
 declare global {
   interface Window {

@@ -1,5 +1,5 @@
 /**
- * @file errors.js
+ * @file errors.ts
  * @description The error classes for Qeen Analytics SDK.
  */
 

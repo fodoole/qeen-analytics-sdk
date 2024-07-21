@@ -1,13 +1,13 @@
 /**
- * @file pageEvents.js
+ * @file pageEvents.ts
  * @description The page events script for Qeen Analytics SDK.
  */
 
-import { Config, State } from './config.js';
-import { PageAnalyticsEvent, InteractionEvent } from './models.js';
-import { InvalidParameterError } from './errors.js';
-import { resetSession, BindQueueItem } from './sessionManager.js';
-import { Debouncer } from './utils.js';
+import { Config, State } from './config';
+import { PageAnalyticsEvent, InteractionEvent } from './models';
+import { InvalidParameterError } from './errors';
+import { resetSession, BindQueueItem } from './sessionManager';
+import { Debouncer } from './utils';
 
 /**
  * Function for binding click events to DOM elements.

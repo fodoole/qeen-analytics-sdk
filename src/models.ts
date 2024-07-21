@@ -1,10 +1,10 @@
 /**
- * @file models.js
+ * @file models.ts
  * @description The models for Qeen Analytics SDK.
  */
 
-import { Config, State } from './config.js';
-import { AnalyticsEndpointError, InvalidParameterError } from './errors.js';
+import { Config, State } from './config';
+import { AnalyticsEndpointError, InvalidParameterError } from './errors';
 
 /**
  * Class that handles page-level analytics.

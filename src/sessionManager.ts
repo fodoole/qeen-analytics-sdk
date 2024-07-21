@@ -1,13 +1,13 @@
 /**
- * @file sessionManager.js
+ * @file sessionManager.ts
  * @description The session manager script for Qeen Analytics SDK.
  */
 
-import { Config, State, getContentEndpoint } from './config.js';
-import { InteractionEvent, PageAnalyticsEvent, fetchContentParams, ContentResponse } from './models.js';
-import { InvalidParameterError, URLContainsNoQeenError, ResponseNotOkError } from './errors.js';
-import { bindScrollEventsToElements, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
-import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
+import { Config, State, getContentEndpoint } from './config';
+import { InteractionEvent, PageAnalyticsEvent, fetchContentParams, ContentResponse } from './models';
+import { InvalidParameterError, URLContainsNoQeenError, ResponseNotOkError } from './errors';
+import { bindScrollEventsToElements, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents';
+import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils';
 
 /**
   * Function that implements common logic for resetting the session state.
@@ -27,6 +27,8 @@ function initResetCommon(label: string): void {
   // Log the page view and content served events
   function logPageView(): void {
     new PageAnalyticsEvent('PAGE_VIEW', null, label, null);
+    // FIXME: sending content served even if the content is not rendered
+    // TODO: after changing, user must set this value; update docs
     if (!State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
       new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
       State.contentServed = true;

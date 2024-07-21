@@ -1,5 +1,5 @@
 /**
- * @file utils.js
+ * @file utils.ts
  * @description Utility functions for Qeen Analytics SDK.
  */
 
