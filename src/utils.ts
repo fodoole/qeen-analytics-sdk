@@ -32,10 +32,10 @@ export function beforeUnload(fn: Function): void {
  * @param {Function} fn - the function to be debounced.
  * @param {number} delay - the time in milliseconds to wait before calling the function.
  * @returns {Debouncer} - an object containing the debounced function, a trigger function, and a clear function.
- * @property {Function} debounced - the function to debounce the function.
- * @property {Function} trigger - the function to trigger the function immediately.
- * @property {Function} clear - the function to clear the timeout.
- * @property {Function} flushAll - the function to flush all pending debounced events.
+ * @method debounced - the function to debounce the function.
+ * @method trigger - the function to trigger the function immediately.
+ * @method clear - the function to clear the timeout.
+ * @method flushAll - the function to flush all pending debounced events.
  * @property {Debouncer[]} debouncedEvents - an array of all debounced events.
  * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function.
  */

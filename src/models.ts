@@ -68,19 +68,45 @@ export class PageAnalyticsEvent {
 /**
  * Class that handles the parameters for fetching content.
  * @class fetchContentParams
- * @extends URLSearchParams
- * @param {string} fodooleDeviceId - The Fodoole user device ID.
+ * @param {string} fodooleDeviceId - The Fodoole device ID.
+ * @property {string} pageUrl - The URL of the page.
+ * @property {string} referrerUrl - The URL of the referrer.
+ * @property {string} locale - The locale of the user.
+ * @property {string} langCode - The language code of the page.
+ * @property {string} timezone - The timezone of the user.
+ * @property {string} userDeviceId - The Fodoole device ID.
+ * @property {URLSearchParams} params - The URL search parameters.
+ * @method toString - Convert the parameters to a string.
  */
-export class fetchContentParams extends URLSearchParams {
+export class fetchContentParams {
+  private pageUrl: string = window.location.href;
+  private referrerUrl: string = document.referrer;
+  private locale: string = navigator.language
+  private langCode: string = document.documentElement.lang || 'en';
+  private timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  private userDeviceId: string;
+
+  public params: URLSearchParams;
+
   constructor(fodooleDeviceId: string) {
-    super({
-      pageUrl: window.location.href,
-      userDeviceId: fodooleDeviceId,
-      referrerUrl: document.referrer,
-      locale: navigator.language,
-      langCode: document.documentElement.lang || 'en',
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    this.userDeviceId = fodooleDeviceId;
+
+    this.params = new URLSearchParams({
+      pageUrl: this.pageUrl,
+      userDeviceId: this.userDeviceId,
+      referrerUrl: this.referrerUrl,
+      locale: this.locale,
+      langCode: this.langCode,
+      timezone: this.timezone
     });
+  }
+
+  /**
+   * Convert the parameters to a string.
+   * @returns {string} The stringified parameters.
+   */
+  toString(): string {
+    return this.params.toString();
   }
 }
 

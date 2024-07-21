@@ -46,6 +46,9 @@ fodoole.bindScrollEvents(new InteractionEvent('SCROLL_DESCRIPTION', '.product-de
 The `fetchFodooleContent` function takes a single parameter:
 - `fodooleDeviceId`: A unique identifier for the user's device. This ID should be generated and stored on the client side.
 
+> [!NOTE]
+> The language of the page is determined by the `lang` attribute in the `<html>` tag. The SDK will use this language to fetch content from the API. Make sure to set the `lang` attribute to the correct language code for your page.
+
 ### Returned Content
 The `fetchFodooleContent` function returns optimized content in the `contentSelectors` object where each key is the content selector and the value is the optimized content. This object may be empty if original content is served.
 ```js
