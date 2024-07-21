@@ -1,6 +1,6 @@
 /**
  * @file pageEvents.js
- * @description The page events script for Fodoole Analytics SDK.
+ * @description The page events script for Qeen Analytics SDK.
  */
 
 import { Config, State } from './config.js';
@@ -46,8 +46,8 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
 
     domElements.forEach(element => {
       // Only bind the event if it hasn't been bound before
-      if (!element.hasAttribute('data-fodoole-click-bound')) {
-        element.setAttribute('data-fodoole-click-bound', 'true');
+      if (!element.hasAttribute('data-qeen-click-bound')) {
+        element.setAttribute('data-qeen-click-bound', 'true');
         element.addEventListener('click', new Debouncer(function (): void {
           new PageAnalyticsEvent('CLICK', null, event.label, event.value);
         }, State.debounceTime).debounced);

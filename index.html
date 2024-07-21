@@ -3,18 +3,18 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Fodoole Test</title>
-  <script type="module" src="/fodoole.js"></script>
+  <title>Qeen Test</title>
+  <script type="module" src="/qeen.js"></script>
 </head>
 
 <body>
-  <h1>Fodoole Test</h1>
+  <h1>Qeen Test</h1>
   <script type="module">
-    import '/fodoole.js';
+    import '/qeen.js';
 
-    fodoole.fetchFodooleContent();
+    qeen.fetchQeenContent();
 
-    fodoole.initPageSession({
+    qeen.initPageSession({
       analyticsEndpoint: '/log',
       projectId: '123',
       contentServingId: '0',
@@ -23,9 +23,9 @@
       idleTime: 10_000
     });
 
-    fodoole.bindClickEvents([{ 'label': 'CLICK_H1', 'value': 'h1' }]);
-    fodoole.bindScrollEvents([{ 'label': 'SCROLL_H1', 'value': 'h1' }]);
-    // fodoole.sendCheckoutEvent('USD', 100);
+    qeen.bindClickEvents([{ 'label': 'CLICK_H1', 'value': 'h1' }]);
+    qeen.bindScrollEvents([{ 'label': 'SCROLL_H1', 'value': 'h1' }]);
+    // qeen.sendCheckoutEvent('USD', 100);
 
   </script>
 </body>

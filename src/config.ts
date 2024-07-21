@@ -1,6 +1,6 @@
 /**
  * @file config.ts
- * @description The configuration objects for Fodoole Analytics SDK.
+ * @description The configuration objects for Qeen Analytics SDK.
  */
 
 import { InteractionEvent } from "./models";
@@ -9,11 +9,12 @@ import { BindQueueItem } from "./sessionManager";
 /**
  * @constant {string} getContentEndpoint - The endpoint to fetch content.
  */
+// FIXME
 export const getContentEndpoint: string = 'https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/sdk/client-config';
 
 /**
  * @class Config
- * @description The configuration class for Fodoole Analytics SDK.
+ * @description The configuration class for Qeen Analytics SDK.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
  * @property {string} contentServingId - The content serving ID.
@@ -22,7 +23,7 @@ export const getContentEndpoint: string = 'https://fodoole-web-analytics-qfan6cr
  * @property {number} idleTime - The idle time in milliseconds.
  * @property {InteractionEvent[]} clickEvents - The click events array.
  * @property {InteractionEvent[]} scrollEvents - The scroll events array.
- * @property {boolean} noFodoole - If the URL contains #no-fodoole.
+ * @property {boolean} noQeen - If the URL contains #no-qeen.
  * @property {any[]} rawContentSelectors - The raw content selectors.
  * @property {Object} contentSelectors - The content selectors and content.
  */
@@ -35,16 +36,16 @@ export class Config {
   public static idleTime: number;
   public static clickEvents: InteractionEvent[];
   public static scrollEvents: InteractionEvent[];
-  public static noFodoole: boolean;
+  public static noQeen: boolean;
   public static rawContentSelectors: any[];
   public static contentSelectors: Object;
 }
 
 /**
  * @class State
- * @description The state class for Fodoole Analytics SDK.
+ * @description The state class for Qeen Analytics SDK.
  * @property {number} debounceTime - The debounce time in milliseconds.
- * @property {string} fodooleDeviceId - The Fodoole device ID.
+ * @property {string} qeenDeviceId - The Qeen device ID.
  * @property {boolean} boundThreadEvents - The bound thread events flag.
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
@@ -58,7 +59,7 @@ export class Config {
 export class State {
   public static readonly debounceTime: number = 500;
 
-  public static fodooleDeviceId: string = '';
+  public static qeenDeviceId: string = '';
   public static boundThreadEvents: boolean = false;
   public static bindQueue: BindQueueItem[] = [];
 

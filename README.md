@@ -1,9 +1,9 @@
-# Fodoole Analytics SDK Integration Guide for Single Page Applications
+# Qeen Analytics SDK Integration Guide for Single Page Applications
 
-This guide will help you integrate the Fodoole Analytics SDK into your single-page application (SPA). The SDK allows you to track page sessions, content interactions, and custom events in your SPA.
+This guide will help you integrate the Qeen Analytics SDK into your single-page application (SPA). The SDK allows you to track page sessions, content interactions, and custom events in your SPA.
 
 ## Table of Contents
-- [Fodoole Analytics SDK Integration Guide for Single Page Applications](#fodoole-analytics-sdk-integration-guide-for-single-page-applications)
+- [Qeen Analytics SDK Integration Guide for Single Page Applications](#qeen-analytics-sdk-integration-guide-for-single-page-applications)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Initialization](#initialization)
@@ -22,7 +22,7 @@ This guide will help you integrate the Fodoole Analytics SDK into your single-pa
   - [Best Practices](#best-practices)
 
 ## Installation
-To install the Fodoole Analytics SDK, add the following script tag to your HTML file:
+To install the Qeen Analytics SDK, add the following script tag to your HTML file:
 ```html
 <script src="https://cdn.qeen.ai/analytics-sdk.js"></script>
 ```
@@ -34,23 +34,23 @@ Initializing the SDK is a three-step process:
 3. Binding custom events.
 
 ```js
-const pageData = await fodoole.fetchFodooleContent(fodooleDeviceId);
+const pageData = await qeen.fetchQeenContent(qeenDeviceId);
 
-fodoole.initPageSession(pageData);
+qeen.initPageSession(pageData);
 
-fodoole.bindClickEvents(new InteractionEvent('ADD_TO_CART', '.add-to-cart-button'));
-fodoole.bindScrollEvents(new InteractionEvent('SCROLL_DESCRIPTION', '.product-details'));
+qeen.bindClickEvents(new InteractionEvent('ADD_TO_CART', '.add-to-cart-button'));
+qeen.bindScrollEvents(new InteractionEvent('SCROLL_DESCRIPTION', '.product-details'));
 ```
 
 ### Parameters
-The `fetchFodooleContent` function takes a single parameter:
-- `fodooleDeviceId`: A unique identifier for the user's device. This ID should be generated and stored on the client side.
+The `fetchQeenContent` function takes a single parameter:
+- `qeenDeviceId`: A unique identifier for the user's device. This ID should be generated and stored on the client side.
 
 > [!NOTE]
 > The language of the page is determined by the `lang` attribute in the `<html>` tag. The SDK will use this language to fetch content from the API. Make sure to set the `lang` attribute to the correct language code for your page.
 
 ### Returned Content
-The `fetchFodooleContent` function returns optimized content in the `contentSelectors` object where each key is the content selector and the value is the optimized content. This object may be empty if original content is served.
+The `fetchQeenContent` function returns optimized content in the `contentSelectors` object where each key is the content selector and the value is the optimized content. This object may be empty if original content is served.
 ```js
 {
   contentSelectors: {
@@ -74,17 +74,17 @@ The `fetchFodooleContent` function returns optimized content in the `contentSele
 
 #### Basic Usage Example
 ```js
-fodoole.fetchFodooleContent(fodooleDeviceId)
+qeen.fetchQeenContent(qeenDeviceId)
   .then((pageData) => {
     // Render your page with optimized content
     renderOptimizedContent(pageData);
 
     // Initialize the page session
-    fodoole.initPageSession(pageData);
+    qeen.initPageSession(pageData);
 
     // Bind custom click and scroll events
-    fodoole.bindClickEvents(new InteractionEvent('ADD_TO_CART', '.add-to-cart-button'));
-    fodoole.bindScrollEvents(new InteractionEvent('SCROLL_DESCRIPTION', '.product-details'));
+    qeen.bindClickEvents(new InteractionEvent('ADD_TO_CART', '.add-to-cart-button'));
+    qeen.bindScrollEvents(new InteractionEvent('SCROLL_DESCRIPTION', '.product-details'));
   })
   .catch((error) => {
     // Render your page with original content
@@ -102,16 +102,16 @@ function AnalyticsWrapper({ children }) {
   const [pageData, setPageData] = useState(null); // State to hold fetched data
 
   useEffect(() => {
-    fodoole.fetchFodooleContent(fodooleDeviceId)
+    qeen.fetchQeenContent(qeenDeviceId)
       .then((fetchedPageData) => {
         // Store the fetched data in state to render in the children
         setPageData(fetchedPageData);
 
         // Initialize the page session
-        fodoole.initPageSession(fetchedPageData);
+        qeen.initPageSession(fetchedPageData);
 
         // Bind click events on a higher level in your app
-        fodoole.bindClickEvents(new fodoole.InteractionEvent('CLICK_LINK', '.nav'));
+        qeen.bindClickEvents(new qeen.InteractionEvent('CLICK_LINK', '.nav'));
       })
       .catch((error) => {
         // Signal to children that no optimized content is available
@@ -131,17 +131,17 @@ function AnalyticsWrapper({ children }) {
 function ChildComponent({ pageData }) {
   useEffect(() => {
     // Bind custom click and scroll events in the child component
-    fodoole.bindClickEvents(
+    qeen.bindClickEvents(
       [
-        new fodoole.InteractionEvent('ADD_TO_CART', '.add-to-cart-button'),
-        new fodoole.InteractionEvent('PRODUCT_ZOOM', '.product-image')
+        new qeen.InteractionEvent('ADD_TO_CART', '.add-to-cart-button'),
+        new qeen.InteractionEvent('PRODUCT_ZOOM', '.product-image')
       ]
     );
 
-    fodoole.bindScrollEvents(
+    qeen.bindScrollEvents(
       [
-        new fodoole.InteractionEvent('SCROLL_TITLE', '.product-title'),
-        new fodoole.InteractionEvent('SCROLL_DESC', '.product-description')
+        new qeen.InteractionEvent('SCROLL_TITLE', '.product-title'),
+        new qeen.InteractionEvent('SCROLL_DESC', '.product-description')
       ]
     );
   }, []);
@@ -175,11 +175,11 @@ function App() {
 ```
 
 ## Methods and Properties
-The `fodoole` namespace provides the following methods and properties:
-- **`fetchFodooleContent(fodooleDeviceId: string): Promise<ContentResponse>`**
+The `qeen` namespace provides the following methods and properties:
+- **`fetchQeenContent(qeenDeviceId: string): Promise<ContentResponse>`**
    - Fetches optimized content and domain configuration from the API.
    - Returns a promise that resolves to a `ContentResponse` object with the following properties:
-     - `fodooleDeviceId: string` - The device ID used to fetch content.
+     - `qeenDeviceId: string` - The device ID used to fetch content.
      - `analyticsEndpoint: string` - The endpoint for sending analytics data.
      - `projectId: string` - The project ID for the domain.
      - `contentId: string` - The ID of the optimized content.
@@ -210,8 +210,8 @@ The `fodoole` namespace provides the following methods and properties:
    - Error that is thrown when the analytics endpoint is not found.
 - **`ResponseNotOkError: Error`**
    - Error that is thrown when the response from the API is not OK.
-- **`URLContainsNoFodooleError: Error`**
-   - Error that is thrown when the URL contains `#no-fodoole`.
+- **`URLContainsNoQeenError: Error`**
+   - Error that is thrown when the URL contains `#no-qeen`.
 
 ## Session Management
 The SDK automatically manages page session ID. When navigating to a new page in your SPA, make sure to call `initPageSession`  again. This will:
@@ -222,7 +222,7 @@ User device ID creation and storage is the responsibility of the application. Th
 A random 16-digit integer can be generated using the `randInt` method provided by the SDK.
 
 ## Definitions of a Product Detail Page
-Within the context of the Fodoole Analytics SDK, a product detail page (PDP) is defined as a product page with content generation enabled. If your website serves content in multiple languages, only the products pages in languages with content generation enabled will be considered PDPs. The SDK will consider product pages in other languages as non-product detail pages.
+Within the context of the Qeen Analytics SDK, a product detail page (PDP) is defined as a product page with content generation enabled. If your website serves content in multiple languages, only the products pages in languages with content generation enabled will be considered PDPs. The SDK will consider product pages in other languages as non-product detail pages.
 A product detail page is determined by the site URL pattern in the site configuration. If the current page URL matches the pattern, the SDK will consider it a product detail page and optimize content for it assuming the content fetch request is sent with a language that has content generation enabled.
 
 ## Rendering Content Guidelines
@@ -230,7 +230,7 @@ Optimized content will be served in the `contentSelectors` object; however, ther
 - **User In Original Content Group**: Depending on the original/optimized serving ratio, some users will not receive optimized content.
 - **Optimized Content Does Not Exist:** This is due to the optimized content still being generated or reviewed. The content may also be disabled for this page in the dashboard.
 - **Non-Product Detail Pages:** The SDK will not optimize content for [non-product detail pages](#definitions-of-a-product-detail-page), but you can still use the SDK for event tracking.
-- **URL Contains `#no-fodoole`:** If the URL contains `#no-fodoole`, the SDK will not fetch optimized content. This can be used for debugging or testing purposes. You are not able to use the SDK for event tracking in this case.
+- **URL Contains `#no-qeen`:** If the URL contains `#no-qeen`, the SDK will not fetch optimized content. This can be used for debugging or testing purposes. You are not able to use the SDK for event tracking in this case.
 - **General Fetch Error:** If an error occurs during content fetching, no optimized content will be served and analytics will not be tracked.
 
 Refer to the following table for guidelines on rendering content:
@@ -240,7 +240,7 @@ Refer to the following table for guidelines on rendering content:
 | User In Original Content Group   | `contentId`: `"original"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                                    | Use Original Content  | Track Analytics       |
 | Optimized Content Does Not Exist | `contentId`: `"-"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                                           | Use Original Content  | Track Analytics       |
 | Non-Product Detail Page          | `isPdp`: `false`<br />`contentId`: `"-"`<br />`contentServingId`: `"0"`<br />`contentSelectors`: empty                     | Use Original Content  | Track Analytics       |
-| URL Contains `#no-fodoole`       | `URLContainsNoFodooleError`                                                                                                | Use Original Content  | No Analytics Tracking |
+| URL Contains `#no-qeen`       | `URLContainsNoQeenError`                                                                                                | Use Original Content  | No Analytics Tracking |
 | General Fetch Error              | `ResponseNotOkError`                                                                                                       | Use Original Content  | No Analytics Tracking |
 
 ## Event Tracking
@@ -270,5 +270,5 @@ Be specific with your CSS selectors to target exactly the elements you want to t
 5. Non-Product Detail Pages: The SDK will automatically detect non-product detail pages and not optimize content for them. You should still call the fetch method to get the domain configuration.
 6. Checkout Events: Checkout events are not debounced and can only be sent on non-product detail pages. Make sure to not directly bind checkout events to user interactions and instead only send them on confirmation or completion of a checkout process.
 
-By following these guidelines and best practices, you'll be able to effectively integrate the Fodoole Analytics SDK into your single-page application, configure custom click and scroll events precisely, and gather valuable insights about user behavior and content performance.
+By following these guidelines and best practices, you'll be able to effectively integrate the Qeen Analytics SDK into your single-page application, configure custom click and scroll events precisely, and gather valuable insights about user behavior and content performance.
 ___

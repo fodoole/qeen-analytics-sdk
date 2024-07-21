@@ -1,4 +1,4 @@
-/* global fodoole */
+/* global qeen */
 import React, { useEffect } from 'react';
 import products from './products';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function ProductLink({ product }) {
   return (
     <div className="product" style={styles.productContainer}>
-      <Link to={`/product/${product.id}#fodoole-dev`} style={{ textDecoration: 'none' }}>
+      <Link to={`/product/${product.id}#qeen-dev`} style={{ textDecoration: 'none' }}>
         <img src={product.image} alt={product.title} style={styles.productImage} />
         <h3 style={styles.productTitle}>{product.title}</h3>
         <p style={styles.productPrice}>${product.price}</p>
@@ -17,7 +17,7 @@ function ProductLink({ product }) {
 
 function Home() {
   useEffect(() => {
-    fodoole.bindClickEvents([new fodoole.InteractionEvent('CLICK_PRODUCT', '.product')]);
+    qeen.bindClickEvents([new qeen.InteractionEvent('CLICK_PRODUCT', '.product')]);
   }, []);
 
   return (

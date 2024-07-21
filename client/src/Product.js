@@ -1,4 +1,4 @@
-/* global fodoole */
+/* global qeen */
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import products from './products';
@@ -6,17 +6,17 @@ import products from './products';
 function Product() {
   let { id } = useParams();
   useEffect(() => {
-    fodoole.bindClickEvents(
+    qeen.bindClickEvents(
       [
-        new fodoole.InteractionEvent('ADD_TO_CART', '#add-to-cart'),
-        new fodoole.InteractionEvent('ADD_TO_WATCHLIST', '#add-to-watchlist')
+        new qeen.InteractionEvent('ADD_TO_CART', '#add-to-cart'),
+        new qeen.InteractionEvent('ADD_TO_WATCHLIST', '#add-to-watchlist')
       ]
     );
 
-    fodoole.bindScrollEvents(
+    qeen.bindScrollEvents(
       [
-        new fodoole.InteractionEvent('SCROLL_TITLE', 'h2'),
-        new fodoole.InteractionEvent('SCROLL_DESC', '#desc')
+        new qeen.InteractionEvent('SCROLL_TITLE', 'h2'),
+        new qeen.InteractionEvent('SCROLL_DESC', '#desc')
       ]
     );
   }, []);

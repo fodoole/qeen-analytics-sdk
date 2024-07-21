@@ -1,6 +1,6 @@
 /**
  * @file utils.js
- * @description Utility functions for Fodoole Analytics SDK.
+ * @description Utility functions for Qeen Analytics SDK.
  */
 
 /**

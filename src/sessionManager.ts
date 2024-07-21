@@ -1,11 +1,11 @@
 /**
  * @file sessionManager.js
- * @description The session manager script for Fodoole Analytics SDK.
+ * @description The session manager script for Qeen Analytics SDK.
  */
 
 import { Config, State, getContentEndpoint } from './config.js';
 import { InteractionEvent, PageAnalyticsEvent, fetchContentParams, ContentResponse } from './models.js';
-import { InvalidParameterError, URLContainsNoFodooleError, ResponseNotOkError } from './errors.js';
+import { InvalidParameterError, URLContainsNoQeenError, ResponseNotOkError } from './errors.js';
 import { bindScrollEventsToElements, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
 import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
 
@@ -122,37 +122,37 @@ function prepareSelectors(rawContent: any[]): any {
 }
 
 /**
- * Function to fetch Fodoole content.
- * @param {string} fodooleDeviceId - The user device ID.
+ * Function to fetch Qeen content.
+ * @param {string} qeenDeviceId - The user device ID.
  * @returns {Promise<ContentResponse>} The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
- * @throws {URLContainsNoFodooleError} - Throws an error if the URL contains #no-fodoole.
+ * @throws {URLContainsNoQeenError} - Throws an error if the URL contains #no-qeen.
  */
-export async function fetchContent(fodooleDeviceId: string): Promise<ContentResponse> {
+export async function fetchContent(qeenDeviceId: string): Promise<ContentResponse> {
   try {
-    if (!fodooleDeviceId) {
-      return Promise.reject(new InvalidParameterError('Fodoole user device ID is required.'));
+    if (!qeenDeviceId) {
+      return Promise.reject(new InvalidParameterError('Qeen user device ID is required.'));
     }
-    if (window.location.hash.includes('no-fodoole')) {
-      return Promise.reject(new URLContainsNoFodooleError('Fodoole is disabled; URL contains #no-fodoole'));
+    if (window.location.hash.includes('no-qeen')) {
+      return Promise.reject(new URLContainsNoQeenError('Qeen is disabled; URL contains #no-qeen'));
     }
 
-    const params: fetchContentParams = new fetchContentParams(fodooleDeviceId);
+    const params: fetchContentParams = new fetchContentParams(qeenDeviceId);
     const response: Response = await fetch(`${getContentEndpoint}?${params.toString()}`);
     if (!response.ok) {
       return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
     }
     const data: ContentResponse = await response.json();
-    data.fodooleDeviceId = fodooleDeviceId;
+    data.qeenDeviceId = qeenDeviceId;
     data.contentSelectors = prepareSelectors(data.rawContentSelectors)
     // Save the content in the config object for frontend investigation and debugging
     Config.rawContentSelectors = data.rawContentSelectors;
     Config.contentSelectors = data.contentSelectors;
     return data;
   } catch (error) {
-    console.error('Failed to get Fodoole content:', error);
+    console.error('Failed to get Qeen content:', error);
     return Promise.reject(error);
   }
 }
@@ -184,14 +184,14 @@ export class BindQueueItem {
 }
 
 /**
- * Function that initializes the Fodoole Analytics SDK.
- * @param {any} config - The configuration object for the Fodoole Analytics SDK.
+ * Function that initializes the Qeen Analytics SDK.
+ * @param {any} config - The configuration object for the Qeen Analytics SDK.
  */
 export function initPageSession(config: ContentResponse): void {
-  if (Config.noFodoole) {
+  if (Config.noQeen) {
     return;
   }
-  if (!config.fodooleDeviceId) {
+  if (!config.qeenDeviceId) {
     throw new InvalidParameterError('User device ID is required.');
   }
 
@@ -200,7 +200,7 @@ export function initPageSession(config: ContentResponse): void {
     terminateSession();
   }
 
-  State.fodooleDeviceId = config.fodooleDeviceId;
+  State.qeenDeviceId = config.qeenDeviceId;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';

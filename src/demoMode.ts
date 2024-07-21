@@ -1,6 +1,6 @@
 /**
  * @file demoMode.js
- * @description The demo mode script for Fodoole Analytics SDK.
+ * @description The demo mode script for Qeen Analytics SDK.
  * @description This script is used when running in demo mode via iframe.
  */
 

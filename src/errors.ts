@@ -1,6 +1,6 @@
 /**
  * @file errors.js
- * @description The error classes for Fodoole Analytics SDK.
+ * @description The error classes for Qeen Analytics SDK.
  */
 
 /**
@@ -30,15 +30,15 @@ export class AnalyticsEndpointError extends Error {
 }
 
 /**
- * Error class for if the URL contains #no-fodoole.
- * @class NoFodooleError
+ * Error class for if the URL contains #no-qeen.
+ * @class URLContainsNoQeenError
  * @extends Error
  * @param {string} message - The error message.
  */
-export class URLContainsNoFodooleError extends Error {
+export class URLContainsNoQeenError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'URLContainsNoFodooleError';
+    this.name = 'URLContainsNoQeenError';
   }
 }
 

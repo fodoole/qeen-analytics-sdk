@@ -2,9 +2,9 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: './build/fodoole.js',
+  entry: './build/qeen.js',
   output: {
-    filename: 'fodoole.js',
+    filename: 'qeen.js',
     path: path.resolve(__dirname, 'dist'),
   },
 };

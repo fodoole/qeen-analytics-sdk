@@ -30,7 +30,7 @@ const Nav = React.memo(function Nav() {
       {['/', '/about', '/checkout'].map((path, index) => (
         <Link
           key={path}
-          to={`${path}#fodoole-dev`}
+          to={`${path}#qeen-dev`}
           style={hoverIndex === index ? {...linkStyle, ...hoverStyle} : linkStyle}
           onMouseEnter={() => setHoverIndex(index)}
           onMouseLeave={() => setHoverIndex(null)}

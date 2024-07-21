@@ -1,4 +1,4 @@
-/* global fodoole */
+/* global qeen */
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -13,19 +13,19 @@ function AnalyticsWrapper({ children }) {
   const isPdp = location.pathname.includes('/product/');
 
   useEffect(() => {
-    // fodoole.fetchFodooleContent();
+    // qeen.fetchQeenContent();
   
-    fodoole.initPageSession({
-      fodooleDeviceId: 'dev',
+    qeen.initPageSession({
+      qeenDeviceId: 'dev',
       analyticsEndpoint: '/log',
       projectId: '123',
-      contentServingId: isPdp ? String(fodoole.randInt()) : '0',
+      contentServingId: isPdp ? String(qeen.randInt()) : '0',
       contentId: isPdp ? 'optimised' : '-',
       isPdp: isPdp,
       idleTime: 5_000
     });
 
-    fodoole.bindClickEvents(new fodoole.InteractionEvent('CLICK_LINK', '.nav'));
+    qeen.bindClickEvents(new qeen.InteractionEvent('CLICK_LINK', '.nav'));
   }, [location]);
 
   return <>{children}</>;

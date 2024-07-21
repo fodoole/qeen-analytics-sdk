@@ -1,6 +1,6 @@
 /**
  * @file models.js
- * @description The models for Fodoole Analytics SDK.
+ * @description The models for Qeen Analytics SDK.
  */
 
 import { Config, State } from './config.js';
@@ -25,7 +25,7 @@ export class PageAnalyticsEvent {
   public p: string = Config.projectId;
   public csrvid: string = Config.contentServingId;
   public cid: string = Config.contentId;
-  public uid: string = State.fodooleDeviceId;
+  public uid: string = State.qeenDeviceId;
   public npdp: boolean = !Config.isPdp;
 
   public t: string;
@@ -48,12 +48,12 @@ export class PageAnalyticsEvent {
    */
   pushEvent(): void {
     if (!Config.analyticsEndpoint) {
-      throw new AnalyticsEndpointError('Fodoole analytics endpoint not set.');
+      throw new AnalyticsEndpointError('Qeen analytics endpoint not set.');
     }
-    if (!State.fodooleDeviceId) {
-      throw new InvalidParameterError('Fodoole user device ID is required.');
+    if (!State.qeenDeviceId) {
+      throw new InvalidParameterError('Qeen user device ID is required.');
     }
-    if (window.location.hash.includes('fodoole-dev')) {
+    if (window.location.hash.includes('qeen-dev')) {
       console.log(this);
     }
 
@@ -68,13 +68,13 @@ export class PageAnalyticsEvent {
 /**
  * Class that handles the parameters for fetching content.
  * @class fetchContentParams
- * @param {string} fodooleDeviceId - The Fodoole device ID.
+ * @param {string} qeenDeviceId - The Qeen device ID.
  * @property {string} pageUrl - The URL of the page.
  * @property {string} referrerUrl - The URL of the referrer.
  * @property {string} locale - The locale of the user.
  * @property {string} langCode - The language code of the page.
  * @property {string} timezone - The timezone of the user.
- * @property {string} userDeviceId - The Fodoole device ID.
+ * @property {string} userDeviceId - The Qeen device ID.
  * @property {URLSearchParams} params - The URL search parameters.
  * @method toString - Convert the parameters to a string.
  */
@@ -88,8 +88,8 @@ export class fetchContentParams {
 
   public params: URLSearchParams;
 
-  constructor(fodooleDeviceId: string) {
-    this.userDeviceId = fodooleDeviceId;
+  constructor(qeenDeviceId: string) {
+    this.userDeviceId = qeenDeviceId;
 
     this.params = new URLSearchParams({
       pageUrl: this.pageUrl,
@@ -112,7 +112,7 @@ export class fetchContentParams {
 
 /**
  * @interface ContentResponse
- * @property {string} fodooleDeviceId - The Fodoole device ID.
+ * @property {string} qeenDeviceId - The Qeen device ID.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
  * @property {string} contentServingId - The content serving ID.
@@ -123,7 +123,7 @@ export class fetchContentParams {
  * @property {Object} contentSelectors - The content selectors and content.
  */
 export interface ContentResponse {
-  fodooleDeviceId: string;
+  qeenDeviceId: string;
   analyticsEndpoint: string;
   projectId: string;
   idleTime: number;

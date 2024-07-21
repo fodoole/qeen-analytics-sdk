@@ -1,10 +1,10 @@
-/* global fodoole */
+/* global qeen */
 import React, { useEffect } from 'react';
 
 function About() {
   useEffect(() => {
-    fodoole.bindClickEvents(
-        new fodoole.InteractionEvent('ABOUT', 'h1'),
+    qeen.bindClickEvents(
+        new qeen.InteractionEvent('ABOUT', 'h1'),
     );
 
   }, []);

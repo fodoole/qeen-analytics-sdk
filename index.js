@@ -1,5 +1,5 @@
 /**
- * @fileoverview This is the main file for the Fodoole script testing server.
+ * @fileoverview This is the main file for the Qeen script testing server.
  */
 const express = require('express');
 const path = require('path');

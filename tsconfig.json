@@ -106,7 +106,7 @@
   },
   "include": [
     "src/**/*",
-    "src/fodoole.ts",
+    "src/qeen.ts",
   ],
   "exclude": [
     "node_modules",

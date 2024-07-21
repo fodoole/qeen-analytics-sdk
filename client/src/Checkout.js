@@ -1,4 +1,4 @@
-/* global fodoole */
+/* global qeen */
 import React, { useState } from 'react';
 
 function Checkout() {
@@ -6,7 +6,7 @@ function Checkout() {
 
   const handleButtonClick = () => {
     setTimeout(() => {
-      fodoole.sendCheckoutEvent('USD', 1_234.56);
+      qeen.sendCheckoutEvent('USD', 1_234.56);
       setPaymentSuccess(true);
     }, 1000);
   };
