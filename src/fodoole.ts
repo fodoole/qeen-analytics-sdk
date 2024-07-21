@@ -46,5 +46,3 @@ if (window.location.hash.includes('no-fodoole')) {
 } else {
   Config.noFodoole = false;
 }
-
-// export { fodoole }; // FIXME: intellisense

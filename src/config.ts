@@ -9,7 +9,7 @@ import { BindQueueItem } from "./sessionManager";
 /**
  * @constant {string} getContentEndpoint - The endpoint to fetch content.
  */
-export const getContentEndpoint: string = ''; // FIXME: add the endpoint
+export const getContentEndpoint: string = 'https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/sdk/client-config';
 
 /**
  * @class Config
