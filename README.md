@@ -193,9 +193,9 @@ The `fodoole` namespace provides the following methods and properties:
 - **`sendCheckoutEvent(currency: string, value: number): void`**
    - Sends a checkout event with the specified currency and value.
 - **`randInt(): number`**
-   - Convenience function to generate a 16-digit random integer; can be used to generate a device ID. 
+   - Convenience function to generate a 16-digit random integer; can be used to generate a device ID.
 - **`config: Object`**
-   - Configuration object for the SDK; exposed for debugging and testing purposes. 
+   - Configuration object for the SDK; exposed for debugging and testing purposes.
 - **`state: Object`**
    - State object for the SDK; exposed for debugging and testing purposes.
 - **`InteractionEvent: Class`**
@@ -214,7 +214,8 @@ The SDK automatically manages page session ID. When navigating to a new page in 
 1. Signal a `PAGE_EXIT` event for the previous session.
 2. Initialize a new session for the current page.
 
-User device ID creation and storage is the responsibility of the application. This ID should be passed to the API when fetching content data. A random 16-digit integer can be generated using the `randInt` method provided by the SDK.
+User device ID creation and storage is the responsibility of the application. This ID should be passed to the API when fetching content data.
+A random 16-digit integer can be generated using the `randInt` method provided by the SDK.
 
 ## Rendering Content Guidelines
 Optimized content will be served in the `contentSelectors` object; however, there are cases where original content must be rendered instead:
@@ -258,6 +259,8 @@ Use clear and descriptive labels for your custom events to make analysis easier.
 > `ADD_TO_CART` is a special click label that is used for analytics.
 Be specific with your CSS selectors to target exactly the elements you want to track. Using IDs or unique classes is recommended; avoid using tag or child selectors.
 4. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
+5. Non-Product Detail Pages: The SDK will automatically detect non-product detail pages and not optimize content for them. You should still call the fetch method to get the domain configuration.
+6. Checkout Events: Checkout events are not debounced and can only be sent on non-product detail pages. Make sure to not directly bind checkout events to user interactions and instead only send them on confirmation or completion of a checkout process.
 
 By following these guidelines and best practices, you'll be able to effectively integrate the Fodoole Analytics SDK into your single-page application, configure custom click and scroll events precisely, and gather valuable insights about user behavior and content performance.
 ___
