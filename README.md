@@ -14,6 +14,7 @@ This guide will help you integrate the Fodoole Analytics SDK into your single-pa
       - [Example with ReactJS](#example-with-reactjs)
   - [Methods and Properties](#methods-and-properties)
   - [Session Management](#session-management)
+  - [Definitions of a Product Detail Page](#definitions-of-a-product-detail-page)
   - [Rendering Content Guidelines](#rendering-content-guidelines)
   - [Event Tracking](#event-tracking)
     - [Automatic Events](#automatic-events)
@@ -180,7 +181,7 @@ The `fodoole` namespace provides the following methods and properties:
      - `projectId: string` - The project ID for the domain.
      - `contentId: string` - The ID of the optimized content.
      - `contentServingId: string` - The ID of the content serving.
-     - `isPdp: boolean` - Indicates if the page is a product detail page; determined by the site URL pattern in the site configuration.
+     - `isPdp: boolean` - Indicates if the page is a product detail page; determined by the site URL pattern in the site configuration. Please refer to [Definitions of a Product Detail Page](#definitions-of-a-product-detail-page) for more information.
      - `idleTime: number` - The time in milliseconds before a session is considered idle; set in the site configuration.
      - `contentSelectors: { [key: string]: string }` - An object with CSS selectors as keys and optimized content as values.
      - `rawContentSelectors: [ { uid: string, path: string, value: string } ]` - An array of raw content selectors; included for debugging purposes.
@@ -217,11 +218,15 @@ The SDK automatically manages page session ID. When navigating to a new page in 
 User device ID creation and storage is the responsibility of the application. This ID should be passed to the API when fetching content data.
 A random 16-digit integer can be generated using the `randInt` method provided by the SDK.
 
+## Definitions of a Product Detail Page
+Within the context of the Fodoole Analytics SDK, a product detail page (PDP) is defined as a product page with content generation enabled. If your website serves content in multiple languages, only the products pages in languages with content generation enabled will be considered PDPs. The SDK will consider product pages in other languages as non-product detail pages.
+A product detail page is determined by the site URL pattern in the site configuration. If the current page URL matches the pattern, the SDK will consider it a product detail page and optimize content for it assuming the content fetch request is sent with a language that has content generation enabled.
+
 ## Rendering Content Guidelines
 Optimized content will be served in the `contentSelectors` object; however, there are cases where original content must be rendered instead:
+- **User In Original Content Group**: Depending on the original/optimized serving ratio, some users will not receive optimized content.
 - **Optimized Content Does Not Exist:** This is due to the optimized content still being generated or reviewed. The content may also be disabled for this page in the dashboard.
-- **User Device ID**: Depending on the original/optimized serving ratio, some users will not receive optimized content.
-- **Non-Product Detail Pages:** The SDK will not optimize content for non-product detail pages, but you can still use the SDK for event tracking.
+- **Non-Product Detail Pages:** The SDK will not optimize content for [non-product detail pages](#definitions-of-a-product-detail-page), but you can still use the SDK for event tracking.
 - **URL Contains `#no-fodoole`:** If the URL contains `#no-fodoole`, the SDK will not fetch optimized content. This can be used for debugging or testing purposes. You are not able to use the SDK for event tracking in this case.
 - **General Fetch Error:** If an error occurs during content fetching, no optimized content will be served and analytics will not be tracked.
 
@@ -246,8 +251,8 @@ The SDK automatically tracks the following events:
 
 ### Custom Events
 Instead of enabling general click and scroll tracking, you can now define specific elements to track for clicks and scrolls. These are bound to the SDK using the appropriate methods.
-- **Click Events:** Defined in the `clickEvents` array, these will trigger when a user clicks on an element or elements matching the specified selector. Click events are debounced with a delay of 500ms.
-- **Scroll Events:** Defined in the `scrollEvents` array, these will trigger when a user scrolls to an element or elements matching the specified selector. Every scroll event may only be fired once per session.
+- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of 500ms.
+- **Scroll Events:** Use the `bindScrollEvents` method to bind custom scroll events to specific elements on the page. Each scroll event label may only be fired once per page session.
 - **Checkout Event:** Use the `sendCheckoutEvent` method to send a checkout event with the specified currency and value. Note that this event can only be sent on non-product detail pages and is not debounced.
 
 ## Best Practices

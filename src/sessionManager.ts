@@ -4,7 +4,7 @@
  */
 
 import { Config, State, getContentEndpoint } from './config.js';
-import { InteractionEvent, PageAnalyticsEvent, fetchContentParams } from './models.js';
+import { InteractionEvent, PageAnalyticsEvent, fetchContentParams, ContentResponse } from './models.js';
 import { InvalidParameterError, URLContainsNoFodooleError, ResponseNotOkError } from './errors.js';
 import { bindScrollEventsToElements, bindTabEvents, bindIdleTimeEvents, resetIdleTimer } from './pageEvents.js';
 import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils.js';
@@ -119,30 +119,6 @@ function prepareSelectors(rawContent: any[]): any {
   });
 
   return contentSelectors;
-}
-
-/**
- * @interface ContentResponse
- * @property {string} fodooleDeviceId - The Fodoole device ID.
- * @property {string} analyticsEndpoint - The endpoint for the analytics server.
- * @property {string} projectId - The project ID.
- * @property {string} contentServingId - The content serving ID.
- * @property {string} contentId - The content ID.
- * @property {boolean} isPdp - The product detail page flag.
- * @property {number} idleTime - The idle time in milliseconds.
- * @property {any[]} rawContentSelectors - The raw content selectors.
- * @property {Object} contentSelectors - The content selectors and content.
- */
-interface ContentResponse {
-  fodooleDeviceId: string;
-  analyticsEndpoint: string;
-  projectId: string;
-  contentServingId: string;
-  contentId: string;
-  isPdp: boolean;
-  idleTime: number;
-  rawContentSelectors: any[];
-  contentSelectors: Object;
 }
 
 /**

@@ -85,6 +85,30 @@ export class fetchContentParams extends URLSearchParams {
 }
 
 /**
+ * @interface ContentResponse
+ * @property {string} fodooleDeviceId - The Fodoole device ID.
+ * @property {string} analyticsEndpoint - The endpoint for the analytics server.
+ * @property {string} projectId - The project ID.
+ * @property {string} contentServingId - The content serving ID.
+ * @property {string} contentId - The content ID.
+ * @property {boolean} isPdp - The product detail page flag.
+ * @property {number} idleTime - The idle time in milliseconds.
+ * @property {any[]} rawContentSelectors - The raw content selectors.
+ * @property {Object} contentSelectors - The content selectors and content.
+ */
+export interface ContentResponse {
+  fodooleDeviceId: string;
+  analyticsEndpoint: string;
+  projectId: string;
+  idleTime: number;
+  contentServingId: string;
+  contentId: string;
+  isPdp: boolean;
+  rawContentSelectors: any[];
+  contentSelectors: Object;
+}
+
+/**
  * Structure for interaction events (i.e. clicks, scrolls).
  * @class InteractionEvent
  * @param {string} label - The label of the event.
