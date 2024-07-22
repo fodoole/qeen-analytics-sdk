@@ -10,7 +10,8 @@ This guide will help you integrate the Qeen Analytics SDK into your single-page 
     - [Parameters](#parameters)
     - [Returned Content](#returned-content)
     - [InteractionEvent Object](#interactionevent-object)
-      - [Basic Usage Example](#basic-usage-example)
+    - [Content Served Flag](#content-served-flag)
+    - [Basic Usage Example](#basic-usage-example)
       - [Example with ReactJS](#example-with-reactjs)
   - [Methods and Properties](#methods-and-properties)
   - [Session Management](#session-management)
@@ -36,6 +37,7 @@ Initializing the SDK is a three-step process:
 ```js
 const pageData = await qeen.fetchQeenContent(qeenDeviceId);
 
+qeen.setContentServed();
 qeen.initPageSession(pageData);
 
 qeen.bindClickEvents(new InteractionEvent('ADD_TO_CART', '.add-to-cart-button'));
@@ -72,12 +74,19 @@ The `fetchQeenContent` function returns optimized content in the `contentSelecto
 - **label:** A unique identifier for the event.
 - **value:** A CSS selector or JS path that targets the element(s) to track.
 
-#### Basic Usage Example
+### Content Served Flag
+The `contentServed` flag should be set to `true` after content is fetched and rendered through the `setContentServed` method. This flag is used to determine if content was served to track the effectiveness of the optimized content. If original content is served, set the flag to `false` by calling `resetContentServed`.
+
+### Basic Usage Example
 ```js
 qeen.fetchQeenContent(qeenDeviceId)
   .then((pageData) => {
     // Render your page with optimized content
     renderOptimizedContent(pageData);
+    // Set the content served flag if optimized content was rendered
+     if (pageData.contentSelectors) {
+      qeen.setContentServed();
+    }
 
     // Initialize the page session
     qeen.initPageSession(pageData);
@@ -130,6 +139,11 @@ function AnalyticsWrapper({ children }) {
 // Child component that uses the fetched data
 function ChildComponent({ pageData }) {
   useEffect(() => {
+    // Set the content served flag; ideally this should correlate to successful rendering of optimized content
+    if (pageData.contentSelectors) {
+      qeen.setContentServed();
+    }
+
     // Bind custom click and scroll events in the child component
     qeen.bindClickEvents(
       [
@@ -190,6 +204,10 @@ The `qeen` namespace provides the following methods and properties:
      - `rawContentSelectors: [ { uid: string, path: string, value: string } ]` - An array of raw content selectors; included for debugging purposes.
 - **`initPageSession(pageData: ContentResponse): void`**
    - Initializes the page session with the provided `pageData`.
+- **`setContentServed(): void`**
+   - Sets the content served flag to `true`.
+- **`resetContentServed(): void`**
+   - Sets the content served flag to `false`. This method is implicitly called during `fetchQeenContent`.
 - **`bindClickEvents(events: InteractionEvent | InteractionEvent[]): void`**
    - Binds custom click events to the specified elements.
 - **`bindScrollEvents(events: InteractionEvent | InteractionEvent[]): void`**
@@ -247,7 +265,7 @@ Refer to the following table for guidelines on rendering content:
 ### Automatic Events
 The SDK automatically tracks the following events:
 - **`PAGE_VIEW`:** Fired when a session is initialized regardless if it has content or not.
-- **`CONTENT_SERVED`:** Fired when a session is initialized with valid `contentId` and `contentServingId`.
+- **`CONTENT_SERVED`:** Fired when a session is initialized after optimized content is rendered.
 - **`TAB_SWITCH`:** Fired when the tab or browser is defocused or refocused with two possible labels: `EXIT` and `RETURN`.
 - **`IDLE`:** Fired if a user does nothing on the page and the session exceeds `idleTime`. This will also create a new session. Defocusing the tab for a time longer than `idleTime` will also cause the session to be reset.
 - **`PAGE_EXIT`:** Fired when navigating away from a page or closing the browser. Note that most mobile browsers and some frameworks will fire `TAB_SWITCH:EXIT` instead of `PAGE_EXIT`.
@@ -260,15 +278,17 @@ Instead of enabling general click and scroll tracking, you can now define specif
 
 ## Best Practices
 1. Initialization Timing: Always call `initPageSession` after rendering the page content. This ensures accurate tracking of the displayed content.
-2. SPA Navigation: Re-initialize the SDK on every page navigation in your SPA to properly track new sessions and exit events.
-3. Custom Event Configuration:
+2. Language Detection: Content fetching relies on the page language; keep the `lang` attribute in the `<html>` accurate to the language of the page.
+3. State Consistency: Ensure that you set the content served flag if optimized content was rendered successfully.
+4. SPA Navigation: Re-initialize the SDK on every page navigation in your SPA to properly track new sessions and exit events.
+5. Custom Event Configuration:
 Use clear and descriptive labels for your custom events to make analysis easier.
 > [!NOTE]  
 > `ADD_TO_CART` is a special click label that is used for analytics.
 Be specific with your CSS selectors to target exactly the elements you want to track. Using IDs or unique classes is recommended; avoid using tag or child selectors.
-4. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
-5. Non-Product Detail Pages: The SDK will automatically detect non-product detail pages and not optimize content for them. You should still call the fetch method to get the domain configuration.
-6. Checkout Events: Checkout events are not debounced and can only be sent on non-product detail pages. Make sure to not directly bind checkout events to user interactions and instead only send them on confirmation or completion of a checkout process.
+6. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
+7. Non-Product Detail Pages: The SDK will automatically detect non-product detail pages and not optimize content for them. You should still call the fetch method to get the domain configuration.
+8. Checkout Events: Checkout events are not debounced and can only be sent on non-product detail pages. Make sure to not directly bind checkout events to user interactions and instead only send them on confirmation or completion of a checkout process.
 
 By following these guidelines and best practices, you'll be able to effectively integrate the Qeen Analytics SDK into your single-page application, configure custom click and scroll events precisely, and gather valuable insights about user behavior and content performance.
 ___

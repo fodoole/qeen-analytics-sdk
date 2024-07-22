@@ -62,8 +62,8 @@ export class State {
   public static qeenDeviceId: string = '';
   public static boundThreadEvents: boolean = false;
   public static bindQueue: BindQueueItem[] = [];
+  public static contentServed: boolean = false;
 
-  public static contentServed: boolean;
   public static sessionId: string;
   public static isResetSession: boolean;
   public static idleTimer: number;
@@ -75,7 +75,6 @@ export class State {
    * Function to reset the state.
    */
   static reset(): void {
-    State.contentServed = false;
     State.sessionId = '';
     State.isResetSession = false;
     State.idleTimer = 0;

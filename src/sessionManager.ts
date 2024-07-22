@@ -10,6 +10,20 @@ import { bindScrollEventsToElements, bindTabEvents, bindIdleTimeEvents, resetIdl
 import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils';
 
 /**
+ * Function that sets the content served flag to true.
+ */
+export function setContentServed(): void {
+  State.contentServed = true;
+}
+
+/**
+ * Function that sets the content served flag to false.
+ */
+export function resetContentServed(): void {
+  State.contentServed = false;
+}
+
+/**
   * Function that implements common logic for resetting the session state.
   * This function is called when a session is initialised or reset.
   * @param {string} label The label for the page view event.
@@ -27,11 +41,8 @@ function initResetCommon(label: string): void {
   // Log the page view and content served events
   function logPageView(): void {
     new PageAnalyticsEvent('PAGE_VIEW', null, label, null);
-    // FIXME: sending content served even if the content is not rendered
-    // TODO: after changing, user must set this value; update docs
-    if (!State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
+    if (State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
       new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
-      State.contentServed = true;
     }
   }
 
@@ -140,6 +151,7 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
     if (window.location.hash.includes('no-qeen')) {
       return Promise.reject(new URLContainsNoQeenError('Qeen is disabled; URL contains #no-qeen'));
     }
+    resetContentServed();
 
     const params: fetchContentParams = new fetchContentParams(qeenDeviceId);
     const response: Response = await fetch(`${getContentEndpoint}?${params.toString()}`);

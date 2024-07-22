@@ -14,6 +14,8 @@ function AnalyticsWrapper({ children }) {
 
   useEffect(() => {
     // qeen.fetchQeenContent();
+
+    qeen.setContentServed();
   
     qeen.initPageSession({
       qeenDeviceId: 'dev',
