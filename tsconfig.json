@@ -110,7 +110,8 @@
   ],
   "exclude": [
     "node_modules",
-    "client",
+    "test",
+    "examples",
     "build",
     "dist",
   ]

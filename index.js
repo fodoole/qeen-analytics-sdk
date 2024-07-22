@@ -26,15 +26,16 @@ function logRawBody(req, _, next) {
   });
 }
 
-// Serve static files from the src directory
+// Serve built and bundled Qeen script
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Serve React testing app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'test/build')));
 app.get('/*', (_, res) => {
-  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+  res.sendFile(path.join(__dirname, 'test/build/index.html'));
 });
 
+// Log raw body of POST requests
 app.post('/log', logRawBody, (_, __, next) => {
   next();
 }, (_, res) => {
