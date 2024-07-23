@@ -281,11 +281,10 @@ Instead of enabling general click and scroll tracking, you can now define specif
 2. Language Detection: Content fetching relies on the page language; keep the `lang` attribute in the `<html>` accurate to the language of the page.
 3. State Consistency: Ensure that you set the content served flag if optimized content was rendered successfully.
 4. SPA Navigation: Re-initialize the SDK on every page navigation in your SPA to properly track new sessions and exit events.
-5. Custom Event Configuration:
-Use clear and descriptive labels for your custom events to make analysis easier.
+5. Custom Event Configuration: Use clear and descriptive labels for your custom events to make analysis easier. Be specific with your CSS selectors to target exactly the elements you want to track. Using IDs or unique classes is recommended; avoid using tag or child selectors.
 > [!NOTE]  
-> `ADD_TO_CART` is a special click label that is used for analytics.
-Be specific with your CSS selectors to target exactly the elements you want to track. Using IDs or unique classes is recommended; avoid using tag or child selectors.
+> `ADD_TO_CART` is a special click label that is used for tracking the ATC rate. It's generally only used on add to cart/buy now buttons on product detail pages.
+
 6. Consistent Naming: Maintain consistency in your naming across different pages and features. This will make it easier to analyze data and create reports.
 7. Non-Product Detail Pages: The SDK will automatically detect non-product detail pages and not optimize content for them. You should still call the fetch method to get the domain configuration.
 8. Checkout Events: Checkout events are not debounced and can only be sent on non-product detail pages. Make sure to not directly bind checkout events to user interactions and instead only send them on confirmation or completion of a checkout process.

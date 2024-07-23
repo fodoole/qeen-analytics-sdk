@@ -49,6 +49,7 @@ export class Config {
  * @property {boolean} boundThreadEvents - The bound thread events flag.
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
+ * @property {string} pageUrl - The page URL.
  * @property {string} sessionId - The session ID.
  * @property {boolean} isResetSession - The reset session flag.
  * @property {number} idleTimer - The idle timer.
@@ -63,6 +64,7 @@ export class State {
   public static boundThreadEvents: boolean = false;
   public static bindQueue: BindQueueItem[] = [];
   public static contentServed: boolean = false;
+  public static pageUrl: string;
 
   public static sessionId: string;
   public static isResetSession: boolean;

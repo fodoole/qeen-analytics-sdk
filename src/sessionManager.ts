@@ -215,6 +215,7 @@ export function initPageSession(config: ContentResponse): void {
   }
 
   State.qeenDeviceId = config.qeenDeviceId;
+  State.pageUrl = window.location.href;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';
@@ -222,7 +223,7 @@ export function initPageSession(config: ContentResponse): void {
   Config.isPdp = config.isPdp || false;
   Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
 
-  // Ensure interaction events don't leak through different routes
+  // Ensure interaction events don't leak through different pages
   Config.clickEvents = Config.clickEvents || [];
   Config.scrollEvents = Config.scrollEvents || [];
   cleanUpStaleEvents();

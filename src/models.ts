@@ -19,7 +19,7 @@ import { AnalyticsEndpointError, InvalidParameterError } from './errors';
 export class PageAnalyticsEvent {
   public ts: number = Date.now();
   public pid: string = State.sessionId;
-  public u: string = window.location.href;
+  public u: string = State.pageUrl;
   public ua: string = navigator.userAgent;
   public r: string = document.referrer;
   public p: string = Config.projectId;
