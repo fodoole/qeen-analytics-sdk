@@ -10,7 +10,7 @@ describe('Tab Change', () => {
     it('(Tab Change Exit) should observe a TAB_SWITCH event', async () => {
         browser = await puppeteer.launch();
 
-        const { _, payloads } = await common.setupTest(browser, {
+        const [, payloads] = await common.setupTest(browser, {
             url: common.pages.productPage,
             endpoint: common.endpoints.pageLevelAnalytics,
             json: true,
@@ -60,7 +60,7 @@ describe('Tab Change', () => {
             waitForSessionStart: true,
         }, {});
 
-        const oldSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
 
         const newPage = await browser.newPage();
         await newPage.goto('about:blank');
@@ -69,7 +69,7 @@ describe('Tab Change', () => {
         const events = common.reduceToEventsArray(payloads);
         expect(events).toContainEqual(expect.objectContaining({ t: 'TAB_SWITCH', l: 'EXIT' }));
 
-        const idleTime = await page.evaluate(() => window.fodoole.config.idleTime);
+        const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
         await common.wait(idleTime);
 
@@ -79,11 +79,11 @@ describe('Tab Change', () => {
 
         await common.wait(50);
 
-        const newSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const sessionId2 = await page.evaluate(() => window.qeen.state.sessionId);
 
         const events2 = common.reduceToEventsArray(payloads);
         expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
-        expect(oldSessionId).not.toBe(newSessionId);
+        expect(sessionId1).not.toBe(sessionId2);
     });
     
     it('(Tab Change Double Idle) should observe a TAB_SWITCH event and see two new sessions after going idle twice', async () => {
@@ -96,7 +96,7 @@ describe('Tab Change', () => {
             waitForSessionStart: true,
         }, {});
 
-        const firstSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const firstSessionId = await page.evaluate(() => window.qeen.state.sessionId);
 
         const newPage = await browser.newPage();
         await newPage.goto('about:blank');
@@ -105,7 +105,7 @@ describe('Tab Change', () => {
         const events = common.reduceToEventsArray(payloads);
         expect(events).toContainEqual(expect.objectContaining({ t: 'TAB_SWITCH', l: 'EXIT' }));
 
-        const idleTime = await page.evaluate(() => window.fodoole.config.idleTime);
+        const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
         
         payloads.length = 0;
         
@@ -115,7 +115,7 @@ describe('Tab Change', () => {
 
         await common.wait(50);
 
-        const secondSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const secondSessionId = await page.evaluate(() => window.qeen.state.sessionId);
 
         const events2 = common.reduceToEventsArray(payloads);
         expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
@@ -127,7 +127,7 @@ describe('Tab Change', () => {
 
         await common.wait(50);
 
-        const thirdSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const thirdSessionId = await page.evaluate(() => window.qeen.state.sessionId);
 
         const events3 = common.reduceToEventsArray(payloads);
         expect(events3).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));

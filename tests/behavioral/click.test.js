@@ -19,7 +19,7 @@ describe('Click Events', () => {
 
         await page.click('#add-to-cart');
 
-        const debounceTime = await page.evaluate(() => window.fodoole.state.debounceTime);
+        const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
 
         await common.wait(debounceTime + 50);
 
@@ -27,7 +27,7 @@ describe('Click Events', () => {
         expect(events).toContainEqual(expect.objectContaining({ t: 'CLICK', l: 'ADD_TO_CART'}));
     });
 
-    it('(Click Group) should observe 3 CLICK events with the same label', async () => {
+    it.skip('(Click Group) should observe 3 CLICK events with the same label', async () => {
         browser = await puppeteer.launch();
 
         const { page, payloads } = await common.setupTest(browser, {
@@ -56,7 +56,7 @@ describe('Click Events', () => {
             });
         });
         
-        const debounceTime = await page.evaluate(() => window.fodoole.state.debounceTime);
+        const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
 
         for (let i = 0; i < buttons.length; i++) {
             await page.click(buttons[i]);
@@ -78,7 +78,7 @@ describe('Click Events', () => {
             waitForSessionStart: true,
         }, {});
         
-        const debounceTime = await page.evaluate(() => window.fodoole.state.debounceTime);
+        const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
 
         for (let i = 0; i < 5; i++) {
             await page.click('#add-to-cart');

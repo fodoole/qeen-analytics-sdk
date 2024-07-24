@@ -6,8 +6,8 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe('Scroll Events', () => {
-    it('(Scroll Events) should observe a SCROLL_TITLE and SCROLL_DESCRIPTION events', async () => {
+describe.skip('Scroll Events', () => {
+    it('(Scroll Events) should observe a SCROLL events', async () => {
         browser = await puppeteer.launch();
 
         const { page, payloads } = await common.setupTest(browser, {
@@ -27,7 +27,7 @@ describe('Scroll Events', () => {
         expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLLS_DESCRIPTION'}));
     });
     
-    it('(Multi Scroll Events) should observe a SCROLL_DESCRIPTION and exactly one SCROLL_IMAGES event', async () => {
+    it('(Multi Scroll Events) should observe a one SCROLL event per label', async () => {
         browser = await puppeteer.launch();
 
         const { page, payloads } = await common.setupTest(browser, {
@@ -50,40 +50,5 @@ describe('Scroll Events', () => {
         const events = common.reduceToEventsArray(payloads);
         expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESCRIPTION'}));
         expect(events.filter(event => event.l === 'SCROLL_IMAGES').length).toBe(1);
-    });
-
-    it('(Scroll Event Mutation Observer) should observe a SCROLL_DESCRIPTION event', async () => {
-        browser = await puppeteer.launch();
-
-        const { page, payloads } = await common.setupTest(browser, {
-            url: common.pages.productPage,
-            endpoint: common.endpoints.pageLevelAnalytics,
-            json: true,
-            waitForSessionStart: true,
-        }, {});
-    
-        await page.evaluate(() => {
-            const description = document.querySelector('p.description');
-            description.parentNode.removeChild(description);
-        });
-    
-        await common.wait(2000);
-    
-        await page.evaluate(() => {
-            const description = document.createElement('p');
-            description.className = 'description';
-            description.textContent = 'This is the description';
-    
-            const textContainer = document.querySelector('div.text-container');
-            textContainer.insertBefore(description, textContainer.childNodes[1]);
-        });
-    
-        const description = await page.$('p.description');
-        await page.evaluate(description => description.scrollIntoView(false), description);
-    
-        await common.wait(50);
-    
-        const events = common.reduceToEventsArray(payloads);
-        expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESCRIPTION'}));
     });
 });

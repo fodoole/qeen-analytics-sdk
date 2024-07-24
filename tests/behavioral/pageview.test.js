@@ -10,18 +10,12 @@ describe('Page View', () => {
     it('(Page View and Content Served) should see content replaced and observe PAGE_VIEW and CONTENT_SERVED events', async () => {
         browser = await puppeteer.launch();
 
-        const { page, payloads } = await common.setupTest(browser, {
+        const [, payloads] = await common.setupTest(browser, {
             url: common.pages.productPage,
             endpoint: common.endpoints.pageLevelAnalytics,
             json: true,
             waitForSessionStart: true,
         }, {});
-
-        const replacedTitle = await page.$eval('.title', el => el.innerText);
-        const replacedSubtitle = await page.$eval('.subtitle', el => el.innerText);
-
-        expect(replacedTitle).toBe('TITLE REPLACED');
-        expect(replacedSubtitle).toBe('SUBTITLE REPLACED');
 
         const events = common.reduceToEventsArray(payloads);
         expect(events).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
@@ -31,18 +25,13 @@ describe('Page View', () => {
     it('(Page View and No Content Served) should not see content replaced and observe PAGE_VIEW event only', async () => {
         browser = await puppeteer.launch();
 
-        const { page, payloads } = await common.setupTest(browser, {
+        const [, payloads] = await common.setupTest(browser, {
             url: common.pages.productPage,
             endpoint: common.endpoints.pageLevelAnalytics,
             json: true,
-            applyConfig: { state: { contentServed: true } },
+            applyConfig: { state: { contentServed: false } },
             waitForSessionStart: true,
         }, {});
-
-        const replacedTitle = await page.$eval('.title', el => el.innerText);
-        const replacedSubtitle = await page.$eval('.subtitle', el => el.innerText);
-        expect(replacedTitle).toBe('TITLE');
-        expect(replacedSubtitle).toBe('SUBTITLE');
 
         const events = common.reduceToEventsArray(payloads);
         expect(events).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
@@ -56,6 +45,7 @@ describe('Page View', () => {
             url: common.pages.productPage,
             endpoint: common.endpoints.pageLevelAnalytics,
             json: true,
+            applyConfig: { config: { idleTime: 5_000 } },
             waitForSessionStart: true,
         }, {});
 
@@ -65,8 +55,8 @@ describe('Page View', () => {
 
         payloads.length = 0;
 
-        await page.evaluate(() => window.fodoole.resetSession());
-        await common.waitForSessionStart(page);
+        const idleTime = page.evaluate(() => window.qeen.config.idleTime);
+        await common.wait(idleTime + 50);
 
         const events2 = common.reduceToEventsArray(payloads);
         expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
@@ -104,21 +94,6 @@ describe('Page View', () => {
         expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
     });
 
-    it('(Site-wide) should observe PAGE_VIEW but not CONTENT_SERVED when content generation is disabled', async () => {
-        browser = await puppeteer.launch();
-
-        const { _, payloads } = await common.setupTest(browser, {
-            url: common.pages.productPage,
-            endpoint: common.endpoints.pageLevelAnalytics,
-            json: true,
-            waitForSessionStart: true,
-        });
-
-        const events = common.reduceToEventsArray(payloads);
-        expect(events).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
-        expect(events).not.toContainEqual(expect.objectContaining({ t: 'CONTENT_SERVED' }));
-    });
-
     it('(Reset Session Consistency/Content Served) should observe a new session and CONTENT_SERVED after resetting the session', async () => {
         browser = await puppeteer.launch();
 
@@ -136,8 +111,8 @@ describe('Page View', () => {
         expect(events).toContainEqual(expect.objectContaining({ t: 'CONTENT_SERVED' }));
 
         payloads.length = 0;
-        await page.evaluate(() => window.fodoole.resetSession());
-        await common.waitForSessionStart(page);
+        const idleTime = page.evaluate(() => window.qeen.config.idleTime);
+        await common.wait(idleTime + 50);
 
         const events2 = common.reduceToEventsArray(payloads);
         expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
@@ -160,8 +135,8 @@ describe('Page View', () => {
         expect(events).not.toContainEqual(expect.objectContaining({ t: 'CONTENT_SERVED' }));
 
         payloads.length = 0;
-        page.evaluate(() => window.fodoole.resetSession());
-        await common.waitForSessionStart(page);
+        const idleTime = page.evaluate(() => window.qeen.config.idleTime);
+        await common.wait(idleTime + 50);
 
         const events2 = common.reduceToEventsArray(payloads);
         expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));

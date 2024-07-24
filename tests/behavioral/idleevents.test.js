@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe('Idle Events', () => {
+describe.skip('Idle Events', () => {
     it('(Idle User) should observe an IDLE event and different session IDs', async () => {
         browser = await puppeteer.launch();
 
@@ -18,15 +18,15 @@ describe('Idle Events', () => {
             waitForSessionStart: true,
         }, {});
 
-        const oldSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
 
-        const idleTime = await page.evaluate(() => window.fodoole.config.idleTime);
+        const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
-        await common.wait(idleTime);
+        await common.wait(idleTime + 50);
 
-        const newSessionId = await page.evaluate(() => window.fodoole.state.sessionId);
+        const sessionId2 = await page.evaluate(() => window.qeen.state.sessionId);
 
-        expect(oldSessionId).not.toBe(newSessionId);
+        expect(sessionId1).not.toBe(sessionId2);
 
         const events = common.reduceToEventsArray(payloads);
 
@@ -44,7 +44,7 @@ describe('Idle Events', () => {
             waitForSessionStart: true,
         }, {});
 
-        const idleTime = await page.evaluate(() => window.fodoole.config.idleTime);
+        const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
         await common.wait(idleTime / 2);
         

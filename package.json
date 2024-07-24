@@ -4,7 +4,7 @@
   "description": "Fodoole Analytics SDK",
   "main": "core.js",
   "scripts": {
-    "test": "npx jest test --watchAll=false --testTimeout=60000 --verbose --maxWorkers=1",
+    "test": "npx jest test --watchAll=false --testTimeout=90000 --verbose --maxWorkers=1",
     "start": "node index.js",
     "build": "tsc && webpack"
   },

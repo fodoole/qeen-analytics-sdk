@@ -10,7 +10,7 @@ describe.skip('Debouncer', () => {
     it('(Debounce Delay) should observe the side effects of a debounced event after a delay', async () => {
         browser = await puppeteer.launch();
 
-        const { page, _ } = await common.setupTest(browser, {
+        const { page } = await common.setupTest(browser, {
             url: common.blankURL,
             waitForVisibility: true,
         }, {});
@@ -31,7 +31,7 @@ describe.skip('Debouncer', () => {
     it('(Debounce Anti-Spam) should observe the side effects of a debounced event once if spammed', async () => {
         browser = await puppeteer.launch();
 
-        const { page, _ } = await common.setupTest(browser, {
+        const { page } = await common.setupTest(browser, {
             url: common.blankURL,
             waitForVisibility: true,
         }, {});
@@ -58,7 +58,7 @@ describe.skip('Debouncer', () => {
     it('(Debounce Clear) should not observe the side effects of a debounced event when cleared', async () => {
         browser = await puppeteer.launch();
 
-        const { page, _ } = await common.setupTest(browser, {
+        const { page } = await common.setupTest(browser, {
             url: common.blankURL,
             waitForVisibility: true,
         }, {});
@@ -77,7 +77,7 @@ describe.skip('Debouncer', () => {
     it('(Debounce Trigger) should observe the side effects of a debounced event early when triggered', async () => {
         browser = await puppeteer.launch();
 
-        const { page, _ } = await common.setupTest(browser, {
+        const { page } = await common.setupTest(browser, {
             url: common.blankURL,
             waitForVisibility: true,
         }, {});
@@ -96,7 +96,7 @@ describe.skip('Debouncer', () => {
     it('(Debounce Flush) should observe the side effects debounced events immediately when flushed', async () => {
         browser = await puppeteer.launch();
 
-        const { page, _ } = await common.setupTest(browser, {
+        const { page } = await common.setupTest(browser, {
             url: common.blankURL,
             waitForVisibility: true,
         }, {});

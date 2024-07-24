@@ -30,7 +30,9 @@ const endpoints = {
  * @returns {Promise} - A promise that resolves when the content is served.
  */
 async function waitForContentServed(page) {
-    return page.waitForFunction('window.qeen?.state?.contentServed === true');
+    return page.waitForFunction(() => {
+        return window.qeen?.state?.contentServed === true;
+    });
 };
 
 /**
@@ -39,7 +41,9 @@ async function waitForContentServed(page) {
  * @returns {Promise} - A promise that resolves when the page is fully visible.
  */
 async function waitForVisibility(page) {
-    return page.waitForFunction('document.visibilityState === "visible" && document.readyState === "complete"');
+    return page.waitForFunction(() => {
+        return document.visibilityState === 'visible' && document.readyState === 'complete';
+    });
 }
 
 /**
@@ -48,7 +52,9 @@ async function waitForVisibility(page) {
  * @returns {Promise} - A promise that resolves when the session starts.
  */
 async function waitForSessionStart(page) {
-    return page.waitForFunction('window.qeen?.state?.sessionId');
+    return page.waitForFunction(() => {
+        return window.qeen?.state?.sessionId !== undefined && window.qeen?.state?.sessionId !== '';
+    });
 }
 
 /**

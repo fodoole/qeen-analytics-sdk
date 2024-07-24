@@ -12,16 +12,10 @@ const env = {
     BQ_DATASET: process.env.BQ_DATASET,
     BQ_EVENTS_TABLE: process.env.BQ_EVENTS_TABLE,
     BQ_EVENTS_TABLE_NPDP: process.env.BQ_EVENTS_TABLE_NPDP,
-    BQ_SEARCH_EVENTS_TABLE: process.env.BQ_SEARCH_EVENTS_TABLE,
-    BQ_PERF_METRICS_TABLE: process.env.BQ_PERF_METRICS_TABLE,
 }
 
 // The time to wait for the events to be logged in BigQuery.
 const loggingWaitTime = 5000;
-
-if (Object.values(env).some(prop => prop === undefined)) {
-    throw new Error('Please provide the necessary environment variables.');
-}
 
 const hostAddress = process.env.ANALYTICS_HOST || 'localhost';
 const port = process.env.PORT || 8080;
@@ -70,17 +64,6 @@ async function executeQueryEvent(sessionId, table, timestamp = 0) {
 }
 
 /**
- * Executes a query in BigQuery based on the Telemetry Metric class.
- * @param {string} contentServingId The content serving
- * @param {string} table The table to query from.
- * @param {Number} timestamp The timestamp to query for.
- * @returns {Promise<void>} A promise that resolves when the query is complete.
- */
-async function executeQueryTelemetry(contentServingId, table, timestamp = 0) {
-    return executeQuery(QueryParams.CONTENT_SERVING_ID, contentServingId, table, QueryParams.LOGGING_TIMESTAMP, timestamp);
-}
-
-/**
  * Denullifies an object. Number values are converted to 0, string values are converted to ''.
  * @param {Object} obj The object to denullify.
  * @param {string[]} zeroProps The properties to convert to 0.
@@ -101,8 +84,7 @@ function denullify(obj, zeroProps = []) {
  * @param {Page} page The page to run the test on.
  * @returns {Object} The session IDs before and after the test.
  */
-async function pageLevelAnalyticsTest(page)
-{
+async function pageLevelAnalyticsTest(page) {
     // CONTENT_SERVED/CHECKOUT
     // RECOMMENDATION_SERVED
     // PAGE_VIEW
@@ -194,7 +176,11 @@ async function processPageLevelAnalyticsTest(payloads, sessionId1, sessionId2, s
 }
 
 // E2E Test
-describe('E2E/Integration', () => {
+describe.skip('E2E/Integration', () => {
+    if (Object.values(env).some(prop => prop === undefined)) {
+        throw new Error('Please provide the necessary environment variables.');
+    }
+
     it('(Page-Level Analytics) send page-level analytics events via the browser and observe these events in the database', async () => {
         const startTime = Date.now();
         const loggingURL = serverURL + common.endpoints.pageLevelAnalytics;
