@@ -176,7 +176,7 @@ async function processPageLevelAnalyticsTest(payloads, sessionId1, sessionId2, s
 }
 
 // E2E Test
-describe.skip('E2E/Integration', () => {
+describe('E2E/Integration', () => {
     if (Object.values(env).some(prop => prop === undefined)) {
         throw new Error('Please provide the necessary environment variables.');
     }

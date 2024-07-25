@@ -1,3 +1,7 @@
 node_modules/
 build/
 dist/
+
+dev_scripts/
+.env
+.dev-keys/

@@ -24,7 +24,7 @@ function AnalyticsWrapper({ children }) {
       contentServingId: isPdp ? String(qeen.randInt()) : '0',
       contentId: isPdp ? 'optimised' : '-',
       isPdp: isPdp,
-      idleTime: 5_000
+      idleTime: 60_000,
     });
 
     qeen.bindClickEvents(new qeen.InteractionEvent('CLICK_LINK', '.nav'));

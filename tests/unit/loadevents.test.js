@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe.skip('Load Events', () => {
+describe('Load Events', () => {
     it('(On Load) should observe the side effects of a function on load', async () => {
         browser = await puppeteer.launch();
 
