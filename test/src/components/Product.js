@@ -8,6 +8,7 @@ function Product() {
 
   const [products, setProducts] = useState([]);
   const [render, setRender] = useState(false);
+
   useEffect(() => {
     fetch('/products.json')
       .then(response => {
@@ -17,17 +18,15 @@ function Product() {
         return response.json();
       })
       .then(data => {
-        console.log('Fetched data:', data);  // Log fetched data
+        console.log('Fetched data:', data);
         setProducts(data);
         setRender(true);
       })
       .catch(error => console.error('Error fetching data:', error));
-  },[]);
+  }, []);
 
   useEffect(() => {
-      console.log('Button was clicked!');
-      if(render){
-        console.log('render set to true!');
+    if (render) {
       qeen.bindClickEvents(
         [
           new qeen.InteractionEvent('ADD_TO_CART', '#add-to-cart'),
@@ -42,18 +41,15 @@ function Product() {
         ]
       );
     }
-  },[render]);
-  
-  // Log products array and ID
+  }, [render]);
+
   console.log("Products array:", products);
-  console.log("Product ID:", id);
 
   if (products === undefined || products.length === 0) {
     return <div>Loading...</div>;
   }
-  const product = products.find(product => product.id === parseInt(id));
-  
 
+  const product = products.find(product => product.id === parseInt(id));
   return (
     <>
       <div className='productContainer'>

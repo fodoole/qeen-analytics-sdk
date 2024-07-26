@@ -33,18 +33,12 @@ function Home() {
         setRender(true);
 
       })
-      .then(() => {   // Needs to be fixed
-        qeen.bindClickEvents([new qeen.InteractionEvent('CLICK_PRODUCT', '.product')]);
-      })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   useEffect(() => {
-    console.log('Button was clicked!');
     if (render) {
-      console.log('render set to true!');
       qeen.bindClickEvents([new qeen.InteractionEvent('CLICK_PRODUCT', '.product')]);
-
     }
   }, [render]);
 
