@@ -26,7 +26,7 @@
  }
  .productContainer {
    display: flex;
-   flex-direction: column;
+   flex-direction: row;
    align-items: center;
    justify-content: center;
    background-color: #333;
@@ -36,14 +36,14 @@
    min-height: 285px;
  }
  .productImage {
-   max-width: 150px;
-   max-height: 150px;
-   border-radius: 5px;
+  max-width: 50%;
+  max-height: 500px;
+  border-radius: 5px;
+  margin-right: 20px;
  }
  .productTitle {
    color: #61dafb;
    margin: 10px 0;
-   max-width: 200px;
  }
  .productPrice {
    color: #fff;

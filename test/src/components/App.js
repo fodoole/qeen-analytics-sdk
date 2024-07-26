@@ -8,6 +8,8 @@ import Checkout from './Checkout';
 import About from './About';
 import Nav from './Nav';
 
+import '../styles/App.css';
+
 function AnalyticsWrapper({ children }) {
   const location = useLocation();
   const isPdp = location.pathname.includes('/product/');

@@ -1,6 +1,6 @@
 /* global qeen */
 import React, { useState } from 'react';
-import './Checkout.css';
+import '../styles/Checkout.css';
 
 function Checkout() {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
