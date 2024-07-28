@@ -17,14 +17,17 @@ describe('Scroll Events', () => {
       waitForSessionStart: true,
     }, {});
 
-    const title = await page.$('.title');
+    const title = await page.$('.productTitle');
     await page.evaluate(title => title.scrollIntoView(false), title);
-
     await common.wait(50);
+    
+    const description = await page.$('#desc');
+    await page.evaluate(description => description.scrollIntoView(false), description);
+    await common.wait(200);
 
     const events = common.reduceToEventsArray(payloads);
     expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_TITLE' }));
-    expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLLS_DESCRIPTION' }));
+    expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESC' }));
   });
 
   it('(Multi Scroll Events) should observe a one SCROLL event per label', async () => {
@@ -37,18 +40,12 @@ describe('Scroll Events', () => {
       waitForSessionStart: true,
     }, {});
 
-    const description = await page.$('body > div.text-container > p');
+    const description = await page.$('.desc');
     await page.evaluate(description => description.scrollIntoView(false), description);
-
-    const images = await page.$$('.image');
-    for (const image of images) {
-      await page.evaluate(image => image.scrollIntoView(false), image);
-    }
-
-    await common.wait(50);
+    await common.wait(200);
 
     const events = common.reduceToEventsArray(payloads);
-    expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESCRIPTION' }));
-    expect(events.filter(event => event.l === 'SCROLL_IMAGES').length).toBe(1);
+    expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESC' }));
+    expect(events.filter(event => event.l === 'SCROLL_DESC').length).toBe(1);
   });
 });

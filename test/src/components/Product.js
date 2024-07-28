@@ -18,7 +18,6 @@ function Product() {
         return response.json();
       })
       .then(data => {
-        console.log('Fetched data:', data);
         setProducts(data);
         setRender(true);
       })
@@ -42,8 +41,6 @@ function Product() {
       );
     }
   }, [render]);
-
-  console.log('Products array:', products);
 
   if (products === undefined || products.length === 0) {
     return <div>Loading...</div>;
@@ -77,9 +74,9 @@ function Product() {
           </Link>
         </div>
       </div>
-      <div id='desc' className='desc'>
-        <h3>Description</h3>
-        <p>{product.description}</p>
+      <div className='desc'>
+        <h3 id='desc'>Description</h3>
+        <p id='desc'>{product.description}</p>
       </div>
     </>
   );

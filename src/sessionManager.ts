@@ -13,9 +13,7 @@ import { onLoad, beforeUnload, randInt, limit, Debouncer } from './utils';
  * Function that sets the content served flag to true.
  */
 export function setContentServed(): void {
-  console.log('Content served:', State.contentServed);
   State.contentServed = true;
-  console.log('Content served:', State.contentServed);
 }
 
 /**
@@ -205,7 +203,6 @@ export class BindQueueItem {
  * @param {any} config - The configuration object for the Qeen Analytics SDK.
  */
 export function initPageSession(config: ContentResponse): void {
-  console.log('Initializing Qeen Analytics SDK..., contentServed:', State.contentServed);
   if (Config.noQeen) {
     return;
   }

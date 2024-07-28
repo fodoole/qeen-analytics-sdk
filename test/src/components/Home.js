@@ -28,7 +28,6 @@ function Home() {
         return response.json();
       })
       .then(data => {
-        console.log('Fetched data:', data);
         setProducts(data);
         setRender(true);
 

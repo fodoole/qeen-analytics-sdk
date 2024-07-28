@@ -25,16 +25,13 @@ describe('Page View', () => {
   it('(Page View and No Content Served) should not see content replaced and observe PAGE_VIEW event only', async () => {
     browser = await puppeteer.launch();
 
-    const { page, payloads } = await common.setupTest(browser, {
+    const { _, payloads } = await common.setupTest(browser, {
       url: common.pages.productPage,
       endpoint: common.endpoints.pageLevelAnalytics,
       json: true,
-      applyConfig: { state: { contentServed: false } },
       waitForSessionStart: true,
       console: true,
     }, {});
-
-    console.log(await page.evaluate(() => window.qeen.state.contentServed));
 
     const events = common.reduceToEventsArray(payloads);
     expect(events).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
@@ -127,7 +124,6 @@ describe('Page View', () => {
       url: common.pages.productPage,
       endpoint: common.endpoints.pageLevelAnalytics,
       json: true,
-      applyConfig: { state: { contentServed: false } },
       waitForSessionStart: true,
     });
 

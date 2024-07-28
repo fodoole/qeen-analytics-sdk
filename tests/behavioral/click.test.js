@@ -38,7 +38,7 @@ describe('Click Events', () => {
     }, {});
 
     const buttons = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('.group .button')).map(button => {
+      return Array.from(document.querySelectorAll('#add-to-wishlist-carrousel')).map(button => {
         let path = [];
         let node = button;
         while (node !== document.body) {
@@ -64,7 +64,7 @@ describe('Click Events', () => {
     }
 
     const events = common.reduceToEventsArray(payloads);
-    const clickGroupEvents = events.filter(event => event.l === 'CLICK_GROUP');
+    const clickGroupEvents = events.filter(event => event.l === 'ATW');
     expect(clickGroupEvents.length).toBe(3);
   });
 

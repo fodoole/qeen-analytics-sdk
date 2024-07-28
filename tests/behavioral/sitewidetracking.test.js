@@ -14,7 +14,6 @@ describe('Site-wide Tracking', () => {
       url: common.pages.checkoutPage,
       endpoint: common.endpoints.pageLevelAnalytics,
       json: true,
-      applyConfig: { config: { enableContentGeneration: false } },
       waitForSessionStart: true,
     }, {});
 

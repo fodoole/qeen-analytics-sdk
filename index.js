@@ -20,7 +20,6 @@ function logRawBody(req, _, next) {
     } catch (error) {
       req.body = body;
     }
-    console.log('/log', JSON.stringify(req.body, null, 2), '\n');
     req.rawBody = body;
     next();
   });
