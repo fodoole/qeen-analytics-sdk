@@ -99,6 +99,9 @@ function initSession(): void {
   State.reset();
   State.sessionId = String(randInt());
 
+  // Rebind intersection observer for scroll events
+  bindScrollEventsToElements(Config.scrollEvents);
+
   onLoad(function () {
     // Common initialization logic
     initResetCommon('INIT');
@@ -116,8 +119,6 @@ function initSession(): void {
 export function resetSession(): void {
   // Reset session id and session data
   State.reset();
-  // Rebind intersection observer for scroll events
-  bindScrollEventsToElements(Config.scrollEvents);
 
   initResetCommon('RESET');
 }
