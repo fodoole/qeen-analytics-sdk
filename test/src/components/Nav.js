@@ -11,7 +11,7 @@ const navStyle = {
 const linkStyle = {
   margin: '0 10px',
   textDecoration: 'none',
-  color: '#333', 
+  color: '#333',
   padding: '5px 10px',
   borderRadius: '5px',
   transition: 'all 0.3s ease',
@@ -31,7 +31,7 @@ const Nav = React.memo(function Nav() {
         <Link
           key={path}
           to={`${path}#qeen-dev`}
-          style={hoverIndex === index ? {...linkStyle, ...hoverStyle} : linkStyle}
+          style={hoverIndex === index ? { ...linkStyle, ...hoverStyle } : linkStyle}
           onMouseEnter={() => setHoverIndex(index)}
           onMouseLeave={() => setHoverIndex(null)}
           className="nav"

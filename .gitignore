@@ -2,6 +2,8 @@ node_modules/
 build/
 dist/
 
+test/public/qeen.js
+
 dev_scripts/
 .env
 .dev-keys/
