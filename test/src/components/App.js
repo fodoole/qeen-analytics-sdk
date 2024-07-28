@@ -18,7 +18,7 @@ function AnalyticsWrapper({ children }) {
     // qeen.fetchQeenContent();
 
     qeen.setContentServed();
-  
+
     qeen.initPageSession({
       qeenDeviceId: 'dev',
       analyticsEndpoint: '/log',

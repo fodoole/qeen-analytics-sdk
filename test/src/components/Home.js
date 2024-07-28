@@ -7,7 +7,7 @@ function ProductLink({ product }) {
   return (
     <div className="productContainer product">
       <Link to={`/product/${product.id}#qeen-dev`} style={{ textDecoration: 'none' }}>
-        <img src={product.image} alt={product.title} className='productImage' />
+        <img src={product.image} alt={product.title} className='productImage' style={{ marginRight: '0' }} />
         <h3 className='productTitle'>{product.title}</h3>
         <p className='productPrice'>${product.price}</p>
       </Link>

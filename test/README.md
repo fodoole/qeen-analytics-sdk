@@ -24,7 +24,7 @@ npm start
 ```
 
 This will start the development server on `http://localhost:3000`.
-The page will reload when you make changes.\
+The page will reload when you make changes.
 
 ## Learn More
 

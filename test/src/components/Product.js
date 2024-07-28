@@ -1,6 +1,6 @@
 /* global qeen */
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import '../styles/Product.css';
 
 function Product() {
@@ -43,13 +43,15 @@ function Product() {
     }
   }, [render]);
 
-  console.log("Products array:", products);
+  console.log('Products array:', products);
 
   if (products === undefined || products.length === 0) {
     return <div>Loading...</div>;
   }
 
-  const product = products.find(product => product.id === parseInt(id));
+  const productIndex = products.findIndex(product => product.id === parseInt(id));
+  const product = products[productIndex];
+  const relatedProduct = products[(productIndex + 1) % products.length];
   return (
     <>
       <div className='productContainer'>
@@ -57,11 +59,22 @@ function Product() {
         <div className='productDetails'>
           <h2 className='productTitle'>{product.title}</h2>
           <p className='productPrice'>Price: ${product.price}</p> {/* Adjust price as needed */}
-          <button id="add-to-cart" className='addToCartButton'>Add to Cart</button>
-          <button id="add-to-wishlist" className='addToWishlistButton'>Add to wishlist</button>
-          <button id="add-to-wishlist-carrousel" className='addToWishlistCarrouselButton'>atw1</button>
-          <button id="add-to-wishlist-carrousel" className='addToWishlistCarrouselButton'>atw2</button>
-          <button id="add-to-wishlist-carrousel" className='addToWishlistCarrouselButton'>atw3</button>
+          <button id='add-to-cart' className='addToCartButton productButton'>Add to Cart</button>
+          <button id='add-to-wishlist' className='addToWishlistButton productButton'>Add to wishlist</button>
+          <div className='buttonCarrousel'>
+            <button id='add-to-wishlist-carrousel' className='addToWishlistCarrouselButton productButton'>Button 1</button>
+            <button id='add-to-wishlist-carrousel' className='addToWishlistCarrouselButton productButton'>Button 2</button>
+            <button id='add-to-wishlist-carrousel' className='addToWishlistCarrouselButton productButton'>Button 3</button>
+          </div>
+        </div>
+      </div>
+      <div className='productContainer'>
+        <div className='relatedProduct'>
+          <Link to={`/product/${relatedProduct.id}#qeen-dev`} style={{ textDecoration: 'none' }}>
+            <img src={relatedProduct.image} alt={relatedProduct.title} className='productImage' style={{ marginRight: '0' }} />
+            <h3 className='productTitle'>{relatedProduct.title}</h3>
+            <p className='productPrice'>${relatedProduct.price}</p>
+          </Link>
         </div>
       </div>
       <div id='desc' className='desc'>

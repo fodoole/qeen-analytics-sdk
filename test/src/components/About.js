@@ -27,7 +27,7 @@ function About() {
       <button id="more-info" className='moreInfoButton'>More Info</button>
       <div id='description' className='description'>
         <h3>Description</h3>
-        <p>some Desciption for now </p>
+        <p>hi</p>
       </div>
     </div>
   );
