@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe.skip('Prepare Selectors', () => {
+describe('Prepare Selectors', () => {
     it('(Content Selectors) should observe the correct content selector bindings', async () => {
         browser = await puppeteer.launch();
 

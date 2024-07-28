@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe.skip('Debouncer', () => {
+describe('Debouncer', () => {
     it('(Debounce Delay) should observe the side effects of a debounced event after a delay', async () => {
         browser = await puppeteer.launch();
 

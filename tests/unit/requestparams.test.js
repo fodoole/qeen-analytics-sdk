@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe.skip('Request Parameters', () => {
+describe('Request Parameters', () => {
     it('(Request Parameters) should observe the correct request parameters', async () => {
         browser = await puppeteer.launch();
 

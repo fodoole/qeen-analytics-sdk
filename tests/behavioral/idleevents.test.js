@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe.skip('Idle Events', () => {
+describe('Idle Events', () => {
     it('(Idle User) should observe an IDLE event and different session IDs', async () => {
         browser = await puppeteer.launch();
 
@@ -14,7 +14,7 @@ describe.skip('Idle Events', () => {
             url: common.pages.productPage,
             endpoint: common.endpoints.pageLevelAnalytics,
             json: true,
-            applyConfig: { config: { idleTime: 10_000 } },
+            applyConfig: { config: { idleTime: 5_000 } },
             waitForSessionStart: true,
         }, {});
 
@@ -40,7 +40,7 @@ describe.skip('Idle Events', () => {
             url: common.pages.productPage,
             endpoint: common.endpoints.pageLevelAnalytics,
             json: true,
-            applyConfig: { config: { idleTime: 10_000 } },
+            applyConfig: { config: { idleTime: 5_000 } },
             waitForSessionStart: true,
         }, {});
 

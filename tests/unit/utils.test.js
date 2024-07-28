@@ -6,7 +6,7 @@ afterEach(async () => {
     await browser.close();
 });
 
-describe.skip('Utilities', () => {
+describe('Utilities', () => {
     it('(Random Integer) should generate a random integer between 10^15 and 10^16 - 1', async () => {
         browser = await puppeteer.launch();
 
