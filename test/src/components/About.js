@@ -6,7 +6,7 @@ function About() {
   useEffect(() => {
     qeen.bindClickEvents(
       [
-        new qeen.InteractionEvent('More_Info', '#more-info'),
+        new qeen.InteractionEvent('MORE_INFO', '#more-info'),
       ]
     );
     qeen.bindScrollEvents(

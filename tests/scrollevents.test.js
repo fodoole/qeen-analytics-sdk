@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('./common.js');
 const puppeteer = require('puppeteer');
 let browser;
 
@@ -19,11 +19,11 @@ describe('Scroll Events', () => {
 
     const title = await page.$('.productTitle');
     await page.evaluate(title => title.scrollIntoView(false), title);
-    await common.wait(50);
+    await common.wait(250);
     
     const description = await page.$('#desc');
     await page.evaluate(description => description.scrollIntoView(false), description);
-    await common.wait(200);
+    await common.wait(250);
 
     const events = common.reduceToEventsArray(payloads);
     expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_TITLE' }));
@@ -42,10 +42,49 @@ describe('Scroll Events', () => {
 
     const description = await page.$('.desc');
     await page.evaluate(description => description.scrollIntoView(false), description);
-    await common.wait(200);
+    await common.wait(250);
 
     const events = common.reduceToEventsArray(payloads);
     expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESC' }));
     expect(events.filter(event => event.l === 'SCROLL_DESC').length).toBe(1);
+  });
+
+  it('(Scroll Events Reset) should observe SCROLL events after a reset', async () => {
+    browser = await puppeteer.launch();
+
+    const { page, payloads } = await common.setupTest(browser, {
+      url: common.pages.productPage,
+      endpoint: common.endpoints.pageLevelAnalytics,
+      json: true,
+      waitForSessionStart: true,
+    }, {});
+
+    await common.wait(250);
+    payloads.length = 0;
+
+    const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
+    await common.wait(idleTime + 250);
+
+    const events = common.reduceToEventsArray(payloads);
+    expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_TITLE' }));
+  });
+
+  it('(Scroll Events Across Pages) should observe SCROLL events after going to a different product page', async () => {
+    browser = await puppeteer.launch();
+
+    const { page, payloads } = await common.setupTest(browser, {
+      url: common.pages.productPage,
+      endpoint: common.endpoints.pageLevelAnalytics,
+      json: true,
+      waitForSessionStart: true,
+    }, {});
+
+    await page.click('.relatedProduct > a');
+    payloads.length = 0;
+
+    await common.wait(250);
+
+    const events = common.reduceToEventsArray(payloads);
+    expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_TITLE' }));
   });
 });

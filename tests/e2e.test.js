@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('./common.js');
 const puppeteer = require('puppeteer');
 const { BigQuery } = require('@google-cloud/bigquery');
 let browser;
@@ -15,7 +15,7 @@ const env = {
 }
 
 // The time to wait for the events to be logged in BigQuery.
-const loggingWaitTime = 5000;
+const loggingWaitTime = 5_000;
 
 const hostAddress = process.env.ANALYTICS_HOST || 'localhost';
 const port = process.env.PORT || 8080;
@@ -80,68 +80,27 @@ function denullify(obj, zeroProps = []) {
 }
 
 /**
- * Runs the page-level analytics test.
- * @param {Page} page The page to run the test on.
- * @returns {Object} The session IDs before and after the test.
- */
-async function pageLevelAnalyticsTest(page) {
-  // CONTENT_SERVED/CHECKOUT
-  // RECOMMENDATION_SERVED
-  // PAGE_VIEW
-  // await content served or page visibility; done in test setup
-
-  const sessionId1 = await page.evaluate(() => window.fodoole.state.sessionId);
-  const debounceTime = await page.evaluate(() => window.fodoole.state.debounceTime);
-  const idleTime = await page.evaluate(() => window.fodoole.config.idleTime);
-
-  // CLICK
-  await page.click('#important-button');
-
-  // SCROLL
-  const title = await page.$('.title');
-  await page.evaluate(title => title.scrollIntoView(false), title);
-
-  await common.wait(debounceTime + 50);
-
-  // TAB_SWITCH
-  const newPage = await browser.newPage();
-  await newPage.goto('about:blank');
-  await newPage.bringToFront();
-
-  await common.wait(50);
-  await page.bringToFront();
-
-  // IDLE
-  await common.wait(idleTime);
-  const sessionId2 = await page.evaluate(() => window.fodoole.state.sessionId);
-
-  // PAGE_EXIT
-  await page.reload();
-
-  return { sessionId1, sessionId2 };
-}
-
-/**
  * Processes the page-level analytics test.
  * @param {Object[]} payloads The payloads to process.
- * @param {string} sessionId1 The first session ID.
- * @param {string} sessionId2 The second session ID.
+ * @param {Array<string>} sessionIds The session IDs to query for.
  * @param {Number} startTime The start time of the test.
  * @param {string} table The table to query from.
  * @returns {Object} The mutated rows and the matching events.
  */
-async function processPageLevelAnalyticsTest(payloads, sessionId1, sessionId2, startTime, table) {
+async function processPageLevelAnalyticsTest(payloads, sessionIds, startTime, table) {
   const events = common.reduceToEventsArray(payloads);
 
   // Making sure we only get the events we're interested in
-  const eventsOfInterest = events.filter(event => event.pid === sessionId1 || event.pid === sessionId2);
+  const eventsOfInterest = events.filter(event => sessionIds.includes(event.pid));
 
   // Give the events some time to be logged in BigQuery
   await common.wait(loggingWaitTime);
 
-  const rows1 = await executeQueryEvent(sessionId1, table, startTime);
-  const rows2 = await executeQueryEvent(sessionId2, table, startTime);
-  const rows = rows1.concat(rows2);
+  const rows = [];
+  for (const sessionId of sessionIds) {
+    const rowsForSession = await executeQueryEvent(sessionId, table, startTime);
+    rows.push(...rowsForSession);
+  }
 
   // Bind BigQuery column names to the expected event properties
   let rowsMutated = rows.map(row => {
@@ -172,7 +131,7 @@ async function processPageLevelAnalyticsTest(payloads, sessionId1, sessionId2, s
   eventsMatching = common.sortObjects(eventsMatching, ['t', 'l']);
   rowsMutated = common.sortObjects(rowsMutated, ['t', 'l']);
 
-  return { rowsMutated, eventsMatching };
+  return { eventsMatching, rowsMutated };
 }
 
 // E2E Test
@@ -190,20 +149,43 @@ describe('E2E/Integration', () => {
       url: common.pages.productPage,
       endpoint: loggingURL,
       json: true,
-      applyConfig: {
-        config: {
-          analyticsEndpoint: loggingURL,
-        }
-      },
       waitForSessionStart: true,
     });
 
-    // Run common page-level analytics test
-    const { sessionId1, sessionId2 } = await pageLevelAnalyticsTest(page);
+    // PAGE_VIEW
+    // CONTENT_SERVED
+    const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
+    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
+    const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
+
+    // CLICK
+    await page.click('#add-to-cart');
+
+    // SCROLL
+    const title = await page.$('#desc');
+    await page.evaluate(title => title.scrollIntoView(false), title);
+
+    await common.wait(debounceTime + 50);
+
+    // TAB_SWITCH
+    const newPage = await browser.newPage();
+    await newPage.goto('about:blank');
+    await newPage.bringToFront();
+
+    await common.wait(50);
+    await page.bringToFront();
+
+    // IDLE
+    await common.wait(idleTime);
+    const sessionId2 = await page.evaluate(() => window.qeen.state.sessionId);
+
+    // PAGE_EXIT
+    await page.reload();
 
     // Process the page-level analytics test
-    const { rowsMutated, eventsMatching } = await processPageLevelAnalyticsTest(payloads, sessionId1, sessionId2, startTime, env.BQ_EVENTS_TABLE);
-    expect(rowsMutated).toEqual(eventsMatching);
+    await browser.close();
+    const { eventsMatching, rowsMutated } = await processPageLevelAnalyticsTest(payloads, [sessionId1, sessionId2], startTime, env.BQ_EVENTS_TABLE);
+    expect(eventsMatching).toEqual(rowsMutated);
   });
 
   it('(Page-Level Analytics/Non-PDP) send page-level analytics (non-PDP) events via the browser and observe these events in the database', async () => {
@@ -212,27 +194,49 @@ describe('E2E/Integration', () => {
     browser = await puppeteer.launch();
 
     const { page, payloads } = await common.setupTest(browser, {
-      url: common.pages.productPage + '?checkout',
+      url: common.pages.aboutPage,
       endpoint: loggingURL,
       json: true,
-      applyConfig: {
-        config: {
-          analyticsEndpoint: loggingURL,
-          enableContentGeneration: false,
-          contentId: '-',
-        }
-      },
       waitForVisibility: true,
     });
 
-    // Run common page-level analytics test
-    const { sessionId1, sessionId2 } = await pageLevelAnalyticsTest(page);
+    // PAGE_VIEW
+    const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
+    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
+    const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
-    // CLICK:CLICK_NON_PDP
-    await page.click('.title');
+    // CLICK
+    await page.click('#more-info');
+
+    // SCROLL
+    const title = await page.$('#description');
+    await page.evaluate(title => title.scrollIntoView(false), title);
+
+    await common.wait(debounceTime + 50);
+
+    // TAB_SWITCH
+    const newPage = await browser.newPage();
+    await newPage.goto('about:blank');
+    await newPage.bringToFront();
+
+    await common.wait(50);
+    await page.bringToFront();
+
+    // IDLE
+    await common.wait(idleTime);
+    const sessionId2 = await page.evaluate(() => window.qeen.state.sessionId);
+
+    // PAGE_EXIT
+    await page.click('#root > nav > a:nth-child(3)');
+
+    // CHECKOUT
+    const sessionId3 = await page.evaluate(() => window.qeen.state.sessionId);
+    await page.click('#checkout');
+    await common.wait(1_500);
 
     // Process the page-level analytics test
-    const { rowsMutated, eventsMatching } = await processPageLevelAnalyticsTest(payloads, sessionId1, sessionId2, startTime, env.BQ_EVENTS_TABLE_NPDP);
-    expect(rowsMutated).toEqual(eventsMatching);
+    await browser.close();
+    const { eventsMatching, rowsMutated  } = await processPageLevelAnalyticsTest(payloads, [sessionId1, sessionId2, sessionId3], startTime, env.BQ_EVENTS_TABLE_NPDP);
+    expect(eventsMatching).toEqual(rowsMutated);
   });
 });

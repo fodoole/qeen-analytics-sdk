@@ -281,7 +281,7 @@ Instead of enabling general click and scroll tracking, you can now define specif
 2. Language Detection: Content fetching relies on the page language; keep the `lang` attribute in the `<html>` accurate to the language of the page.
 3. State Consistency: Ensure that you set the content served flag if optimized content was rendered successfully.
 4. SPA Navigation: Re-initialize the SDK on every page navigation in your SPA to properly track new sessions and exit events.
-5. Custom Event Configuration: Use clear and descriptive labels for your custom events to make analysis easier. Be specific with your CSS selectors to target exactly the elements you want to track. Using IDs or unique classes is recommended; avoid using tag or child selectors.
+5. Custom Event Configuration: Use clear and descriptive labels for your custom events to make analysis easier. Be specific with your CSS selectors to target exactly the elements you want to track. Using IDs or unique classes is recommended; avoid using tag or child selectors. Additionally, make sure to use different class names between product detail pages and non-product detail pages to avoid tracking the same event on both types of pages.
 > [!NOTE]  
 > `ADD_TO_CART` is a special click label that is used for tracking the ATC rate. It's generally only used on add to cart/buy now buttons on product detail pages.
 

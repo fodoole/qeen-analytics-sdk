@@ -13,15 +13,20 @@ import '../styles/App.css';
 function AnalyticsWrapper({ children }) {
   const location = useLocation();
   const isPdp = location.pathname.includes('/product/');
+  const analyticsEndpoint = 'http://localhost:8080/log';
 
   useEffect(() => {
     // qeen.fetchQeenContent();
 
-    qeen.setContentServed();
-
+    if (isPdp && parseInt(location.pathname.split('/').pop()) % 2 === 1) {
+      qeen.setContentServed();
+    } else {
+      qeen.resetContentServed();
+    }
+  
     qeen.initPageSession({
       qeenDeviceId: 'dev',
-      analyticsEndpoint: '/log',
+      analyticsEndpoint: analyticsEndpoint,
       projectId: '123',
       contentServingId: isPdp ? String(qeen.randInt()) : '0',
       contentId: isPdp ? 'optimised' : '-',

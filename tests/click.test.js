@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('./common.js');
 const puppeteer = require('puppeteer');
 let browser;
 
@@ -89,5 +89,27 @@ describe('Click Events', () => {
     const events = common.reduceToEventsArray(payloads);
     const clickEvents = events.filter(event => event.t === 'CLICK');
     expect(clickEvents.length).toBeLessThanOrEqual(1);
+  });
+
+  it('(Event Cleanup) should not see any events leaking from different page types', async () => {
+    browser = await puppeteer.launch();
+
+    const { page, _ } = await common.setupTest(browser, {
+      url: common.pages.productPage,
+      endpoint: common.endpoints.pageLevelAnalytics,
+      json: true,
+      waitForSessionStart: true,
+    }, {});
+
+    await page.click('#root > nav > a:nth-child(3)');
+
+    const clickEvents = await page.evaluate(() => window.qeen.config.clickEvents);
+    const scrollEvents = await page.evaluate(() => window.qeen.config.scrollEvents);
+
+    expect(clickEvents).not.toContainEqual(expect.objectContaining({ label: 'ADD_TO_CART' }));
+    expect(clickEvents).not.toContainEqual(expect.objectContaining({ label: 'ADD_TO_WISHLIST' }));
+    expect(clickEvents).not.toContainEqual(expect.objectContaining({ label: 'ATW' }));
+    expect(scrollEvents).not.toContainEqual(expect.objectContaining({ label: 'SCROLL_TITLE' }));
+    expect(scrollEvents).not.toContainEqual(expect.objectContaining({ label: 'SCROLL_DESC' }));
   });
 });

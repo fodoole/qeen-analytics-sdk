@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('./common.js');
 const puppeteer = require('puppeteer');
 let browser;
 
@@ -26,7 +26,7 @@ describe('Page View', () => {
     browser = await puppeteer.launch();
 
     const { _, payloads } = await common.setupTest(browser, {
-      url: common.pages.productPage,
+      url: common.pages.productPage2,
       endpoint: common.endpoints.pageLevelAnalytics,
       json: true,
       waitForSessionStart: true,
@@ -121,7 +121,7 @@ describe('Page View', () => {
     browser = await puppeteer.launch();
 
     const { page, payloads } = await common.setupTest(browser, {
-      url: common.pages.productPage,
+      url: common.pages.productPage2,
       endpoint: common.endpoints.pageLevelAnalytics,
       json: true,
       waitForSessionStart: true,

@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('./common.js');
 const puppeteer = require('puppeteer');
 let browser;
 

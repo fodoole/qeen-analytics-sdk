@@ -10,9 +10,11 @@
  * @type {Object}
  */
 const pages = {
-  productPage: "http://localhost:30000/product/1",
-  homePage: "http://localhost:30000/",
-  checkoutPage: "http://localhost:30000/checkout",
+  productPage: 'http://localhost:30000/product/1',
+  productPage2: 'http://localhost:30000/product/2',
+  homePage: 'http://localhost:30000/',
+  aboutPage: 'http://localhost:30000/about',
+  checkoutPage: 'http://localhost:30000/checkout',
 };
 
 /**

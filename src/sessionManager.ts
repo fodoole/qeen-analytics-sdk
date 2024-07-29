@@ -35,6 +35,9 @@ function initResetCommon(label: string): void {
   }
   State.sessionId = String(randInt());
 
+  // Rebind intersection observer for scroll events
+  bindScrollEventsToElements(Config.scrollEvents);
+
   // Instantiate idle timer
   resetIdleTimer(Config.idleTime);
 
@@ -97,9 +100,6 @@ function initSession(): void {
   State.reset();
   State.sessionId = String(randInt());
 
-  // Rebind intersection observer for scroll events
-  bindScrollEventsToElements(Config.scrollEvents);
-
   onLoad(function () {
     // Common initialization logic
     initResetCommon('INIT');
@@ -126,7 +126,7 @@ export function resetSession(): void {
  * @param {any[]} rawContent - The raw content to be prepared.
  * @returns {Object} - The content selectors.
  */
-function prepareSelectors(rawContent: any[]): any {
+export function prepareSelectors(rawContent: any[]): any {
   let contentSelectors: any = {};
   rawContent.forEach(entry => {
     contentSelectors[entry?.path] = entry?.value;

@@ -1,4 +1,4 @@
-const common = require('../common.js');
+const common = require('./common.js');
 const puppeteer = require('puppeteer');
 let browser;
 
@@ -84,5 +84,28 @@ describe('Tab Change', () => {
     const events2 = common.reduceToEventsArray(payloads);
     expect(events2).toContainEqual(expect.objectContaining({ t: 'PAGE_VIEW' }));
     expect(sessionId1).not.toBe(sessionId2);
+  });
+
+  it('(Tab Change Debounce Flush) should observe a CLICK event when switching tabs', async () => {
+    browser = await puppeteer.launch();
+
+    const { page, payloads } = await common.setupTest(browser, {
+      url: common.pages.productPage,
+      endpoint: common.endpoints.pageLevelAnalytics,
+      json: true,
+      waitForSessionStart: true,
+    }, {});
+
+    const newPage = await browser.newPage();
+    await newPage.goto('about:blank');
+
+    await page.bringToFront();
+    await page.click('#add-to-cart');
+    await newPage.bringToFront();
+
+    await common.wait(50);
+
+    const events = common.reduceToEventsArray(payloads);
+    expect(events).toContainEqual(expect.objectContaining({ t: 'CLICK', l: 'ADD_TO_CART' }));
   });
 });
