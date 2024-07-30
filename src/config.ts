@@ -9,7 +9,6 @@ import { BindQueueItem } from "./sessionManager";
 /**
  * @constant {string} getContentEndpoint - The endpoint to fetch content.
  */
-// FIXME
 export const getContentEndpoint: string = 'https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/sdk/client-config';
 
 /**
