@@ -1,4 +1,4 @@
-# Getting Started with sdk Demo React App
+# Getting Started with SDK Demo React App
 This is a demo React application designed to showcase basic functionalities such as fetching data from a backend server and displaying categories and products.
 
 ### Backend Server
