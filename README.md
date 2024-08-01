@@ -25,7 +25,7 @@ This guide will help you integrate the Qeen Analytics SDK into your single-page 
 ## Installation
 To install the Qeen Analytics SDK, add the following script tag to your HTML file:
 ```html
-<script src="https://cdn.qeen.ai/analytics-sdk.js"></script>
+<script src="https://cdn.qeen.ai/sdk/qeen.js"></script>
 ```
 
 ## Initialization
