@@ -16,7 +16,7 @@ function AnalyticsWrapper({ children }) {
   const analyticsEndpoint = 'http://localhost:8080/log';
 
   useEffect(() => {
-    // qeen.fetchQeenContent();
+    // qeen.fetchQeenContent('dev');
 
     if (isPdp && parseInt(location.pathname.split('/').pop()) % 2 === 1) {
       qeen.setContentServed();

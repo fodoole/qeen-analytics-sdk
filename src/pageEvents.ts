@@ -36,12 +36,12 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
   const eventsArray: Array<InteractionEvent | any> = Array.isArray(clickEvents) ? clickEvents : [clickEvents];
   eventsArray.forEach(function (event) {
     if (!(event instanceof InteractionEvent)) {
-      event = new InteractionEvent(event.label, event.value);
+      event = new InteractionEvent(event._label, event._value);
     }
 
-    const domElements: NodeListOf<Element> = document.querySelectorAll(event.value);
+    const domElements: NodeListOf<Element> = document.querySelectorAll(event._value);
     if (domElements.length === 0) {
-      throw new InvalidParameterError(`No elements found with the selector: ${event.value}`);
+      throw new InvalidParameterError(`No elements found with the selector: ${event._value}`);
     }
 
     domElements.forEach(element => {
@@ -49,13 +49,13 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
       if (!element.hasAttribute('data-qeen-click-bound')) {
         element.setAttribute('data-qeen-click-bound', 'true');
         element.addEventListener('click', new Debouncer(function (): void {
-          new PageAnalyticsEvent('CLICK', null, event.label, event.value);
-        }, State.debounceTime).debounced);
+          new PageAnalyticsEvent('CLICK', null, event._label, event._value);
+        }, State.debounceTime)._debounced);
       }
     });
     // Keep track of the click events
     Config.clickEvents = Config.clickEvents || [];
-    if (!Config.clickEvents.some(e => e?.label === event.label && e?.value === event.value)) {
+    if (!Config.clickEvents.some(e => e?._label === event._label && e?._value === event._value)) {
       Config.clickEvents.push(event);
     }
   });
@@ -88,11 +88,11 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
   const eventsArray: Array<InteractionEvent | any> = Array.isArray(scrollEvents) ? scrollEvents : [scrollEvents];
   eventsArray.forEach(function (event) {
     if (!(event instanceof InteractionEvent)) {
-      event = new InteractionEvent(event.label, event.value);
+      event = new InteractionEvent(event._label, event._value);
     }
-    const domElements: NodeListOf<Element> = document.querySelectorAll(event.value);
+    const domElements: NodeListOf<Element> = document.querySelectorAll(event._value);
     if (domElements.length === 0) {
-      throw new InvalidParameterError(`No elements found with the selector: ${event.value}`);
+      throw new InvalidParameterError(`No elements found with the selector: ${event._value}`);
     }
 
     domElements.forEach(element => {
@@ -100,9 +100,9 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             // Only log the event if it hasn't been logged before
-            if (!State.scrollObservedElements.has(event.label)) {
-              new PageAnalyticsEvent('SCROLL', null, event.label, event.value);
-              State.scrollObservedElements.add(event.label);
+            if (!State.scrollObservedElements.has(event._label)) {
+              new PageAnalyticsEvent('SCROLL', null, event._label, event._value);
+              State.scrollObservedElements.add(event._label);
             }
             observer?.unobserve(entry.target);
             observer = null;
@@ -113,7 +113,7 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
     });
     // Keep track of the scroll events
     Config.scrollEvents = Config.scrollEvents || [];
-    if (!Config.scrollEvents.some(e => e?.label === event.label && e?.value === event.value)) {
+    if (!Config.scrollEvents.some(e => e?._label === event._label && e?._value === event._value)) {
       Config.scrollEvents.push(event);
     }
   });
@@ -137,7 +137,7 @@ export function bindTabEvents(): void {
       State.lastTabExitTime = Date.now();
       new PageAnalyticsEvent('TAB_SWITCH', null, 'EXIT', null);
       // Flush any debounced events
-      Debouncer.flushAll();
+      Debouncer._flushAll();
     } else {
       if (tabSwitchCausesReset()) {
         resetSession();

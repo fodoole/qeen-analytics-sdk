@@ -40,29 +40,29 @@ export function beforeUnload(fn: Function): void {
  * @description After creating a debouncer object, start the timeout through the debounced function. Any extra calls to the debounced function within the delay time will reset the timer and the function will only be called after the delay time has passed without any calls. The debouncer can be forced to trigger immediately by calling the trigger function. The debouncer can be cleared by calling the clear function.
  */
 export class Debouncer {
-  public fn: Function;
-  public delay: number;
+  public _fn: Function;
+  public _delay: number;
 
-  static debouncedEvents: Debouncer[] = [];
-  private timer: number = 0;
-  private context: any | null = null;
-  private args: any[] | null = null;
+  static _debouncedEvents: Debouncer[] = [];
+  private _timer: number = 0;
+  private _context: any | null = null;
+  private _args: any[] | null = null;
 
   constructor(fn: Function, delay: number) {
-    this.fn = fn;
-    this.delay = delay;
+    this._fn = fn;
+    this._delay = delay;
   }
 
   /**
    * Clear the timeout.
    */
-  clear = (): void => {
-    window.clearTimeout(this.timer);
-    this.context = null;
-    this.args = null;
-    const index: number = Debouncer.debouncedEvents.indexOf(this);
+  _clear = (): void => {
+    window.clearTimeout(this._timer);
+    this._context = null;
+    this._args = null;
+    const index: number = Debouncer._debouncedEvents.indexOf(this);
     if (index !== -1) {
-      Debouncer.debouncedEvents.splice(index, 1);
+      Debouncer._debouncedEvents.splice(index, 1);
     }
   }
 
@@ -70,37 +70,37 @@ export class Debouncer {
    * Debounce the function.
    * @param {...any} args - arguments to be passed to the function.
    */
-  debounced = (...args: any[]): void => {
-    this.context = this;
-    this.args = args;
-    const clearFunc: Function = this.clear;
-    window.clearTimeout(this.timer);
-    this.timer = window.setTimeout(() => {
-      this.fn.apply(this.context, this.args);
+  _debounced = (...args: any[]): void => {
+    this._context = this;
+    this._args = args;
+    const clearFunc: Function = this._clear;
+    window.clearTimeout(this._timer);
+    this._timer = window.setTimeout(() => {
+      this._fn.apply(this._context, this._args);
       clearFunc();
-    }, this.delay);
-    const index: number = Debouncer.debouncedEvents.indexOf(this);
+    }, this._delay);
+    const index: number = Debouncer._debouncedEvents.indexOf(this);
     if (index === -1) {
-      Debouncer.debouncedEvents.push(this);
+      Debouncer._debouncedEvents.push(this);
     }
   }
 
   /**
    * Trigger the function immediately.
    */
-  trigger = (): void => {
-    if (this.context && this.args) {
-      this.fn.apply(this.context, this.args);
+  _trigger = (): void => {
+    if (this._context && this._args) {
+      this._fn.apply(this._context, this._args);
     }
-    this.clear();
+    this._clear();
   }
 
   /**
    * Flush all pending debounced events.
    */
-  static flushAll = (): void => {
-    Debouncer.debouncedEvents.forEach(debouncer => {
-      debouncer.trigger();
+  static _flushAll = (): void => {
+    Debouncer._debouncedEvents.forEach(debouncer => {
+      debouncer._trigger();
     });
   }
 }

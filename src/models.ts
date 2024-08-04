@@ -39,14 +39,14 @@ export class PageAnalyticsEvent {
     this.l = label;
     this.edp = domPath;
 
-    this.pushEvent();
+    this._pushEvent();
   }
 
   /**
    * Push the event to the analytics endpoint.
    * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
    */
-  pushEvent(): void {
+  _pushEvent(): void {
     if (!Config.analyticsEndpoint) {
       throw new AnalyticsEndpointError('Qeen analytics endpoint not set.');
     }
@@ -105,7 +105,7 @@ export class fetchContentParams {
    * Convert the parameters to a string.
    * @returns {string} The stringified parameters.
    */
-  toString(): string {
+  _toString(): string {
     return this.params.toString();
   }
 }
@@ -142,14 +142,14 @@ export interface ContentResponse {
  * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export class InteractionEvent {
-  public label: string;
-  public value: string;
+  public _label: string;
+  public _value: string;
 
   constructor(label: string, value: string) {
     if (!label || !value) {
       throw new InvalidParameterError('Label and value are required for interaction events.');
     }
-    this.label = label;
-    this.value = value;
+    this._label = label;
+    this._value = value;
   }
 }

@@ -181,11 +181,12 @@ describe('E2E/Integration', () => {
 
     // PAGE_EXIT
     await page.reload();
+    await browser.close();
+    await common.wait(1_000);
 
     // Process the page-level analytics test
-    await browser.close();
     const { eventsMatching, rowsMutated } = await processPageLevelAnalyticsTest(payloads, [sessionId1, sessionId2], startTime, env.BQ_EVENTS_TABLE);
-    expect(eventsMatching).toEqual(rowsMutated);
+    expect(rowsMutated).toEqual(eventsMatching);
   });
 
   it('(Page-Level Analytics/Non-PDP) send page-level analytics (non-PDP) events via the browser and observe these events in the database', async () => {
@@ -233,10 +234,12 @@ describe('E2E/Integration', () => {
     const sessionId3 = await page.evaluate(() => window.qeen.state.sessionId);
     await page.click('#checkout');
     await common.wait(1_500);
+    await page.reload();
+    await browser.close();
+    await common.wait(1_000);
 
     // Process the page-level analytics test
-    await browser.close();
     const { eventsMatching, rowsMutated  } = await processPageLevelAnalyticsTest(payloads, [sessionId1, sessionId2, sessionId3], startTime, env.BQ_EVENTS_TABLE_NPDP);
-    expect(eventsMatching).toEqual(rowsMutated);
+    expect(rowsMutated).toEqual(eventsMatching);
   });
 });

@@ -47,19 +47,19 @@ export class URLContainsNoQeenError extends Error {
  * @class ResponseNotOkError
  * @extends Error
  * @param {number} status - The status code of the response.
- * @param {string} statusText - The status text of the response.
+ * @param {string} body - The status text of the response.
  * @param {string} url - The URL of the request.
  */
 export class ResponseNotOkError extends Error {
   public status: number;
-  public statusText: string;
+  public body: string;
   public url: string;
 
-  constructor(status: number, statusText: string, url: string) {
-    super(`Request to ${url} failed with status ${status}: ${statusText}`);
+  constructor(status: number, body: string, url: string) {
+    super(`Request to ${url} failed with status ${status}: ${body}`);
     this.name = "ResponseNotOkError";
     this.status = status;
-    this.statusText = statusText;
+    this.body = body;
     this.url = url;
   }
 }

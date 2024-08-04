@@ -68,7 +68,7 @@ function initResetCommon(label: string): void {
  */
 function terminateSession(): void {
   // Trigger any remaining debounced events and send PAGE_EXIT event
-  Debouncer.flushAll();
+  Debouncer._flushAll();
   new PageAnalyticsEvent('PAGE_EXIT', null, null, null);
 }
 
@@ -155,9 +155,9 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
     resetContentServed();
 
     const params: fetchContentParams = new fetchContentParams(qeenDeviceId);
-    const response: Response = await fetch(`${getContentEndpoint}?${params.toString()}`);
+    const response: Response = await fetch(`${getContentEndpoint}?${params._toString()}`);
     if (!response.ok) {
-      return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
+      return Promise.reject(new ResponseNotOkError(response.status, await response.text(), response.url));
     }
     const data: ContentResponse = await response.json();
     data.qeenDeviceId = qeenDeviceId;
@@ -176,8 +176,8 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
  * Function that cleans up stale events that are no longer present on the page.
  */
 function cleanUpStaleEvents(): void {
-  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event.value));
-  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event.value));
+  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event._value));
+  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event._value));
 }
 
 /**
