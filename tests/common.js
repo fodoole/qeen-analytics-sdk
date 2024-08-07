@@ -26,6 +26,12 @@ const endpoints = {
 };
 
 /**
+ * The debounce time for click events.
+ * @type {number}
+ */
+const debounceTime = 500;
+
+/**
  * Waits for the content to be served.
  * @param {object} page - The page object from `Puppeteer`.
  * @returns {Promise} A promise that resolves when the content is served.
@@ -262,4 +268,5 @@ module.exports = {
   setupTest,
   pages,
   endpoints,
+  debounceTime,
 };

@@ -30,9 +30,6 @@ export function resetContentServed(): void {
   */
 function initResetCommon(label: string): void {
   // Manage state
-  if (label === 'RESET') {
-    State.isResetSession = true;
-  }
   State.sessionId = String(randInt());
 
   // Rebind intersection observer for scroll events
@@ -222,7 +219,7 @@ export function initPageSession(config: ContentResponse): void {
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.isPdp = config.isPdp || false;
-  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
+  Config.idleTime = limit(config.idleTime, 60_000, 599_000) || 300_000;
 
   // Ensure interaction events don't leak through different pages
   Config.clickEvents = Config.clickEvents || [];

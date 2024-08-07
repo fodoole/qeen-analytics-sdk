@@ -1,5 +1,6 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const GolfMinifierPlugin = require('./build_plugins/golfMinifier');
 
 module.exports = {
   mode: 'production',
@@ -12,6 +13,8 @@ module.exports = {
     minimize: true,
     minimizer: [
       new TerserPlugin({
+        parallel: true,
+        minify: TerserPlugin.uglifyJsMinify,
         terserOptions: {
           compress: {
             passes: 10,
@@ -36,6 +39,8 @@ module.exports = {
             pure_getters: true,
             keep_fargs: false,
             keep_fnames: false,
+            reduce_vars: true,
+            collapse_vars: true,
           },
           output: {
             comments: false,
@@ -51,4 +56,7 @@ module.exports = {
     ],
     usedExports: true,
   },
+  plugins: [
+    new GolfMinifierPlugin(),
+  ],
 };

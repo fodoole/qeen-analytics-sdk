@@ -14,12 +14,10 @@ describe('Utilities', () => {
     const limitResultAbove = limit(10, 0, 5);
     const limitResultBelow = limit(-10, 0, 5);
     const limitResultWithin = limit(3, 0, 5);
-    const limitResultDefault = limit(NaN, 0, 5, 2);
 
     expect(limitResultAbove).toBe(5);
     expect(limitResultBelow).toBe(0);
     expect(limitResultWithin).toBe(3);
-    expect(limitResultDefault).toBe(2);
   });
 
   it('(Prepare Selectors) should observe the correct content selector bindings', async () => {

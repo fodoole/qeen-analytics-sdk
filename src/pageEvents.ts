@@ -32,6 +32,7 @@ export function bindClickEvents(clickEvents: InteractionEvent | InteractionEvent
  * @throws {InvalidParameterError} Throws an error if no elements are found with the provided selector.
  */
 function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEvent[] | any | any[]): void {
+  const debounceTime: number = 500;
   // Ensure clickEvents is always an array
   const eventsArray: Array<InteractionEvent | any> = Array.isArray(clickEvents) ? clickEvents : [clickEvents];
   eventsArray.forEach(function (event) {
@@ -50,7 +51,7 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
         element.setAttribute('data-qeen-click-bound', 'true');
         element.addEventListener('click', new Debouncer(function (): void {
           new PageAnalyticsEvent('CLICK', null, event._label, event._value);
-        }, State.debounceTime)._debounced);
+        }, debounceTime)._debounced);
       }
     });
     // Keep track of the click events

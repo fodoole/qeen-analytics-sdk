@@ -272,7 +272,7 @@ The SDK automatically tracks the following events:
 
 ### Custom Events
 Instead of enabling general click and scroll tracking, you can now define specific elements to track for clicks and scrolls. These are bound to the SDK using the appropriate methods.
-- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of 500ms.
+- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of $500\text{ ms}$.
 - **Scroll Events:** Use the `bindScrollEvents` method to bind custom scroll events to specific elements on the page. Each scroll event label may only be fired once per page session.
 - **Checkout Event:** Use the `sendCheckoutEvent` method to send a checkout event with the specified currency and value. Note that this event can only be sent on non-product detail pages and is not debounced.
 
