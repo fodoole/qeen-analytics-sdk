@@ -106,6 +106,42 @@ export class Debouncer {
 }
 
 /**
+ * Function for getting the path of an element.
+ * @param {Element} element - The element to get the path of.
+ * @returns {string} - The path of the element.
+ */
+export function getElementPath(element: Element): string {
+  let path: string[] = [];
+  while (element && element.nodeType === Node.ELEMENT_NODE) {
+    let selector: string = element.nodeName.toLowerCase();
+    if (element.id) {
+      selector += '#' + element.id;
+    } else if (element.className && typeof element.className === 'string') {
+      selector += '.' + element.className.split(' ').join('.');
+    }
+
+    if (element.parentNode) {
+      let sibling: Element | null = element;
+      let nth: number = 1;
+      while (sibling = sibling.previousElementSibling) {
+        if (sibling.nodeName.toLowerCase() === element.nodeName.toLowerCase() &&
+           sibling.className === element.className &&
+           sibling.id === element.id) {
+          nth++;
+        }
+      }
+      if (nth > 1) {
+        selector += `:nth-child(${nth})`;
+      }
+    }
+
+    path.unshift(selector);
+    element = element.parentNode as Element;
+  }
+  return path.join(' > ');
+};
+
+/**
  * Function for generating a random 16-digit number.
  * @returns {number} - A random number between `10^15` and `10^16 - 1`.
  */
