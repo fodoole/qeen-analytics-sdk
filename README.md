@@ -68,11 +68,11 @@ The `fetchQeenContent` function returns optimized content in the `contentSelecto
 ```js
 {
   label: string,
-  value: string
+  selector: string
 }
 ```
 - **label:** A unique identifier for the event.
-- **value:** A CSS selector or JS path that targets the element(s) to track.
+- **selector:** A CSS selector or JS path that targets the element(s) to track.
 
 ### Content Served Flag
 The `contentServed` flag should be set to `true` after content is fetched and rendered through the `setContentServed` method. This flag is used to determine if content was served to track the effectiveness of the optimized content. If original content is served, set the flag to `false` by calling `resetContentServed`.
@@ -222,7 +222,7 @@ The `qeen` namespace provides the following methods and properties:
 - **`state: Object`**
    - State object for the SDK; exposed for debugging and testing purposes.
 - **`InteractionEvent: Class`**
-   - Class for defining custom click and scroll events; takes a `label` and `value` as parameters.
+   - Class for defining custom click and scroll events; takes a `label` and `selector` as parameters.
 - **`InvalidParameterError: Error`**
    - Error that is thrown when an invalid parameter is passed to a function.
 - **`AnalyticsEndpointError: Error`**

@@ -46,17 +46,19 @@ function initResetCommon(label: string): void {
     }
   }
 
+  function logVisibleEvent() {
+    State.lastTabExitTime = Date.now();
+    if (document.visibilityState === 'visible') {
+      logPageView();
+      document.removeEventListener('visibilitychange', logVisibleEvent);
+    }
+  }
+
   // Only send the page view event if the page is visible
   if (document.visibilityState === 'visible') {
     logPageView();
   } else { // If the page is not visible, wait for it to become visible
-    document.addEventListener('visibilitychange', function logVisibleEvent() {
-      State.lastTabExitTime = Date.now();
-      if (document.visibilityState === 'visible') {
-        logPageView();
-        document.removeEventListener('visibilitychange', logVisibleEvent);
-      }
-    });
+    document.addEventListener('visibilitychange', logVisibleEvent);
   }
 }
 
@@ -174,8 +176,8 @@ export async function fetchContent(qeenDeviceId: string, overrideFetchURL: strin
  * Function that cleans up stale events that are no longer present on the page.
  */
 function cleanUpStaleEvents(): void {
-  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event._value));
-  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event._value));
+  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event._selector));
+  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event._selector));
 }
 
 /**
