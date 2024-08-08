@@ -46,19 +46,17 @@ function initResetCommon(label: string): void {
     }
   }
 
-  function logVisibleEvent() {
-    State.lastTabExitTime = Date.now();
-    if (document.visibilityState === 'visible') {
-      logPageView();
-      document.removeEventListener('visibilitychange', logVisibleEvent);
-    }
-  }
-
   // Only send the page view event if the page is visible
   if (document.visibilityState === 'visible') {
     logPageView();
-  } else { // If the page is not visible, wait for it to become visible
-    document.addEventListener('visibilitychange', logVisibleEvent);
+  } else {
+    // If the page is not visible, wait for it to become visible
+    document.addEventListener('visibilitychange', function (): void {
+      State.lastTabExitTime = Date.now();
+      if (document.visibilityState === 'visible') {
+        logPageView();
+      }
+    }, { once: true });
   }
 }
 
