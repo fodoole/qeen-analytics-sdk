@@ -190,8 +190,9 @@ function App() {
 
 ## Methods and Properties
 The `qeen` namespace provides the following methods and properties:
-- **`fetchQeenContent(qeenDeviceId: string): Promise<ContentResponse>`**
-   - Fetches optimized content and domain configuration from the API.
+- **`fetchQeenContent(qeenDeviceId: string, overrideFetchURL: string | undefined): Promise<ContentResponse>`**
+   - Fetches optimized content and domain configuration from the API using the provided user device ID.
+   - Accepts an optional parameter to override the live API URL for testing purposes.
    - Returns a promise that resolves to a `ContentResponse` object with the following properties:
      - `qeenDeviceId: string` - The device ID used to fetch content.
      - `analyticsEndpoint: string` - The endpoint for sending analytics data.
@@ -203,7 +204,7 @@ The `qeen` namespace provides the following methods and properties:
      - `contentSelectors: { [key: string]: string }` - An object with CSS selectors as keys and optimized content as values.
      - `rawContentSelectors: [ { uid: string, path: string, value: string } ]` - An array of raw content selectors; included for debugging purposes.
 - **`initPageSession(pageData: ContentResponse): void`**
-   - Initializes the page session with the provided `pageData`.
+   - Initializes the page session with the provided `pageData` that was fetched from the API.
 - **`setContentServed(): void`**
    - Sets the content served flag to `true`.
 - **`resetContentServed(): void`**

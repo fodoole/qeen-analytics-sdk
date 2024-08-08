@@ -135,13 +135,14 @@ export function prepareSelectors(rawContent: any[]): any {
 /**
  * Function to fetch Qeen content.
  * @param {string} qeenDeviceId - The user device ID.
+ * @param {string} overrideFetchURL - The override fetch URL.
  * @returns {Promise<ContentResponse>} The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
  * @throws {URLContainsNoQeenError} - Throws an error if the URL contains #no-qeen.
  */
-export async function fetchContent(qeenDeviceId: string): Promise<ContentResponse> {
+export async function fetchContent(qeenDeviceId: string, overrideFetchURL: string | undefined): Promise<ContentResponse> {
   try {
     if (!qeenDeviceId) {
       return Promise.reject(new InvalidParameterError('Qeen user device ID is required.'));
@@ -152,7 +153,7 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
     resetContentServed();
 
     const params: fetchContentParams = new fetchContentParams(qeenDeviceId);
-    const response: Response = await fetch(`${getContentEndpoint}?${params._toString()}`);
+    const response: Response = await fetch(`${overrideFetchURL || getContentEndpoint}?${params._toString()}`);
     if (!response.ok) {
       return Promise.reject(new ResponseNotOkError(response.status, await response.text(), response.url));
     }
