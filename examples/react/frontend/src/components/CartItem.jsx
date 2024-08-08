@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrash,
-  faCheck,
-  faPlus,
-  faMinus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
-const CartItem = ({ item, deleteItem }) => {
+const CartItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
-  const [showSave, setShowSave] = useState(false);
-
-  const save = () => {
-    setShowSave(false);
-  };
 
   return (
     <Card className="mb-3">
@@ -40,7 +30,6 @@ const CartItem = ({ item, deleteItem }) => {
                 variant="dark"
                 onClick={() => {
                   setQuantity(quantity + 1);
-                  setShowSave(true);
                 }}
               >
                 <FontAwesomeIcon icon={faPlus} />
@@ -62,21 +51,6 @@ const CartItem = ({ item, deleteItem }) => {
             <h5 md={6} lg={12} xl={6} className="mb-0">
               {(item.product.price * quantity).toFixed(2)} JD
             </h5>
-            <a href="#!">
-              {showSave ? (
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ color: "green" }}
-                  onClick={save}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  style={{ color: "#e1543a" }}
-                  onClick={() => deleteItem(item.id)}
-                />
-              )}
-            </a>
           </Col>
         </Row>
       </Card.Body>

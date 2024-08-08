@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/esm/Container";
@@ -16,6 +17,10 @@ const Cart = () => {
     });
     return total;
   };
+
+  useEffect(() => {
+    qeen.bindClickEvents([new qeen.InteractionEvent("CHECKOUT", "#checkout")]);
+  }, []);
 
   return (
     <section
@@ -49,12 +54,12 @@ const Cart = () => {
                     <p className="mb-4">
                       You have {items.length} items in your cart
                     </p>
-
+                    <button id="checkout" className="btn btn-success">
+                      Checkout
+                    </button>
                     {items.map((item) => (
                       <CartItem
-                        key={item.id}
                         item={item}
-                        deleteItem={deleteItem}
                       />
                     ))}
                   </Col>
