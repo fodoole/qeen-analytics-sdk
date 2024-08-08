@@ -54,7 +54,7 @@ export class PageAnalyticsEvent {
       throw new InvalidParameterError('Qeen user device ID is required.');
     }
     if (window.location.hash.includes('qeen-dev')) {
-      console.log(this);
+      console.info(this);
     }
 
     const payloadObject = {
