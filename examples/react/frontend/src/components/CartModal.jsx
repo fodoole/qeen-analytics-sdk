@@ -11,7 +11,7 @@ function CartModal({ item }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [render, setRender] = useState(false);
-  const { pageData, loading } = usePageData(); // Use the context
+  const { pageData } = usePageData(); // Use the context
 
   useEffect(() => {
     qeen.bindClickEvents(

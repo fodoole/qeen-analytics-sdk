@@ -4,18 +4,21 @@ This is a demo React application designed to showcase basic functionalities such
 ### Backend Server
 Start the backend server:\
 `npm install next`\
+`npm run build`\
 `npm run dev`\
 This will run the server on [http://localhost:3000]
 
 ### Endpoint Server
 Start the endpoint server:\
 `npm install nodejs`\
+`npm run build`\
 `node index.js`\
 This will run the server on [http://localhost:4000]
 
 ### Frontend App
 Start the frontend app:\
 `npm install vite`\
+`npm run build`\
 `npm run start`\
 This will run the server on [http://localhost:5000]
 
