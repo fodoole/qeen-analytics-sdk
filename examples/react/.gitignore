@@ -1,9 +1,3 @@
-# docker and dockercompose
+# dockercompose
 /docker_compose.yml
-/Dockerfile
 
-# Dependencies
-/node_modules
-
-#dist
-/dist

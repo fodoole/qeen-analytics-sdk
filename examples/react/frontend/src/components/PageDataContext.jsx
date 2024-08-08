@@ -9,7 +9,6 @@ export function usePageData() {
 
 export function PageDataProvider({ children }) {
   const [pageData, setPageData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     qeen

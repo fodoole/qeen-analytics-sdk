@@ -1,8 +1,11 @@
 # Dependencies
 /node_modules
 
-# disr
+# dist
 /dist
 
 # dockerfile
 /dockerfile
+
+# Vite
+/.vite
