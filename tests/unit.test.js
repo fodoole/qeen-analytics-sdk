@@ -55,7 +55,7 @@ describe('Utilities', () => {
     document.body.appendChild(div);
 
     const path = getElementPath(div);
-    expect(path).toBe('html > body > div#test-id');
+    expect(document.querySelector(path)).toBe(div);
 
     document.body.removeChild(div);
   });
@@ -66,7 +66,7 @@ describe('Utilities', () => {
     document.body.appendChild(div);
 
     const path = getElementPath(div);
-    expect(path).toBe('html > body > div.class1.class2');
+    expect(document.querySelector(path)).toBe(div);
 
     document.body.removeChild(div);
   });
@@ -78,7 +78,7 @@ describe('Utilities', () => {
     document.body.appendChild(parentDiv);
 
     const path = getElementPath(childDiv);
-    expect(path).toBe('html > body > div > div');
+    expect(document.querySelector(path)).toBe(childDiv);
 
     document.body.removeChild(parentDiv);
   });
@@ -92,7 +92,7 @@ describe('Utilities', () => {
     document.body.appendChild(parentDiv);
 
     const path = getElementPath(secondChild);
-    expect(path).toBe('html > body > div > div:nth-child(2)');
+    expect(document.querySelector(path)).toBe(secondChild);
 
     document.body.removeChild(parentDiv);
   });

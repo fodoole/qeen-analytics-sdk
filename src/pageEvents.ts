@@ -48,9 +48,9 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
     domElements.forEach(element => {
       // Only bind the event if it hasn't been bound before
       if (!element.hasAttribute('data-qeen-click-bound')) {
-        const elementPath: string = getElementPath(element);
         element.setAttribute('data-qeen-click-bound', 'true');
-        element.addEventListener('click', new Debouncer(function (): void {
+        element.addEventListener('click', new Debouncer(function (e: Event): void {
+          const elementPath: string = getElementPath(e.target as Element);
           new PageAnalyticsEvent('CLICK', null, event._label, elementPath);
         }, debounceTime)._debounced);
       }

@@ -114,6 +114,9 @@ export function getElementPath(element: Element): string {
   let path: string[] = [];
   while (element && element.nodeType === Node.ELEMENT_NODE) {
     let selector: string = element.nodeName.toLowerCase();
+    if (selector === 'html') {
+      break;
+    }
     if (element.id) {
       selector += '#' + element.id;
     } else if (element.className && typeof element.className === 'string') {
@@ -124,14 +127,12 @@ export function getElementPath(element: Element): string {
       let sibling: Element | null = element;
       let nth: number = 1;
       while (sibling = sibling.previousElementSibling) {
-        if (sibling.nodeName.toLowerCase() === element.nodeName.toLowerCase() &&
-           sibling.className === element.className &&
-           sibling.id === element.id) {
+        if (sibling.nodeName.toLowerCase() === element.nodeName.toLowerCase()) {
           nth++;
         }
       }
       if (nth > 1) {
-        selector += `:nth-child(${nth})`;
+        selector += `:nth-of-type(${nth})`;
       }
     }
 
@@ -139,7 +140,7 @@ export function getElementPath(element: Element): string {
     element = element.parentNode as Element;
   }
   return path.join(' > ');
-};
+}
 
 /**
  * Function for generating a random 16-digit number.
