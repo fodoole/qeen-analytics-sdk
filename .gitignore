@@ -7,3 +7,5 @@ test/public/qeen.js
 dev_scripts/
 .env
 .dev-keys/
+
+/script

@@ -1,11 +1,9 @@
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import CartItem from "./CartItem";
 
 const Cart = () => {
   const items = [];
@@ -49,26 +47,11 @@ const Cart = () => {
                     <p className="mb-4">
                       You have {items.length} items in your cart
                     </p>
-
-                    {items.map((item) => (
-                      <CartItem
-                        key={item.id}
-                        item={item}
-                        deleteItem={deleteItem}
-                      />
-                    ))}
+                    <button id="checkout" className="btn btn-success">
+                      Checkout
+                    </button>
                   </Col>
-                </Row>{" "}
-                {/* cart body */}
-                {items.length ? (
-                  <Row className="d-flex justify-content-center px-3 col-md-6">
-                    <Button variant="success" onClick={createOrder}>
-                      create order
-                    </Button>
-                  </Row>
-                ) : (
-                  <></>
-                )}
+                </Row>
               </Card.Body>
             </Card>
           </Col>
