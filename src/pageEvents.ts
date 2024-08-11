@@ -7,7 +7,7 @@ import { Config, State } from './config';
 import { PageAnalyticsEvent, InteractionEvent } from './models';
 import { InvalidParameterError } from './errors';
 import { resetSession, BindQueueItem } from './sessionManager';
-import { Debouncer, getElementPath } from './utils';
+import { Debouncer } from './utils';
 
 /**
  * Function for binding click events to DOM elements.
@@ -49,9 +49,8 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
       // Only bind the event if it hasn't been bound before
       if (!element.hasAttribute('data-qeen-click-bound')) {
         element.setAttribute('data-qeen-click-bound', 'true');
-        element.addEventListener('click', new Debouncer(function (e: Event): void {
-          const elementPath: string = getElementPath(e.target as Element);
-          new PageAnalyticsEvent('CLICK', null, event._label, elementPath);
+        element.addEventListener('click', new Debouncer(function (): void {
+          new PageAnalyticsEvent('CLICK', null, event._label, event._selector);
         }, debounceTime)._debounced);
       }
     });
