@@ -42,9 +42,8 @@ window.qeen.URLContainsNoQeenError = URLContainsNoQeenError;
 
 if (window.location.hash.includes('no-qeen')) {
   Config.noQeen = true;
-  console.log(`${window.qeenError = 'Qeen is disabled; URL contains #no-qeen'}`);
-  window.qeen.receiveMessage = receiveMessage;
-  window.addEventListener('message', window.qeen.receiveMessage, false);
+  console.info(`${window.qeenError = 'Qeen is disabled; URL contains #no-qeen'}`);
+  window.addEventListener('message', receiveMessage, false);
 } else {
   Config.noQeen = false;
 }

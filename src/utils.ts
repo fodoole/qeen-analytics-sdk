@@ -106,11 +106,48 @@ export class Debouncer {
 }
 
 /**
+ * Function for getting the path of an element.
+ * @param {Element} element - The element to get the path of.
+ * @returns {string} - The path of the element.
+ */
+export function getElementPath(element: Element): string {
+  let path: string[] = [];
+  while (element && element.nodeType === Node.ELEMENT_NODE) {
+    let selector: string = element.nodeName.toLowerCase();
+    if (selector === 'html') {
+      break;
+    }
+    if (element.id) {
+      selector += '#' + element.id;
+    } else if (element.className && typeof element.className === 'string') {
+      selector += '.' + element.className.split(' ').join('.');
+    }
+
+    if (element.parentNode) {
+      let sibling: Element | null = element;
+      let nth: number = 1;
+      while (sibling = sibling.previousElementSibling) {
+        if (sibling.nodeName.toLowerCase() === element.nodeName.toLowerCase()) {
+          nth++;
+        }
+      }
+      if (nth > 1) {
+        selector += `:nth-of-type(${nth})`;
+      }
+    }
+
+    path.unshift(selector);
+    element = element.parentNode as Element;
+  }
+  return path.join(' > ');
+}
+
+/**
  * Function for generating a random 16-digit number.
  * @returns {number} - A random number between `10^15` and `10^16 - 1`.
  */
 export function randInt(): number {
-  const min: number = 1;
+  const min: number = Math.pow(10, 15);
   const max: number = Math.pow(10, 16) - 1;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -120,9 +157,8 @@ export function randInt(): number {
  * @param {number} value - The value to be limited.
  * @param {number} min - The minimum value.
  * @param {number} max - The maximum value.
- * @param {number} defaultValue - The default value.
  * @returns {number} - The limited value.
  */
-export function limit(value: number, min: number, max: number, defaultValue: number = 0): number {
-  return Math.min(Math.max(value, min), max) || defaultValue;
+export function limit(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
 }

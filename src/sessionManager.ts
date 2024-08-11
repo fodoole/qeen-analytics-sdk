@@ -30,9 +30,6 @@ export function resetContentServed(): void {
   */
 function initResetCommon(label: string): void {
   // Manage state
-  if (label === 'RESET') {
-    State.isResetSession = true;
-  }
   State.sessionId = String(randInt());
 
   // Rebind intersection observer for scroll events
@@ -52,14 +49,14 @@ function initResetCommon(label: string): void {
   // Only send the page view event if the page is visible
   if (document.visibilityState === 'visible') {
     logPageView();
-  } else { // If the page is not visible, wait for it to become visible
-    document.addEventListener('visibilitychange', function logVisibleEvent() {
+  } else {
+    // If the page is not visible, wait for it to become visible
+    document.addEventListener('visibilitychange', function (): void {
       State.lastTabExitTime = Date.now();
       if (document.visibilityState === 'visible') {
         logPageView();
-        document.removeEventListener('visibilitychange', logVisibleEvent);
       }
-    });
+    }, { once: true });
   }
 }
 
@@ -138,13 +135,14 @@ export function prepareSelectors(rawContent: any[]): any {
 /**
  * Function to fetch Qeen content.
  * @param {string} qeenDeviceId - The user device ID.
+ * @param {string} overrideFetchURL - The override fetch URL.
  * @returns {Promise<ContentResponse>} The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
  * @throws {URLContainsNoQeenError} - Throws an error if the URL contains #no-qeen.
  */
-export async function fetchContent(qeenDeviceId: string): Promise<ContentResponse> {
+export async function fetchContent(qeenDeviceId: string, overrideFetchURL: string | undefined): Promise<ContentResponse> {
   try {
     if (!qeenDeviceId) {
       return Promise.reject(new InvalidParameterError('Qeen user device ID is required.'));
@@ -155,7 +153,7 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
     resetContentServed();
 
     const params: fetchContentParams = new fetchContentParams(qeenDeviceId);
-    const response: Response = await fetch(`${getContentEndpoint}?${params._toString()}`);
+    const response: Response = await fetch(`${overrideFetchURL || getContentEndpoint}?${params._toString()}`);
     if (!response.ok) {
       return Promise.reject(new ResponseNotOkError(response.status, await response.text(), response.url));
     }
@@ -176,8 +174,8 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
  * Function that cleans up stale events that are no longer present on the page.
  */
 function cleanUpStaleEvents(): void {
-  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event._value));
-  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event._value));
+  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event._selector));
+  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event._selector));
 }
 
 /**
@@ -222,7 +220,7 @@ export function initPageSession(config: ContentResponse): void {
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.isPdp = config.isPdp || false;
-  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
+  Config.idleTime = limit(config.idleTime, 60_000, 599_000) || 300_000;
 
   // Ensure interaction events don't leak through different pages
   Config.clickEvents = Config.clickEvents || [];

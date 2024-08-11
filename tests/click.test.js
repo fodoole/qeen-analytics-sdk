@@ -19,9 +19,7 @@ describe('Click Events', () => {
 
     await page.click('#add-to-cart');
 
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
-
-    await common.wait(debounceTime + 50);
+    await common.wait(common.debounceTime + 50);
 
     const events = common.reduceToEventsArray(payloads);
     expect(events).toContainEqual(expect.objectContaining({ t: 'CLICK', l: 'ADD_TO_CART' }));
@@ -56,11 +54,9 @@ describe('Click Events', () => {
       });
     });
 
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
-
     for (let i = 0; i < buttons.length; i++) {
       await page.click(buttons[i]);
-      await common.wait(debounceTime + 50);
+      await common.wait(common.debounceTime + 50);
     }
 
     const events = common.reduceToEventsArray(payloads);
@@ -78,13 +74,11 @@ describe('Click Events', () => {
       waitForSessionStart: true,
     }, {});
 
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
-
     for (let i = 0; i < 5; i++) {
       await page.click('#add-to-cart');
     }
 
-    await common.wait(debounceTime);
+    await common.wait(common.debounceTime);
 
     const events = common.reduceToEventsArray(payloads);
     const clickEvents = events.filter(event => event.t === 'CLICK');

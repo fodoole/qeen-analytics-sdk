@@ -43,22 +43,18 @@ export class Config {
 /**
  * @class State
  * @description The state class for Qeen Analytics SDK.
- * @property {number} debounceTime - The debounce time in milliseconds.
  * @property {string} qeenDeviceId - The Qeen device ID.
  * @property {boolean} boundThreadEvents - The bound thread events flag.
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
  * @property {string} pageUrl - The page URL.
  * @property {string} sessionId - The session ID.
- * @property {boolean} isResetSession - The reset session flag.
  * @property {number} idleTimer - The idle timer.
  * @property {number} lastIdleTime - The last idle time.
  * @property {number} lastTabExitTime - The last tab exit time.
  * @property {Set<InteractionEvent | any>} scrollObservedElements - The set of scroll observed elements.
  */
 export class State {
-  public static readonly debounceTime: number = 500;
-
   public static qeenDeviceId: string = '';
   public static boundThreadEvents: boolean = false;
   public static bindQueue: BindQueueItem[] = [];
@@ -66,7 +62,6 @@ export class State {
   public static pageUrl: string;
 
   public static sessionId: string;
-  public static isResetSession: boolean;
   public static idleTimer: number;
   public static lastIdleTime: number;
   public static lastTabExitTime: number;
@@ -77,7 +72,6 @@ export class State {
    */
   static reset(): void {
     State.sessionId = '';
-    State.isResetSession = false;
     State.idleTimer = 0;
     State.lastIdleTime = Date.now();
     State.lastTabExitTime = 0;

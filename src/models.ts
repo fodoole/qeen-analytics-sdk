@@ -54,7 +54,7 @@ export class PageAnalyticsEvent {
       throw new InvalidParameterError('Qeen user device ID is required.');
     }
     if (window.location.hash.includes('qeen-dev')) {
-      console.log(this);
+      console.info(this);
     }
 
     const payloadObject = {
@@ -138,18 +138,18 @@ export interface ContentResponse {
  * Structure for interaction events (i.e. clicks, scrolls).
  * @class InteractionEvent
  * @param {string} label - The label of the event.
- * @param {string} value - The selector to bind the event to.
+ * @param {string} selector - The selector to bind the event to.
  * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export class InteractionEvent {
   public _label: string;
-  public _value: string;
+  public _selector: string;
 
-  constructor(label: string, value: string) {
-    if (!label || !value) {
-      throw new InvalidParameterError('Label and value are required for interaction events.');
+  constructor(label: string, selector: string) {
+    if (!label || !selector) {
+      throw new InvalidParameterError('Label and selector are required for interaction events.');
     }
     this._label = label;
-    this._value = value;
+    this._selector = selector;
   }
 }

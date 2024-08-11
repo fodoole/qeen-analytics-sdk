@@ -30,7 +30,7 @@ describe('Scroll Events', () => {
     expect(events).toContainEqual(expect.objectContaining({ t: 'SCROLL', l: 'SCROLL_DESC' }));
   });
 
-  it('(Multi Scroll Events) should observe a one SCROLL event per label', async () => {
+  it('(Multi Scroll Events) should observe one SCROLL event per label', async () => {
     browser = await puppeteer.launch();
 
     const { page, payloads } = await common.setupTest(browser, {
@@ -79,8 +79,8 @@ describe('Scroll Events', () => {
       waitForSessionStart: true,
     }, {});
 
-    await page.click('.relatedProduct > a');
     payloads.length = 0;
+    await page.click('.relatedProduct > a');
 
     await common.wait(250);
 

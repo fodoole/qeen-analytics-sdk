@@ -155,7 +155,6 @@ describe('E2E/Integration', () => {
     // PAGE_VIEW
     // CONTENT_SERVED
     const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
     const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
     // CLICK
@@ -165,7 +164,7 @@ describe('E2E/Integration', () => {
     const title = await page.$('#desc');
     await page.evaluate(title => title.scrollIntoView(false), title);
 
-    await common.wait(debounceTime + 50);
+    await common.wait(common.debounceTime + 50);
 
     // TAB_SWITCH
     const newPage = await browser.newPage();
@@ -203,7 +202,6 @@ describe('E2E/Integration', () => {
 
     // PAGE_VIEW
     const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
     const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
     // CLICK
@@ -213,7 +211,7 @@ describe('E2E/Integration', () => {
     const title = await page.$('#description');
     await page.evaluate(title => title.scrollIntoView(false), title);
 
-    await common.wait(debounceTime + 50);
+    await common.wait(common.debounceTime + 50);
 
     // TAB_SWITCH
     const newPage = await browser.newPage();

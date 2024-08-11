@@ -11,10 +11,10 @@
  * @description Used when running in demo mode via iframe.
  */
 function renderDemoContent(domPath: string, content: string): void {
-  const element: HTMLElement | null = document.querySelector(domPath);
-  if (element) {
+  const elements: NodeListOf<Element> | null = document.querySelectorAll(domPath);
+  elements.forEach((element: Element) => {
     element.innerHTML = content;
-  }
+  });
 }
 
 /**

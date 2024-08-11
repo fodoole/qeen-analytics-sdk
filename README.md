@@ -68,11 +68,11 @@ The `fetchQeenContent` function returns optimized content in the `contentSelecto
 ```js
 {
   label: string,
-  value: string
+  selector: string
 }
 ```
 - **label:** A unique identifier for the event.
-- **value:** A CSS selector or JS path that targets the element(s) to track.
+- **selector:** A CSS selector or JS path that targets the element(s) to track.
 
 ### Content Served Flag
 The `contentServed` flag should be set to `true` after content is fetched and rendered through the `setContentServed` method. This flag is used to determine if content was served to track the effectiveness of the optimized content. If original content is served, set the flag to `false` by calling `resetContentServed`.
@@ -190,8 +190,9 @@ function App() {
 
 ## Methods and Properties
 The `qeen` namespace provides the following methods and properties:
-- **`fetchQeenContent(qeenDeviceId: string): Promise<ContentResponse>`**
-   - Fetches optimized content and domain configuration from the API.
+- **`fetchQeenContent(qeenDeviceId: string, overrideFetchURL: string | undefined): Promise<ContentResponse>`**
+   - Fetches optimized content and domain configuration from the API using the provided user device ID.
+   - Accepts an optional parameter to override the live API URL for testing purposes.
    - Returns a promise that resolves to a `ContentResponse` object with the following properties:
      - `qeenDeviceId: string` - The device ID used to fetch content.
      - `analyticsEndpoint: string` - The endpoint for sending analytics data.
@@ -203,7 +204,7 @@ The `qeen` namespace provides the following methods and properties:
      - `contentSelectors: { [key: string]: string }` - An object with CSS selectors as keys and optimized content as values.
      - `rawContentSelectors: [ { uid: string, path: string, value: string } ]` - An array of raw content selectors; included for debugging purposes.
 - **`initPageSession(pageData: ContentResponse): void`**
-   - Initializes the page session with the provided `pageData`.
+   - Initializes the page session with the provided `pageData` that was fetched from the API.
 - **`setContentServed(): void`**
    - Sets the content served flag to `true`.
 - **`resetContentServed(): void`**
@@ -221,7 +222,7 @@ The `qeen` namespace provides the following methods and properties:
 - **`state: Object`**
    - State object for the SDK; exposed for debugging and testing purposes.
 - **`InteractionEvent: Class`**
-   - Class for defining custom click and scroll events; takes a `label` and `value` as parameters.
+   - Class for defining custom click and scroll events; takes a `label` and `selector` as parameters.
 - **`InvalidParameterError: Error`**
    - Error that is thrown when an invalid parameter is passed to a function.
 - **`AnalyticsEndpointError: Error`**
@@ -272,7 +273,7 @@ The SDK automatically tracks the following events:
 
 ### Custom Events
 Instead of enabling general click and scroll tracking, you can now define specific elements to track for clicks and scrolls. These are bound to the SDK using the appropriate methods.
-- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of 500ms.
+- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of $500\text{ ms}$.
 - **Scroll Events:** Use the `bindScrollEvents` method to bind custom scroll events to specific elements on the page. Each scroll event label may only be fired once per page session.
 - **Checkout Event:** Use the `sendCheckoutEvent` method to send a checkout event with the specified currency and value. Note that this event can only be sent on non-product detail pages and is not debounced.
 
