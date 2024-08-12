@@ -84,7 +84,7 @@ qeen.fetchQeenContent(qeenDeviceId)
     // Render your page with optimized content
     renderOptimizedContent(pageData);
     // Set the content served flag if optimized content was rendered
-     if (pageData.contentSelectors) {
+    if (pageData.contentSelectors) {
       qeen.setContentServed();
     }
 
@@ -107,15 +107,29 @@ qeen.fetchQeenContent(qeenDeviceId)
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const PageDataContext = createContext();
-const userDevicId = "dev";
+// Generate user_device_id and store it local storage
+let UserDeviceId = function () {
+  const min = 1;
+  const max = Math.pow(10, 16) - 1;
+  return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
+};
+
 export function usePageData() {
   return useContext(PageDataContext);
 }
 
 export function PageDataProvider({ children }) {
   const [pageData, setPageData] = useState(null);
+  const [userDeviceId, setUserDeviceId] = useState(() => {
+    // Retrieve userDeviceId from local storage or generate a new one
+    return localStorage.getItem("userDeviceId") || UserDeviceId();
+  });
 
   useEffect(() => {
+    // Store userDeviceId in local storage
+    localStorage.setItem('userDeviceId', userDeviceId);
+    console.log("userDeviceId", userDeviceId);
+
     // Fetch optmized content from localhost in Demo app
     qeen
       .fetchQeenContent(userDevicId)
@@ -126,7 +140,7 @@ export function PageDataProvider({ children }) {
       .catch((error) => {
         console.error(error);
         setPageData(null);
-      })
+      });
   }, []);
 
   return (
