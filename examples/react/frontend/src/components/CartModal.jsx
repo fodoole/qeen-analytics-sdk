@@ -3,8 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTrash,
-  faCheck,
   faPlus,
   faMinus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +16,7 @@ function CartModal({ item }) {
   return (
     <>
       <Button
+        id="add-to-cart"
         variant="dark"
         style={{ marginTop: "20px" }}
         onClick={() => handleShow()}
@@ -60,13 +59,13 @@ function CartModal({ item }) {
             Close
           </Button>
           <Button
+            id="submit"
             variant="primary"
             onClick={() => {
               handleClose();
             }}
           >
-            {" "}
-            Submit{" "}
+            Submit
           </Button>
         </Modal.Footer>
       </Modal>
