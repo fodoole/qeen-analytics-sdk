@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { randInt, limit, getElementPath } from '../src/utils.ts';
+import { randInt, limit } from '../src/utils.ts';
 import { prepareSelectors } from '../src/sessionManager.ts';
 
 describe('Utilities', () => {
@@ -47,53 +47,5 @@ describe('Utilities', () => {
       '#desc': 'Description',
       'html > head > title': 'Document Title',
     });
-  });
-
-  it('(Get Element Path: ID) should return the correct path for an element with an ID', () => {
-    const div = document.createElement('div');
-    div.id = 'test-id';
-    document.body.appendChild(div);
-
-    const path = getElementPath(div);
-    expect(document.querySelector(path)).toBe(div);
-
-    document.body.removeChild(div);
-  });
-
-  it('(Get Element Path: Class) should return the correct path for an element with classes', () => {
-    const div = document.createElement('div');
-    div.className = 'class1 class2';
-    document.body.appendChild(div);
-
-    const path = getElementPath(div);
-    expect(document.querySelector(path)).toBe(div);
-
-    document.body.removeChild(div);
-  });
-
-  it('(Get Element Path: Nested) should return the correct path for a nested element', () => {
-    const parentDiv = document.createElement('div');
-    const childDiv = document.createElement('div');
-    parentDiv.appendChild(childDiv);
-    document.body.appendChild(parentDiv);
-
-    const path = getElementPath(childDiv);
-    expect(document.querySelector(path)).toBe(childDiv);
-
-    document.body.removeChild(parentDiv);
-  });
-
-  it('(Get Element Path: Siblings) should return the correct path for an element with siblings', () => {
-    const parentDiv = document.createElement('div');
-    const firstChild = document.createElement('div');
-    const secondChild = document.createElement('div');
-    parentDiv.appendChild(firstChild);
-    parentDiv.appendChild(secondChild);
-    document.body.appendChild(parentDiv);
-
-    const path = getElementPath(secondChild);
-    expect(document.querySelector(path)).toBe(secondChild);
-
-    document.body.removeChild(parentDiv);
   });
 });

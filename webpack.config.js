@@ -41,6 +41,7 @@ module.exports = {
             keep_fnames: false,
             reduce_vars: true,
             collapse_vars: true,
+            pure_funcs: ['console.log'],
           },
           output: {
             comments: false,
