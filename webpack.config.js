@@ -1,6 +1,7 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const GolfMinifierPlugin = require('./build_plugins/golfMinifier');
+const IIFEWrapperPlugin = require('./build_plugins/iifeWrapper');
 
 module.exports = {
   mode: 'production',
@@ -45,6 +46,7 @@ module.exports = {
           },
           output: {
             comments: false,
+            wrap_iife: true,
           },
           mangle: {
             properties: {
@@ -59,5 +61,6 @@ module.exports = {
   },
   plugins: [
     new GolfMinifierPlugin(),
+    new IIFEWrapperPlugin(),
   ],
 };
