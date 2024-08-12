@@ -26,14 +26,14 @@ export const Item = () => {
       {item ? (
         <Card style={cardStyles}>
           <Row>
-            <h1 style={cardTitleStyles}>{item.name}</h1>
+            <h1 style={cardTitleStyles}  id="name">{item.name}</h1>
             <Col className="left" sm={4} style={leftStyles}>
               <Card.Img src={item.image} style={cardImageStyles} />
               <Card.Text style={priceStyles}>{item.price} JD</Card.Text>
               <CartModal item={item} />
             </Col>
             <Col sm={8}>
-              <p>{item.description}</p>
+              <p id="description">{item.description}</p>
               <div className="tags" style={tagsStyles}>
                 {item.tags.map((tag) => (
                   <Card.Link href={`/tags/${tag.id}`} key={tag.id}>

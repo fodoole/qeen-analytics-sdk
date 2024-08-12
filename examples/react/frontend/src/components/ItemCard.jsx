@@ -9,7 +9,7 @@ const ItemCard = ({ item }) => {
           href={`/products/${item.id}`}
           style={{ textDecoration: "none", color: "black" }}
         >
-          <Card.Title style={cardTitleStyles}>{item.name}</Card.Title>
+          <Card.Title style={cardTitleStyles} id="name">{item.name}</Card.Title>
         </a>
         <Card.Text style={{ marginBottom: "5px" }}>{item.price} JD</Card.Text>
         <div className="tags" style={tagsStyles}>
