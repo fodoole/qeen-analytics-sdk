@@ -12,7 +12,7 @@ This will run the server on [http://localhost:3000]
 Start the endpoint server:\
 This endpoint is to mimic our cofing and content endpoint\
 `npm install nodejs`\
-`npm run build`\
+`npm install cors`\
 `node index.js`\
 This will run the server on [http://localhost:4000]
 
