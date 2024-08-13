@@ -164,9 +164,7 @@ function App() {
   );
 }
 
-// Child component that uses the fetched data
-import { usePageData } from "./PageDataContext"; // Import the custom hook
-
+// Child component that uses the binding for events
 function ChildComponent() {
   useEffect(() => {
     // Set the content served flag; ideally this should correlate to successful rendering of optimized content
@@ -191,7 +189,11 @@ function ChildComponent() {
   }, []);
 ```
 ```jsx
+  // Child component that uses the fetched data
   // Use the pageData prop as needed
+  import { usePageData } from "./PageDataContext"; // Import the custom hook
+  const { pageData, loading } = usePageData(); // Use the context
+
   return (
     <div>
       <h2>Child Component</h2>
