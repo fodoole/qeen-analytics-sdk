@@ -132,7 +132,7 @@ export function PageDataProvider({ children }) {
 
     // Fetch optmized content from localhost in Demo app
     qeen
-      .fetchQeenContent(userDevicId)
+      .fetchQeenContent(userDeviceId)
       .then((fetchedPageData) => {
         setPageData(fetchedPageData);
         qeen.initPageSession(fetchedPageData);
