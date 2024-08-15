@@ -37,12 +37,12 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
   const eventsArray: Array<InteractionEvent | any> = Array.isArray(clickEvents) ? clickEvents : [clickEvents];
   eventsArray.forEach(function (event) {
     if (!(event instanceof InteractionEvent)) {
-      event = new InteractionEvent(event._label, event._selector);
+      event = new InteractionEvent(event.label, event.selector);
     }
 
-    const domElements: NodeListOf<Element> = document.querySelectorAll(event._selector);
+    const domElements: NodeListOf<Element> = document.querySelectorAll(event.selector);
     if (domElements.length === 0) {
-      throw new InvalidParameterError(`No elements found with the selector: ${event._selector}`);
+      throw new InvalidParameterError(`No elements found with the selector: ${event.selector}`);
     }
 
     domElements.forEach(element => {
@@ -50,13 +50,13 @@ function bindClickEventsToElements(clickEvents: InteractionEvent | InteractionEv
       if (!element.hasAttribute('data-qeen-click-bound')) {
         element.setAttribute('data-qeen-click-bound', 'true');
         element.addEventListener('click', new Debouncer(function (): void {
-          new PageAnalyticsEvent('CLICK', null, event._label, event._selector);
+          new PageAnalyticsEvent('CLICK', null, event.label, event.selector);
         }, debounceTime)._debounced);
       }
     });
     // Keep track of the click events
     Config.clickEvents = Config.clickEvents || [];
-    if (!Config.clickEvents.some(e => e?._label === event._label && e?._selector === event._selector)) {
+    if (!Config.clickEvents.some(e => e?.label === event.label && e?.selector === event.selector)) {
       Config.clickEvents.push(event);
     }
   });
@@ -89,11 +89,11 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
   const eventsArray: Array<InteractionEvent | any> = Array.isArray(scrollEvents) ? scrollEvents : [scrollEvents];
   eventsArray.forEach(function (event) {
     if (!(event instanceof InteractionEvent)) {
-      event = new InteractionEvent(event._label, event._selector);
+      event = new InteractionEvent(event.label, event.selector);
     }
-    const domElements: NodeListOf<Element> = document.querySelectorAll(event._selector);
+    const domElements: NodeListOf<Element> = document.querySelectorAll(event.selector);
     if (domElements.length === 0) {
-      throw new InvalidParameterError(`No elements found with the selector: ${event._selector}`);
+      throw new InvalidParameterError(`No elements found with the selector: ${event.selector}`);
     }
 
     domElements.forEach(element => {
@@ -101,9 +101,9 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             // Only log the event if it hasn't been logged before
-            if (!State.scrollObservedElements.has(event._label)) {
-              new PageAnalyticsEvent('SCROLL', null, event._label, event._selector);
-              State.scrollObservedElements.add(event._label);
+            if (!State.scrollObservedElements.has(event.label)) {
+              new PageAnalyticsEvent('SCROLL', null, event.label, event.selector);
+              State.scrollObservedElements.add(event.label);
             }
             observer?.unobserve(entry.target);
             observer = null;
@@ -114,7 +114,7 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
     });
     // Keep track of the scroll events
     Config.scrollEvents = Config.scrollEvents || [];
-    if (!Config.scrollEvents.some(e => e?._label === event._label && e?._selector === event._selector)) {
+    if (!Config.scrollEvents.some(e => e?.label === event.label && e?.selector === event.selector)) {
       Config.scrollEvents.push(event);
     }
   });

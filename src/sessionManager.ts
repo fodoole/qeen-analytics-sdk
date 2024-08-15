@@ -174,8 +174,8 @@ export async function fetchContent(qeenDeviceId: string, overrideFetchURL: strin
  * Function that cleans up stale events that are no longer present on the page.
  */
 function cleanUpStaleEvents(): void {
-  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event._selector));
-  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event._selector));
+  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event.selector));
+  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event.selector));
 }
 
 /**

@@ -142,14 +142,14 @@ export interface ContentResponse {
  * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export class InteractionEvent {
-  public _label: string;
-  public _selector: string;
+  public label: string;
+  public selector: string;
 
   constructor(label: string, selector: string) {
     if (!label || !selector) {
       throw new InvalidParameterError('Label and selector are required for interaction events.');
     }
-    this._label = label;
-    this._selector = selector;
+    this.label = label;
+    this.selector = selector;
   }
 }

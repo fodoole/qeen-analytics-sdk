@@ -8,12 +8,12 @@
  * @param {Function} fn - function to be executed on load.
  */
 export function onLoad(fn: Function): void {
-  if (document.body === null) {
+  if (document.readyState === 'complete') {
+    fn();
+  } else {
     document.addEventListener('DOMContentLoaded', function (): void {
       fn();
     }, false);
-  } else {
-    fn();
   }
 }
 
