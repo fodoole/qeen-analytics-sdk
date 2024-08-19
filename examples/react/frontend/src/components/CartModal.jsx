@@ -46,7 +46,7 @@ function CartModal({ item }) {
           <Modal.Title >Add to cart</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Would you like to add {pageData?.contentSelectors?.["#name"] || item.name} to cart ?
+          Would you like to add {item.name} to cart ?
           <div className="d-flex mt-4 align-items-center">
             <Button
               className="d-flex justify-content-center align-items-center"

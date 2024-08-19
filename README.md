@@ -116,12 +116,12 @@ export function PageDataProvider({ children }) {
   const [pageData, setPageData] = useState(null);
   const [userDeviceId, setUserDeviceId] = useState(() => {
     // Retrieve userDeviceId from local storage or generate a new one
-    return localStorage.getItem('userDeviceId') || qeen.randInt();
+    return localStorage.getItem("userDeviceId") || qeen.randInt();
   });
 
   useEffect(() => {
     // Store userDeviceId in local storage
-    localStorage.setItem('userDeviceId', userDeviceId);
+    localStorage.setItem("userDeviceId", userDeviceId);
     console.log("userDeviceId", userDeviceId);
 
     // Fetch optmized content from localhost in Demo app
@@ -131,8 +131,7 @@ export function PageDataProvider({ children }) {
         setPageData(fetchedPageData);
         qeen.initPageSession(fetchedPageData);
       })
-      .catch((error) => {
-        console.error(error);
+      .catch(() => {
         setPageData(null);
       });
   }, []);
@@ -162,9 +161,13 @@ function App() {
 function ChildComponent() {
   useEffect(() => {
     // Set the content served flag; ideally this should correlate to successful rendering of optimized content
-    // if (pageData.contentSelectors) {
-    //   qeen.setContentServed();
-    // }
+    if (pageData != null) {
+      if (pageData.contentSelectors["elementSelector"] != "originalValue") {
+        qeen.setContentServed();
+      } else {
+        console.log("Error rendering new content");
+      }
+    }
 
     // Bind custom click and scroll events in the child component
     qeen.bindClickEvents(

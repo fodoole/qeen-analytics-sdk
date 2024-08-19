@@ -27,19 +27,22 @@ export const Item = () => {
 
   useEffect(() => {
     if (render) {
-      // Set the content served flag; ideally this should correlate to successful rendering of optimized content
-      // if (pageData.contentSelectors) {
-      //   qeen.setContentServed();
-      // }
-
+      if (pageData != null) {
+        if (
+          pageData.contentSelectors["#name"] != item.name &&
+          pageData.contentSelectors["#description"] != item.description
+        ) {
+          qeen.setContentServed();
+        } else {
+          console.log("Error rendering new content");
+        }
+      }
       // Bind custom click and scroll events in the child component
-      qeen.bindClickEvents(
-        [new qeen.InteractionEvent("NAME", "#name")]
-      );
+      qeen.bindClickEvents([new qeen.InteractionEvent("NAME", "#name")]);
 
-      qeen.bindScrollEvents(
-        [new qeen.InteractionEvent("DESCRIPTION", "#description")]
-      );
+      qeen.bindScrollEvents([
+        new qeen.InteractionEvent("DESCRIPTION", "#description"),
+      ]);
     }
   }, [render]);
 

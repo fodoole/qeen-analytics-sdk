@@ -9,16 +9,15 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 const Cart = () => {
   const items = [];
   const calctotal = () => {
-    let total = 0;
+    let total = 10.56;
     items.forEach((item) => {
       total += item.product.price * item.quantity;
     });
     return total;
   };
-
-  useEffect(() => {
-    qeen.bindClickEvents([new qeen.InteractionEvent("CHECKOUT", "#checkout")]);
-  }, []);
+  const handleCheckoutEvent = () => {
+    qeen.sendCheckoutEvent("USD", calctotal());
+  };
 
   return (
     <section
@@ -37,7 +36,7 @@ const Cart = () => {
                   <Col lg="7">
                     <h5>
                       <a
-                        href="#!"
+                        href="/Home#qeen-dev"
                         className="text-body"
                         style={{ textDecoration: "none" }}
                       >
@@ -52,7 +51,11 @@ const Cart = () => {
                     <p className="mb-4">
                       You have {items.length} items in your cart
                     </p>
-                    <button id="checkout" className="btn btn-success">
+                    <button
+                      id="checkout"
+                      className="btn btn-success"
+                      onClick={handleCheckoutEvent}
+                    >
                       Checkout
                     </button>
                   </Col>
