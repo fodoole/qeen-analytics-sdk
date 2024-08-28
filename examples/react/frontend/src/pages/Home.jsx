@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
-import ItemCard from "./ItemCard";
+import ItemCard from "../components/ItemCard";
 const baseurl = "http://127.0.0.1:3000";
 
 const Home = () => {

@@ -4,39 +4,28 @@ import { useParams } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/esm/Col";
-import ItemCard from "./ItemCard";
+import ItemCard from "../components/ItemCard";
 
-const Category = () => {
-  const [cat, setCat] = useState([]);
+const Tag = () => {
+  const [tag, setTag] = useState([]);
   const [items, setItems] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:3000/api/categories/${id}`
-        );
-        setCat(response.data);
-      } catch (error) {
-        console.error("Failed to fetch categories: ", error);
-      }
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:3000/api/products?category=${id}`
-        );
-        setItems(response.data.results);
-      } catch (error) {
-        console.error("Failed to fetch categories: ", error);
-      }
-    };
+    axios
+      .get(`http://127.0.0.1:3000/api/tags/${id}`)
+      .then((res) => setTag(res.data))
+      .catch((err) => console.log(err));
 
-    fetchCategories();
+    axios
+      .get(`http://127.0.0.1:3000/api/products?tag=${id}`)
+      .then((res) => setItems(res.data.results))
+      .catch((err) => console.log(err));
   }, []);
 
   return (
     <Container style={{ padding: "50px 30px" }}>
-      <h2>@{cat.name}</h2>
+      <h2>#{tag.tagname}</h2>
       <Row>
         {items.map((item) => (
           <Col
@@ -53,5 +42,4 @@ const Category = () => {
     </Container>
   );
 };
-
-export default Category;
+export default Tag;

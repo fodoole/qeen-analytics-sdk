@@ -5,7 +5,7 @@ import axios from "axios";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CartModal from "./CartModal";
+import CartModal from "../components/CartModal";
 const baseurl = "http://127.0.0.1:3000";
 
 export const Item = () => {
@@ -26,7 +26,9 @@ export const Item = () => {
       {item ? (
         <Card style={cardStyles}>
           <Row>
-            <h1 style={cardTitleStyles}  id="name">{item.name}</h1>
+            <h1 style={cardTitleStyles} id="name">
+              {item.name}
+            </h1>
             <Col className="left" sm={4} style={leftStyles}>
               <Card.Img src={item.image} style={cardImageStyles} />
               <Card.Text style={priceStyles}>{item.price} JD</Card.Text>

@@ -1,11 +1,11 @@
 import { Routes, Route, Router } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
-import Home from "./components/Home";
-import Item from "./components/Item";
-import Category from "./components/Category";
-import Tag from "./components/Tag";
-import Cart from "./components/Cart";
+import Home from "./pages/Home";
+import Item from "./pages/Item";
+import Category from "./pages/Category";
+import Tag from "./pages/Tag";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
