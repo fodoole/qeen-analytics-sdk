@@ -36,8 +36,9 @@ export const Item = () => {
     if (render) {
       try {
         setValues({
-          name: pageData.contentSelectors["#name"],
-          description: pageData.contentSelectors["#description"],
+          name: pageData.contentSelectors["#name"] ?? item.name,
+          description:
+            pageData.contentSelectors["#description"] ?? item.description,
         });
       } catch (e) {
         console.info(e);
@@ -49,7 +50,7 @@ export const Item = () => {
       // To check rendering values.
       setServed(true);
 
-      //Bind custom click and scroll events in the child component
+      // Bind custom click and scroll events in the child component
       qeen.bindClickEvents([new qeen.InteractionEvent("NAME", "#name")]);
 
       qeen.bindScrollEvents([
@@ -60,12 +61,7 @@ export const Item = () => {
 
   useEffect(() => {
     if (served) {
-      console.log(
-        "Rendered value:",
-        values.name,
-        "\nDescription:",
-        values.description
-      );
+      console.log("Name:", values.name, "\nDescription:", values.description);
 
       if (
         // Check if it was succesfully rendered

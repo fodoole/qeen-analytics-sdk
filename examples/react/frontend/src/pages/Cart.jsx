@@ -16,6 +16,7 @@ const Cart = () => {
   };
   const handleCheckoutEvent = () => {
     qeen.sendCheckoutEvent("USD", calctotal());
+    alert("Checkout process initiated!");
   };
 
   return (

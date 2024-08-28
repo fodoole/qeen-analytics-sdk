@@ -8,7 +8,7 @@ Start the backend server:\
 `npm run dev`\
 This will run the server on [http://localhost:3000]
 
-### Endpoint Server
+### Config Server
 Start the endpoint server:\
 This endpoint is to mimic our cofing and content endpoint\
 `npm install nodejs`\
