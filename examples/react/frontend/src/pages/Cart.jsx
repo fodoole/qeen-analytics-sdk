@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";

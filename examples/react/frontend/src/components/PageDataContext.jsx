@@ -12,7 +12,7 @@ export function PageDataProvider({ children }) {
     // Retrieve userDeviceId from local storage or generate a new one
     return localStorage.getItem("userDeviceId") || qeen.randInt();
   });
-
+  const PageUrl = window.location.href;
   useEffect(() => {
     // Store userDeviceId in local storage
     localStorage.setItem("userDeviceId", userDeviceId);
@@ -27,10 +27,11 @@ export function PageDataProvider({ children }) {
         setPageData(fetchedPageData);
         qeen.initPageSession(fetchedPageData);
       })
-      .catch(() => {
+      .catch((error) => {
         setPageData(null);
+        console.info(error);
       });
-  }, [userDeviceId]);
+  }, [PageUrl]);
 
   return (
     <PageDataContext.Provider value={{ pageData }}>

@@ -23,6 +23,10 @@ Start the frontend app:\
 `npm run start`\
 This will run the server on [http://localhost:5000]
 
+### Running All Commands at Once
+In the examples directory, run the following command: \
+`.\run_commands.bat`
+
 ### Usage
 1. Navigate to Home Page: Displays all products.
 2. Navigate to Categories: Displays products by category.

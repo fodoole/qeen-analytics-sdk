@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/esm/Col";
-import ItemCard from "./ItemCard";
+import ItemCard from "../components/ItemCard";
 
 const Tag = () => {
   const [tag, setTag] = useState([]);
