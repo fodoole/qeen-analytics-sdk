@@ -47,3 +47,5 @@ if (window.location.hash.includes('no-qeen')) {
 } else {
   Config.noQeen = false;
 }
+
+window.qeen.sdkVersion = '1.0';
