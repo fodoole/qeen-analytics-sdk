@@ -11,7 +11,7 @@ export function onLoad(fn: Function): void {
   if (['interactive', 'complete'].includes(document.readyState)) {
     fn();
   } else {
-    document.addEventListener('readyStateChange', fn(), { once: true });
+    document.addEventListener('readystatechange', fn(), { once: true });
   }
 }
 
