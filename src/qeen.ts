@@ -3,7 +3,7 @@
  * @description The main script for Qeen Analytics SDK.
  */
 
-import { fetchContent, initPageSession, setContentServed, resetContentServed } from './sessionManager';
+import { fetchContent, initPageSession, setContentServed, resetContentServed, sendContentServed } from './sessionManager';
 import { Config, State } from './config';
 import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents';
 import { randInt } from './utils';
@@ -31,6 +31,7 @@ window.qeen.bindScrollEvents = bindScrollEvents;
 window.qeen.sendCheckoutEvent = sendCheckoutEvent;
 window.qeen.setContentServed = setContentServed;
 window.qeen.resetContentServed = resetContentServed;
+window.qeen.sendContentServed = sendContentServed;
 window.qeen.randInt = randInt;
 window.qeen.config = Config;
 window.qeen.state = State;

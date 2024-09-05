@@ -209,6 +209,8 @@ The `qeen` namespace provides the following methods and properties:
    - Sets the content served flag to `true`.
 - **`resetContentServed(): void`**
    - Sets the content served flag to `false`. This method is implicitly called during `fetchQeenContent`.
+- **`sendContentServed(): void`**
+   - Sends a content served event to the analytics endpoint. This should only be called manually if rendering content is delayed after the analytics session is initialized; in most cases, this is not necessary.
 - **`bindClickEvents(events: InteractionEvent | InteractionEvent[]): void`**
    - Binds custom click events to the specified elements.
 - **`bindScrollEvents(events: InteractionEvent | InteractionEvent[]): void`**

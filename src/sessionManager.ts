@@ -24,6 +24,18 @@ export function resetContentServed(): void {
 }
 
 /**
+ * Function that sends a CONTENT_SERVED event.
+ * @description This function only sends the event once per session, if content is served, the page is a PDP, and the content serving ID is not 0.
+ */
+export function sendContentServed(): void {
+  if (State.contentServedSent || !State.contentServed || !Config.isPdp || Config.contentServingId === '0') {
+    return;
+  }
+  new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
+  State.contentServedSent = true;
+}
+
+/**
   * Function that implements common logic for resetting the session state.
   * This function is called when a session is initialised or reset.
   * @param {string} label The label for the page view event.
@@ -41,11 +53,10 @@ function initResetCommon(label: string): void {
   // Log the page view and content served events
   function logPageView(): void {
     new PageAnalyticsEvent('PAGE_VIEW', null, label, null);
-    if (State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
-      new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
-    }
+    sendContentServed();
   }
 
+  logPageView();
   // Only send the page view event if the page is visible
   if (document.visibilityState === 'visible') {
     logPageView();
