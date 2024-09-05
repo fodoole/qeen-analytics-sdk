@@ -47,8 +47,8 @@ export class Config {
  * @property {boolean} boundThreadEvents - The bound thread events flag.
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
- * @property {boolean} contentServedSent - The content served sent flag.
  * @property {string} pageUrl - The page URL.
+ * @property {boolean} contentServedSent - The content served sent flag.
  * @property {string} sessionId - The session ID.
  * @property {number} idleTimer - The idle timer.
  * @property {number} lastIdleTime - The last idle time.
@@ -60,9 +60,9 @@ export class State {
   public static boundThreadEvents: boolean = false;
   public static bindQueue: BindQueueItem[] = [];
   public static contentServed: boolean = false;
-  public static contentServedSent: boolean = false;
   public static pageUrl: string;
-
+  
+  public static contentServedSent: boolean = false;
   public static sessionId: string;
   public static idleTimer: number;
   public static lastIdleTime: number;
@@ -73,6 +73,7 @@ export class State {
    * Function to reset the state.
    */
   static reset(): void {
+    State.contentServedSent = false;
     State.sessionId = '';
     State.idleTimer = 0;
     State.lastIdleTime = Date.now();
