@@ -8,12 +8,10 @@
  * @param {Function} fn - function to be executed on load.
  */
 export function onLoad(fn: Function): void {
-  if (document.readyState === 'complete') {
+  if (['interactive', 'complete'].includes(document.readyState)) {
     fn();
   } else {
-    document.addEventListener('DOMContentLoaded', function (): void {
-      fn();
-    }, false);
+    document.addEventListener('readyStateChange', fn(), { once: true });
   }
 }
 
