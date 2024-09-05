@@ -118,11 +118,9 @@ export function PageDataProvider({ children }) {
     // Retrieve userDeviceId from local storage or generate a new one
     return localStorage.getItem("userDeviceId") || qeen.randInt();
   });
-
+  const PageUrl = window.location.href;
   useEffect(() => {
-    // Store userDeviceId in local storage
     localStorage.setItem("userDeviceId", userDeviceId);
-    console.log("userDeviceId", userDeviceId);
 
     // Fetch optmized content from localhost in Demo app
     qeen
@@ -131,10 +129,11 @@ export function PageDataProvider({ children }) {
         setPageData(fetchedPageData);
         qeen.initPageSession(fetchedPageData);
       })
-      .catch(() => {
+      .catch((error) => {
         setPageData(null);
+        console.info(error);
       });
-  }, []);
+  }, [PageUrl]);
 
   return (
     <PageDataContext.Provider value={{ pageData }}>
@@ -156,19 +155,11 @@ function App() {
     </PageDataProvider>
   );
 }
-
-// Child component that uses the binding for events
+```
+```jsx
+// Usage in Child component that uses the binding for events
 function ChildComponent() {
   useEffect(() => {
-    // Set the content served flag; ideally this should correlate to successful rendering of optimized content
-    if (pageData != null) {
-      if (pageData.contentSelectors["elementSelector"] != "originalValue") {
-        qeen.setContentServed();
-      } else {
-        console.log("Error rendering new content");
-      }
-    }
-
     // Bind custom click and scroll events in the child component
     qeen.bindClickEvents(
       [
@@ -176,7 +167,7 @@ function ChildComponent() {
         new qeen.InteractionEvent('PRODUCT_ZOOM', '.product-image')
       ]
     );
-
+  
     qeen.bindScrollEvents(
       [
         new qeen.InteractionEvent('SCROLL_TITLE', '.product-title'),
@@ -184,9 +175,12 @@ function ChildComponent() {
       ]
     );
   }, []);
+
+  return ();
+};
 ```
 ```jsx
-  // Child component that uses the fetched data
+  // Usage in Child component that uses the fetched data
   // Use the pageData prop as needed
   import { usePageData } from "./PageDataContext"; // Import the custom hook
   const { pageData, loading } = usePageData(); // Use the context
@@ -199,7 +193,6 @@ function ChildComponent() {
         </div>
     </div>
   );
-}
 ```
 
 ## Methods and Properties
