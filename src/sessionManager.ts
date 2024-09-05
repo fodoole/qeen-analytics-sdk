@@ -56,7 +56,6 @@ function initResetCommon(label: string): void {
     sendContentServed();
   }
 
-  logPageView();
   // Only send the page view event if the page is visible
   if (document.visibilityState === 'visible') {
     logPageView();
