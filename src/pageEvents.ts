@@ -97,6 +97,7 @@ export function bindScrollEventsToElements(scrollEvents: InteractionEvent | Inte
     }
 
     domElements.forEach(element => {
+      element.setAttribute('data-qeen-scroll-bound', 'true');
       let observer: IntersectionObserver | null = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
