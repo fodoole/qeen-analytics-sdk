@@ -209,7 +209,7 @@ The `qeen` namespace provides the following methods and properties:
    - Sets the content served flag to `true`.
 - **`resetContentServed(): void`**
    - Sets the content served flag to `false`. This method is implicitly called during `fetchQeenContent`.
-- **`sendContentServed(): void`**
+- **`sendContentServedEvent(): void`**
    - Sends a content served event to the analytics endpoint. This should only be called manually if rendering content is delayed after the analytics session is initialized; in most cases, this is not necessary.
 - **`bindClickEvents(events: InteractionEvent | InteractionEvent[]): void`**
    - Binds custom click events to the specified elements.
@@ -258,10 +258,10 @@ Refer to the following table for guidelines on rendering content:
 | Case                             | Response                                                                                                                   | Content               | Analytics             |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------- | --------------------- |
 | Optimized Content Exists         | `contentId`: some meaningful value<br />`contentServingId`: some meaningful value<br />`contentSelectors`: non-empty value | Use Optimized Content | Track Analytics       |
-| User In Original Content Group   | `contentId`: `"original"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                                    | Use Original Content  | Track Analytics       |
-| Optimized Content Does Not Exist | `contentId`: `"-"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                                           | Use Original Content  | Track Analytics       |
+| User In Original Content Group   | `contentId`: `"original"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                    | Use Original Content  | Track Analytics       |
+| Optimized Content Does Not Exist | `contentId`: `"-"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                           | Use Original Content  | Track Analytics       |
 | Non-Product Detail Page          | `isPdp`: `false`<br />`contentId`: `"-"`<br />`contentServingId`: `"0"`<br />`contentSelectors`: empty                     | Use Original Content  | Track Analytics       |
-| URL Contains `#no-qeen`       | `URLContainsNoQeenError`                                                                                                | Use Original Content  | No Analytics Tracking |
+| URL Contains `#no-qeen`          | `URLContainsNoQeenError`                                                                                                   | Use Original Content  | No Analytics Tracking |
 | General Fetch Error              | `ResponseNotOkError`                                                                                                       | Use Original Content  | No Analytics Tracking |
 
 ## Event Tracking

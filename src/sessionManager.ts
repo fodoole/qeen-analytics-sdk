@@ -145,7 +145,7 @@ export function prepareSelectors(rawContent: any[]): any {
 /**
  * Function to fetch Qeen content.
  * @param {string} qeenDeviceId - The user device ID.
- * @param {string} overrideFetchURL - The override fetch URL.
+ * @param {string | undefined} overrideFetchURL - The override fetch URL.
  * @returns {Promise<ContentResponse>} The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
@@ -208,7 +208,7 @@ export class BindQueueItem {
 
 /**
  * Function that initializes the Qeen Analytics SDK.
- * @param {any} config - The configuration object for the Qeen Analytics SDK.
+ * @param {ContentResponse} config - The configuration object for the Qeen Analytics SDK.
  */
 export function initPageSession(config: ContentResponse): void {
   if (Config.noQeen) {
