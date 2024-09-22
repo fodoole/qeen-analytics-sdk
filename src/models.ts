@@ -113,6 +113,7 @@ export class fetchContentParams {
 /**
  * @interface ContentResponse
  * @property {string} qeenDeviceId - The Qeen device ID.
+ * @property {string} requestUrl - The request URL.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
  * @property {string} contentServingId - The content serving ID.
@@ -124,6 +125,7 @@ export class fetchContentParams {
  */
 export interface ContentResponse {
   qeenDeviceId: string;
+  requestUrl: string;
   analyticsEndpoint: string;
   projectId: string;
   idleTime: number;

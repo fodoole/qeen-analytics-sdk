@@ -48,6 +48,7 @@ export class Config {
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
  * @property {string} pageUrl - The page URL.
+ * @property {string} requestUrl - The request URL.
  * @property {boolean} contentServedSent - The content served sent flag.
  * @property {string} sessionId - The session ID.
  * @property {number} idleTimer - The idle timer.
@@ -61,6 +62,7 @@ export class State {
   public static bindQueue: BindQueueItem[] = [];
   public static contentServed: boolean = false;
   public static pageUrl: string;
+  public static requestUrl: string;
   
   public static contentServedSent: boolean = false;
   public static sessionId: string;

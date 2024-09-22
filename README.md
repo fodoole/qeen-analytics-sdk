@@ -195,6 +195,7 @@ The `qeen` namespace provides the following methods and properties:
    - Accepts an optional parameter to override the live API URL for testing purposes.
    - Returns a promise that resolves to a `ContentResponse` object with the following properties:
      - `qeenDeviceId: string` - The device ID used to fetch content.
+     - `requestUrl: string` - The page URL on which the content fetch was made.
      - `analyticsEndpoint: string` - The endpoint for sending analytics data.
      - `projectId: string` - The project ID for the domain.
      - `contentId: string` - The ID of the optimized content.

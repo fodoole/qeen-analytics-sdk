@@ -26,6 +26,7 @@ function AnalyticsWrapper({ children }) {
   
     qeen.initPageSession({
       qeenDeviceId: 'dev',
+      requestUrl: window.location.href,
       analyticsEndpoint: analyticsEndpoint,
       projectId: '123',
       contentServingId: isPdp ? String(qeen.randInt()) : '0',

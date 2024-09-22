@@ -225,6 +225,7 @@ export function initPageSession(config: ContentResponse): void {
 
   State.qeenDeviceId = config.qeenDeviceId;
   State.pageUrl = window.location.href;
+  State.requestUrl = config.requestUrl;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';
