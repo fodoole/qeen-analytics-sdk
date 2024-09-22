@@ -10,12 +10,12 @@ class GolfMinifierPlugin {
 
   apply(compiler) {
     compiler.hooks.compilation.tap('GolfMinifierPlugin', (compilation) => {
-      compilation.hooks.processAssets.tapAsync(
+      compilation.hooks.processAssets.tap(
         {
           name: 'GolfMinifierPlugin',
           stage: compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
         },
-        (assets, callback) => {
+        (assets) => {
           for (const assetName in assets) {
             if (assetName.endsWith('.js')) {
               let source = assets[assetName].source();
@@ -26,7 +26,6 @@ class GolfMinifierPlugin {
               );
             }
           }
-          callback();
         }
       );
     });
