@@ -1,10 +1,17 @@
+const webpack = require('webpack');
+const fs = require('fs');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const DotenvWebpack = 'dotenv-webpack';
+const Dotenv = require(DotenvWebpack);
 const GolfMinifierPlugin = require('./build_plugins/golfMinifier');
 const IIFEWrapperPlugin = require('./build_plugins/iifeWrapper');
-const dotenvWebpack = 'dotenv-webpack';
-const Dotenv = require(dotenvWebpack);
-require('dotenv').config();
+
+const envFilePath = path.resolve(__dirname, '.env');
+const envFileExists = fs.existsSync(envFilePath);
+if (envFileExists) {
+  require('dotenv').config({ path: envFilePath });
+}
 
 if (!process.env.GET_CONTENT_ENDPOINT) {
   console.error('Error: GET_CONTENT_ENDPOINT environment variable is not defined.');
@@ -68,7 +75,7 @@ module.exports = {
     usedExports: true,
   },
   plugins: [
-    new Dotenv(),
+    envFileExists ? new Dotenv() : new webpack.EnvironmentPlugin(Object.keys(process.env)),
     new GolfMinifierPlugin(),
     new IIFEWrapperPlugin(),
   ],
