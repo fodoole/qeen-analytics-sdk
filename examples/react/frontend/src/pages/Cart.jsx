@@ -4,8 +4,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { usePageData } from "../components/PageDataContext";
 
 const Cart = () => {
+  const { pageData } = usePageData(); // Use the context
   const items = [];
   const calctotal = () => {
     let total = 10.56;
@@ -15,6 +17,7 @@ const Cart = () => {
     return total;
   };
   const handleCheckoutEvent = () => {
+    qeen.initPageSession(pageData);
     qeen.sendCheckoutEvent("USD", calctotal());
     alert("Checkout process initiated!");
   };

@@ -25,13 +25,12 @@ export function PageDataProvider({ children }) {
       )
       .then((fetchedPageData) => {
         setPageData(fetchedPageData);
-        qeen.initPageSession(fetchedPageData);
       })
       .catch((error) => {
         setPageData(null);
         console.info(error);
       });
-  }, [PageUrl]);
+  }, []);
 
   return (
     <PageDataContext.Provider value={{ pageData }}>

@@ -127,7 +127,6 @@ export function PageDataProvider({ children }) {
       .fetchQeenContent(userDeviceId)
       .then((fetchedPageData) => {
         setPageData(fetchedPageData);
-        qeen.initPageSession(fetchedPageData);
       })
       .catch((error) => {
         setPageData(null);
@@ -184,6 +183,51 @@ function ChildComponent() {
   // Use the pageData prop as needed
   import { usePageData } from "./PageDataContext"; // Import the custom hook
   const { pageData, loading } = usePageData(); // Use the context
+
+  // Render Original Content or qeen Content
+  useEffect(() => {
+    if (render) {
+      try {
+        setValues({
+          name: pageData.contentSelectors["elementSelector"] ?? 'originalValue',
+          description:
+            pageData.contentSelectors["elementSelector"] ?? 'originalValue',
+        });
+      } catch (e) {
+        console.info(e);
+        setValues({
+          name: 'originalValue',
+          description: 'originalValue',
+        });
+      }
+      // To check rendering values.
+      setServed(true);
+
+      // Bind custom click and scroll events in the child component
+      qeen.bindClickEvents([new qeen.InteractionEvent("NAME", "#name")]);
+
+      qeen.bindScrollEvents([
+        new qeen.InteractionEvent("DESCRIPTION", "#description"),
+      ]);
+    }
+  }, [render]);
+
+  // Check Rendered Content
+  useEffect(() => {
+    if (served) {
+      // Initialize The Session
+      qeen.initPageSession(pageData);
+      if (
+        // Check if it was succesfully rendered
+        values["elementSelector"] != 'originalValue' &&
+        values["elementSelector"] != 'originalValue'
+      ) {
+        qeen.setContentServed();
+      } else {
+        qeen.resetContentServed();
+      }
+    }
+  }, [served]);
 
   return (
     <div>

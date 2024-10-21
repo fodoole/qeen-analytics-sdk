@@ -61,8 +61,8 @@ export const Item = () => {
 
   useEffect(() => {
     if (served) {
+      qeen.initPageSession(pageData);
       console.log("Name:", values.name, "\nDescription:", values.description);
-
       if (
         // Check if it was succesfully rendered
         values["name"] != item.name &&

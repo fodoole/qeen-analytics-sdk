@@ -32,6 +32,8 @@ app.use('/contentconfig', (req, res) => {
 
     try {
       config = JSON.parse(data);
+      config.requestUrl = pageUrl;
+      console.log(`Request URL: ${pageUrl}`);
     } catch (parseError) {
       console.error(`Error parsing JSON: ${parseError.message}`);
       res.status(500).send('Server error');
