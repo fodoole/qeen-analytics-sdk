@@ -52,7 +52,7 @@ app.use('/contentconfig', (req, res) => {
       config.isPdp = true;
       config.contentId = "optimised";
       config.contentServingId = "1236547890123456";
-      config.contentStatus = "new";
+      config.contentStatus = "[SET_VIA_SERVER_TEMPLATE]";
       config.rawContentSelectors = [
         {
           "uid": "1",

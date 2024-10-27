@@ -31,7 +31,7 @@ function AnalyticsWrapper({ children }) {
       projectId: '123',
       contentServingId: isPdp ? String(qeen.randInt()) : '0',
       contentId: isPdp ? 'optimised' : '-',
-      contentStatus: 'new',
+      contentStatus: '[SET_VIA_SERVER_TEMPLATE]',
       isPdp: isPdp,
       idleTime: 60_000,
     });
