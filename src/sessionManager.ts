@@ -230,6 +230,7 @@ export function initPageSession(config: ContentResponse): void {
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
+  Config.contentStatus = config.contentStatus || '';
   Config.isPdp = config.isPdp || false;
   Config.idleTime = limit(config.idleTime, 60_000, 599_000) || 300_000;
 

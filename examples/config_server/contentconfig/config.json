@@ -3,6 +3,7 @@
   "projectId": "123456789",
   "contentServingId": "",
   "contentId": "",
+  "contentStatus": "",
   "idleTime": 300000,
   "isPdp": "",
   "rawContentSelectors": [],

@@ -200,6 +200,7 @@ The `qeen` namespace provides the following methods and properties:
      - `projectId: string` - The project ID for the domain.
      - `contentId: string` - The ID of the optimized content.
      - `contentServingId: string` - The ID of the content serving.
+     - `contentStatus: string` - The status of the content.
      - `isPdp: boolean` - Indicates if the page is a product detail page; determined by the site URL pattern in the site configuration. Please refer to [Definitions of a Product Detail Page](#definitions-of-a-product-detail-page) for more information.
      - `idleTime: number` - The time in milliseconds before a session is considered idle; set in the site configuration.
      - `contentSelectors: { [key: string]: string }` - An object with CSS selectors as keys and optimized content as values.

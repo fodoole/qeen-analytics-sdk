@@ -18,6 +18,7 @@ export const getContentEndpoint: string | undefined = process.env['GET_CONTENT_E
  * @property {string} projectId - The project ID.
  * @property {string} contentServingId - The content serving ID.
  * @property {string} contentId - The content ID.
+ * @property {string} contentStatus - The content status.
  * @property {boolean} isPdp - The product detail page flag.
  * @property {number} idleTime - The idle time in milliseconds.
  * @property {InteractionEvent[]} clickEvents - The click events array.
@@ -31,6 +32,7 @@ export class Config {
   public static projectId: string;
   public static contentServingId: string;
   public static contentId: string;
+  public static contentStatus: string;
   public static isPdp: boolean;
   public static idleTime: number;
   public static clickEvents: InteractionEvent[];
