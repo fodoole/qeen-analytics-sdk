@@ -32,8 +32,6 @@ app.use('/contentconfig', (req, res) => {
 
     try {
       config = JSON.parse(data);
-      config.requestUrl = pageUrl;
-      console.log(`Request URL: ${pageUrl}`);
     } catch (parseError) {
       console.error(`Error parsing JSON: ${parseError.message}`);
       res.status(500).send('Server error');
@@ -45,14 +43,16 @@ app.use('/contentconfig', (req, res) => {
     if (pageUrl && (pageUrl.includes('/products/')) && (pageUrl.includes('48') || pageUrl.includes('49'))) {
       config.isPdp = true;
       config.contentId = "-";
-      config.contentServingId = "123654789";
+      config.contentServingId = "1236547890123456";
+      config.contentStatus = "";
       config.rawContentSelectors = [];
     }
     // Page URL is on the product page
     else if (pageUrl && (pageUrl.includes('/products/'))) {
       config.isPdp = true;
-      config.contentId = "optmised";
-      config.contentServingId = "123654789";
+      config.contentId = "optimised";
+      config.contentServingId = "1236547890123456";
+      config.contentStatus = "[SET_VIA_SERVER_TEMPLATE]";
       config.rawContentSelectors = [
         {
           "uid": "1",
@@ -71,6 +71,7 @@ app.use('/contentconfig', (req, res) => {
       config.isPdp = false;
       config.contentId = "-";
       config.contentServingId = "0";
+      config.contentStatus = "";
       config.rawContentSelectors = [];
     }
 

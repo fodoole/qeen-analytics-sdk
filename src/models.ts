@@ -25,6 +25,7 @@ export class PageAnalyticsEvent {
   public p: string = Config.projectId;
   public csrvid: string = Config.contentServingId;
   public cid: string = Config.contentId;
+  public cs: string = Config.contentStatus;
   public uid: string = State.qeenDeviceId;
   public npdp: boolean = !Config.isPdp;
 
@@ -39,14 +40,14 @@ export class PageAnalyticsEvent {
     this.l = label;
     this.edp = domPath;
 
-    this.pushEvent();
+    this._pushEvent();
   }
 
   /**
    * Push the event to the analytics endpoint.
    * @throws {AnalyticsEndpointError} Throws an error if the analytics endpoint is not set.
    */
-  pushEvent(): void {
+  _pushEvent(): void {
     if (!Config.analyticsEndpoint) {
       throw new AnalyticsEndpointError('Qeen analytics endpoint not set.');
     }
@@ -54,7 +55,7 @@ export class PageAnalyticsEvent {
       throw new InvalidParameterError('Qeen user device ID is required.');
     }
     if (window.location.hash.includes('qeen-dev')) {
-      console.log(this);
+      console.info(this);
     }
 
     const payloadObject = {
@@ -105,7 +106,7 @@ export class fetchContentParams {
    * Convert the parameters to a string.
    * @returns {string} The stringified parameters.
    */
-  toString(): string {
+  _toString(): string {
     return this.params.toString();
   }
 }
@@ -113,10 +114,12 @@ export class fetchContentParams {
 /**
  * @interface ContentResponse
  * @property {string} qeenDeviceId - The Qeen device ID.
+ * @property {string} requestUrl - The request URL.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
  * @property {string} contentServingId - The content serving ID.
  * @property {string} contentId - The content ID.
+ * @property {string} contentStatus - The content status.
  * @property {boolean} isPdp - The product detail page flag.
  * @property {number} idleTime - The idle time in milliseconds.
  * @property {any[]} rawContentSelectors - The raw content selectors.
@@ -124,11 +127,13 @@ export class fetchContentParams {
  */
 export interface ContentResponse {
   qeenDeviceId: string;
+  requestUrl: string;
   analyticsEndpoint: string;
   projectId: string;
   idleTime: number;
   contentServingId: string;
   contentId: string;
+  contentStatus: string;
   isPdp: boolean;
   rawContentSelectors: any[];
   contentSelectors: Object;
@@ -138,18 +143,18 @@ export interface ContentResponse {
  * Structure for interaction events (i.e. clicks, scrolls).
  * @class InteractionEvent
  * @param {string} label - The label of the event.
- * @param {string} value - The selector to bind the event to.
+ * @param {string} selector - The selector to bind the event to.
  * @throws {InvalidParameterError} Throws an error if the provided parameters are invalid.
  */
 export class InteractionEvent {
   public label: string;
-  public value: string;
+  public selector: string;
 
-  constructor(label: string, value: string) {
-    if (!label || !value) {
-      throw new InvalidParameterError('Label and value are required for interaction events.');
+  constructor(label: string, selector: string) {
+    if (!label || !selector) {
+      throw new InvalidParameterError('Label and selector are required for interaction events.');
     }
     this.label = label;
-    this.value = value;
+    this.selector = selector;
   }
 }

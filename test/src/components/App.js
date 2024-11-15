@@ -16,7 +16,7 @@ function AnalyticsWrapper({ children }) {
   const analyticsEndpoint = 'http://localhost:8080/log';
 
   useEffect(() => {
-    // qeen.fetchQeenContent();
+    // qeen.fetchQeenContent('dev');
 
     if (isPdp && parseInt(location.pathname.split('/').pop()) % 2 === 1) {
       qeen.setContentServed();
@@ -26,10 +26,12 @@ function AnalyticsWrapper({ children }) {
   
     qeen.initPageSession({
       qeenDeviceId: 'dev',
+      requestUrl: window.location.href,
       analyticsEndpoint: analyticsEndpoint,
       projectId: '123',
       contentServingId: isPdp ? String(qeen.randInt()) : '0',
       contentId: isPdp ? 'optimised' : '-',
+      contentStatus: '[SET_VIA_SERVER_TEMPLATE]',
       isPdp: isPdp,
       idleTime: 60_000,
     });

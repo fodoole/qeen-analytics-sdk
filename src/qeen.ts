@@ -3,7 +3,7 @@
  * @description The main script for Qeen Analytics SDK.
  */
 
-import { fetchContent, initPageSession, setContentServed, resetContentServed } from './sessionManager';
+import { fetchContent, initPageSession, setContentServed, resetContentServed, sendContentServed } from './sessionManager';
 import { Config, State } from './config';
 import { bindClickEvents, bindScrollEvents, sendCheckoutEvent } from './pageEvents';
 import { randInt } from './utils';
@@ -31,6 +31,7 @@ window.qeen.bindScrollEvents = bindScrollEvents;
 window.qeen.sendCheckoutEvent = sendCheckoutEvent;
 window.qeen.setContentServed = setContentServed;
 window.qeen.resetContentServed = resetContentServed;
+window.qeen.sendContentServedEvent = sendContentServed;
 window.qeen.randInt = randInt;
 window.qeen.config = Config;
 window.qeen.state = State;
@@ -42,9 +43,10 @@ window.qeen.URLContainsNoQeenError = URLContainsNoQeenError;
 
 if (window.location.hash.includes('no-qeen')) {
   Config.noQeen = true;
-  console.log(`${window.qeenError = 'Qeen is disabled; URL contains #no-qeen'}`);
-  window.qeen.receiveMessage = receiveMessage;
-  window.addEventListener('message', window.qeen.receiveMessage, false);
+  console.info(`${window.qeenError = 'Qeen is disabled; URL contains #no-qeen'}`);
+  window.addEventListener('message', receiveMessage, false);
 } else {
   Config.noQeen = false;
 }
+
+window.qeen.sdkVersion = '1.0';

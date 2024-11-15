@@ -68,11 +68,11 @@ The `fetchQeenContent` function returns optimized content in the `contentSelecto
 ```js
 {
   label: string,
-  value: string
+  selector: string
 }
 ```
 - **label:** A unique identifier for the event.
-- **value:** A CSS selector or JS path that targets the element(s) to track.
+- **selector:** A CSS selector or JS path that targets the element(s) to track.
 
 ### Content Served Flag
 The `contentServed` flag should be set to `true` after content is fetched and rendered through the `setContentServed` method. This flag is used to determine if content was served to track the effectiveness of the optimized content. If original content is served, set the flag to `false` by calling `resetContentServed`.
@@ -241,24 +241,29 @@ function ChildComponent() {
 
 ## Methods and Properties
 The `qeen` namespace provides the following methods and properties:
-- **`fetchQeenContent(qeenDeviceId: string): Promise<ContentResponse>`**
-   - Fetches optimized content and domain configuration from the API.
+- **`fetchQeenContent(qeenDeviceId: string, overrideFetchURL: string | undefined): Promise<ContentResponse>`**
+   - Fetches optimized content and domain configuration from the API using the provided user device ID.
+   - Accepts an optional parameter to override the live API URL for testing purposes.
    - Returns a promise that resolves to a `ContentResponse` object with the following properties:
      - `qeenDeviceId: string` - The device ID used to fetch content.
+     - `requestUrl: string` - The page URL on which the content fetch was made.
      - `analyticsEndpoint: string` - The endpoint for sending analytics data.
      - `projectId: string` - The project ID for the domain.
      - `contentId: string` - The ID of the optimized content.
      - `contentServingId: string` - The ID of the content serving.
+     - `contentStatus: string` - The status of the content.
      - `isPdp: boolean` - Indicates if the page is a product detail page; determined by the site URL pattern in the site configuration. Please refer to [Definitions of a Product Detail Page](#definitions-of-a-product-detail-page) for more information.
      - `idleTime: number` - The time in milliseconds before a session is considered idle; set in the site configuration.
      - `contentSelectors: { [key: string]: string }` - An object with CSS selectors as keys and optimized content as values.
      - `rawContentSelectors: [ { uid: string, path: string, value: string } ]` - An array of raw content selectors; included for debugging purposes.
 - **`initPageSession(pageData: ContentResponse): void`**
-   - Initializes the page session with the provided `pageData`.
+   - Initializes the page session with the provided `pageData` that was fetched from the API.
 - **`setContentServed(): void`**
    - Sets the content served flag to `true`.
 - **`resetContentServed(): void`**
    - Sets the content served flag to `false`. This method is implicitly called during `fetchQeenContent`.
+- **`sendContentServedEvent(): void`**
+   - Sends a content served event to the analytics endpoint. This should only be called manually if rendering content is delayed after the analytics session is initialized; in most cases, this is not necessary.
 - **`bindClickEvents(events: InteractionEvent | InteractionEvent[]): void`**
    - Binds custom click events to the specified elements.
 - **`bindScrollEvents(events: InteractionEvent | InteractionEvent[]): void`**
@@ -272,7 +277,7 @@ The `qeen` namespace provides the following methods and properties:
 - **`state: Object`**
    - State object for the SDK; exposed for debugging and testing purposes.
 - **`InteractionEvent: Class`**
-   - Class for defining custom click and scroll events; takes a `label` and `value` as parameters.
+   - Class for defining custom click and scroll events; takes a `label` and `selector` as parameters.
 - **`InvalidParameterError: Error`**
    - Error that is thrown when an invalid parameter is passed to a function.
 - **`AnalyticsEndpointError: Error`**
@@ -306,10 +311,10 @@ Refer to the following table for guidelines on rendering content:
 | Case                             | Response                                                                                                                   | Content               | Analytics             |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------- | --------------------- |
 | Optimized Content Exists         | `contentId`: some meaningful value<br />`contentServingId`: some meaningful value<br />`contentSelectors`: non-empty value | Use Optimized Content | Track Analytics       |
-| User In Original Content Group   | `contentId`: `"original"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                                    | Use Original Content  | Track Analytics       |
-| Optimized Content Does Not Exist | `contentId`: `"-"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                                           | Use Original Content  | Track Analytics       |
+| User In Original Content Group   | `contentId`: `"original"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                    | Use Original Content  | Track Analytics       |
+| Optimized Content Does Not Exist | `contentId`: `"-"`<br />`contentServingId`: some meaningful value<br />`contentSelectors`: empty                           | Use Original Content  | Track Analytics       |
 | Non-Product Detail Page          | `isPdp`: `false`<br />`contentId`: `"-"`<br />`contentServingId`: `"0"`<br />`contentSelectors`: empty                     | Use Original Content  | Track Analytics       |
-| URL Contains `#no-qeen`       | `URLContainsNoQeenError`                                                                                                | Use Original Content  | No Analytics Tracking |
+| URL Contains `#no-qeen`          | `URLContainsNoQeenError`                                                                                                   | Use Original Content  | No Analytics Tracking |
 | General Fetch Error              | `ResponseNotOkError`                                                                                                       | Use Original Content  | No Analytics Tracking |
 
 ## Event Tracking
@@ -323,7 +328,7 @@ The SDK automatically tracks the following events:
 
 ### Custom Events
 Instead of enabling general click and scroll tracking, you can now define specific elements to track for clicks and scrolls. These are bound to the SDK using the appropriate methods.
-- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of 500ms.
+- **Click Events:** Use the `bindClickEvents` method to bind custom click events to specific elements on the page. Click events are debounced with a delay of $500\text{ ms}$.
 - **Scroll Events:** Use the `bindScrollEvents` method to bind custom scroll events to specific elements on the page. Each scroll event label may only be fired once per page session.
 - **Checkout Event:** Use the `sendCheckoutEvent` method to send a checkout event with the specified currency and value. Note that this event can only be sent on non-product detail pages and is not debounced.
 

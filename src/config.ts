@@ -9,8 +9,8 @@ import { BindQueueItem } from "./sessionManager";
 /**
  * @constant {string} getContentEndpoint - The endpoint to fetch content.
  */
-export const getContentEndpoint: string = 'https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/sdk/client-config';
-
+// export const getContentEndpoint: string = '';
+export const getContentEndpoint: string | undefined = process.env['GET_CONTENT_ENDPOINT'];
 /**
  * @class Config
  * @description The configuration class for Qeen Analytics SDK.
@@ -18,6 +18,7 @@ export const getContentEndpoint: string = 'https://fodoole-web-analytics-qfan6cr
  * @property {string} projectId - The project ID.
  * @property {string} contentServingId - The content serving ID.
  * @property {string} contentId - The content ID.
+ * @property {string} contentStatus - The content status.
  * @property {boolean} isPdp - The product detail page flag.
  * @property {number} idleTime - The idle time in milliseconds.
  * @property {InteractionEvent[]} clickEvents - The click events array.
@@ -31,6 +32,7 @@ export class Config {
   public static projectId: string;
   public static contentServingId: string;
   public static contentId: string;
+  public static contentStatus: string;
   public static isPdp: boolean;
   public static idleTime: number;
   public static clickEvents: InteractionEvent[];
@@ -43,30 +45,29 @@ export class Config {
 /**
  * @class State
  * @description The state class for Qeen Analytics SDK.
- * @property {number} debounceTime - The debounce time in milliseconds.
  * @property {string} qeenDeviceId - The Qeen device ID.
  * @property {boolean} boundThreadEvents - The bound thread events flag.
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
  * @property {string} pageUrl - The page URL.
+ * @property {string} requestUrl - The request URL.
+ * @property {boolean} contentServedSent - The content served sent flag.
  * @property {string} sessionId - The session ID.
- * @property {boolean} isResetSession - The reset session flag.
  * @property {number} idleTimer - The idle timer.
  * @property {number} lastIdleTime - The last idle time.
  * @property {number} lastTabExitTime - The last tab exit time.
  * @property {Set<InteractionEvent | any>} scrollObservedElements - The set of scroll observed elements.
  */
 export class State {
-  public static readonly debounceTime: number = 500;
-
   public static qeenDeviceId: string = '';
   public static boundThreadEvents: boolean = false;
   public static bindQueue: BindQueueItem[] = [];
   public static contentServed: boolean = false;
   public static pageUrl: string;
-
+  public static requestUrl: string;
+  
+  public static contentServedSent: boolean = false;
   public static sessionId: string;
-  public static isResetSession: boolean;
   public static idleTimer: number;
   public static lastIdleTime: number;
   public static lastTabExitTime: number;
@@ -76,8 +77,8 @@ export class State {
    * Function to reset the state.
    */
   static reset(): void {
+    State.contentServedSent = false;
     State.sessionId = '';
-    State.isResetSession = false;
     State.idleTimer = 0;
     State.lastIdleTime = Date.now();
     State.lastTabExitTime = 0;

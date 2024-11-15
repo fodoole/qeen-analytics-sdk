@@ -155,7 +155,6 @@ describe('E2E/Integration', () => {
     // PAGE_VIEW
     // CONTENT_SERVED
     const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
     const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
     // CLICK
@@ -165,7 +164,7 @@ describe('E2E/Integration', () => {
     const title = await page.$('#desc');
     await page.evaluate(title => title.scrollIntoView(false), title);
 
-    await common.wait(debounceTime + 50);
+    await common.wait(common.debounceTime + 50);
 
     // TAB_SWITCH
     const newPage = await browser.newPage();
@@ -181,11 +180,12 @@ describe('E2E/Integration', () => {
 
     // PAGE_EXIT
     await page.reload();
+    await browser.close();
+    await common.wait(1_000);
 
     // Process the page-level analytics test
-    await browser.close();
     const { eventsMatching, rowsMutated } = await processPageLevelAnalyticsTest(payloads, [sessionId1, sessionId2], startTime, env.BQ_EVENTS_TABLE);
-    expect(eventsMatching).toEqual(rowsMutated);
+    expect(rowsMutated).toEqual(eventsMatching);
   });
 
   it('(Page-Level Analytics/Non-PDP) send page-level analytics (non-PDP) events via the browser and observe these events in the database', async () => {
@@ -202,7 +202,6 @@ describe('E2E/Integration', () => {
 
     // PAGE_VIEW
     const sessionId1 = await page.evaluate(() => window.qeen.state.sessionId);
-    const debounceTime = await page.evaluate(() => window.qeen.state.debounceTime);
     const idleTime = await page.evaluate(() => window.qeen.config.idleTime);
 
     // CLICK
@@ -212,7 +211,7 @@ describe('E2E/Integration', () => {
     const title = await page.$('#description');
     await page.evaluate(title => title.scrollIntoView(false), title);
 
-    await common.wait(debounceTime + 50);
+    await common.wait(common.debounceTime + 50);
 
     // TAB_SWITCH
     const newPage = await browser.newPage();
@@ -233,10 +232,12 @@ describe('E2E/Integration', () => {
     const sessionId3 = await page.evaluate(() => window.qeen.state.sessionId);
     await page.click('#checkout');
     await common.wait(1_500);
+    await page.reload();
+    await browser.close();
+    await common.wait(1_000);
 
     // Process the page-level analytics test
-    await browser.close();
     const { eventsMatching, rowsMutated  } = await processPageLevelAnalyticsTest(payloads, [sessionId1, sessionId2, sessionId3], startTime, env.BQ_EVENTS_TABLE_NPDP);
-    expect(eventsMatching).toEqual(rowsMutated);
+    expect(rowsMutated).toEqual(eventsMatching);
   });
 });

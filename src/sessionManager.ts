@@ -24,15 +24,24 @@ export function resetContentServed(): void {
 }
 
 /**
+ * Function that sends a CONTENT_SERVED event.
+ * @description This function only sends the event once per session, if content is served, the page is a PDP, and the content serving ID is not 0.
+ */
+export function sendContentServed(): void {
+  if (State.contentServedSent || !State.contentServed || !Config.isPdp || Config.contentServingId === '0') {
+    return;
+  }
+  new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
+  State.contentServedSent = true;
+}
+
+/**
   * Function that implements common logic for resetting the session state.
   * This function is called when a session is initialised or reset.
   * @param {string} label The label for the page view event.
   */
 function initResetCommon(label: string): void {
   // Manage state
-  if (label === 'RESET') {
-    State.isResetSession = true;
-  }
   State.sessionId = String(randInt());
 
   // Rebind intersection observer for scroll events
@@ -44,22 +53,20 @@ function initResetCommon(label: string): void {
   // Log the page view and content served events
   function logPageView(): void {
     new PageAnalyticsEvent('PAGE_VIEW', null, label, null);
-    if (State.contentServed && Config.isPdp && Config.contentServingId !== '0') {
-      new PageAnalyticsEvent('CONTENT_SERVED', null, null, null);
-    }
+    sendContentServed();
   }
 
   // Only send the page view event if the page is visible
   if (document.visibilityState === 'visible') {
     logPageView();
-  } else { // If the page is not visible, wait for it to become visible
-    document.addEventListener('visibilitychange', function logVisibleEvent() {
+  } else {
+    // If the page is not visible, wait for it to become visible
+    document.addEventListener('visibilitychange', function (): void {
       State.lastTabExitTime = Date.now();
       if (document.visibilityState === 'visible') {
         logPageView();
-        document.removeEventListener('visibilitychange', logVisibleEvent);
       }
-    });
+    }, { once: true });
   }
 }
 
@@ -68,7 +75,7 @@ function initResetCommon(label: string): void {
  */
 function terminateSession(): void {
   // Trigger any remaining debounced events and send PAGE_EXIT event
-  Debouncer.flushAll();
+  Debouncer._flushAll();
   new PageAnalyticsEvent('PAGE_EXIT', null, null, null);
 }
 
@@ -138,13 +145,14 @@ export function prepareSelectors(rawContent: any[]): any {
 /**
  * Function to fetch Qeen content.
  * @param {string} qeenDeviceId - The user device ID.
+ * @param {string | undefined} overrideFetchURL - The override fetch URL.
  * @returns {Promise<ContentResponse>} The promise object representing the response.
  * @property {Object} contentSelectors - The content selectors and content.
  * @throws {InvalidParameterError} - Throws an error if the user device ID is not provided.
  * @throws {ResponseNotOkError} - Throws an error if the response is not OK.
  * @throws {URLContainsNoQeenError} - Throws an error if the URL contains #no-qeen.
  */
-export async function fetchContent(qeenDeviceId: string): Promise<ContentResponse> {
+export async function fetchContent(qeenDeviceId: string, overrideFetchURL: string | undefined): Promise<ContentResponse> {
   try {
     if (!qeenDeviceId) {
       return Promise.reject(new InvalidParameterError('Qeen user device ID is required.'));
@@ -155,9 +163,9 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
     resetContentServed();
 
     const params: fetchContentParams = new fetchContentParams(qeenDeviceId);
-    const response: Response = await fetch(`${getContentEndpoint}?${params.toString()}`);
+    const response: Response = await fetch(`${overrideFetchURL || getContentEndpoint}?${params._toString()}`);
     if (!response.ok) {
-      return Promise.reject(new ResponseNotOkError(response.status, response.statusText, response.url));
+      return Promise.reject(new ResponseNotOkError(response.status, await response.text(), response.url));
     }
     const data: ContentResponse = await response.json();
     data.qeenDeviceId = qeenDeviceId;
@@ -176,8 +184,8 @@ export async function fetchContent(qeenDeviceId: string): Promise<ContentRespons
  * Function that cleans up stale events that are no longer present on the page.
  */
 function cleanUpStaleEvents(): void {
-  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event.value));
-  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event.value));
+  Config.clickEvents = Config.clickEvents.filter((event: InteractionEvent) => document.querySelector(event.selector));
+  Config.scrollEvents = Config.scrollEvents.filter((event: InteractionEvent) => document.querySelector(event.selector));
 }
 
 /**
@@ -200,7 +208,7 @@ export class BindQueueItem {
 
 /**
  * Function that initializes the Qeen Analytics SDK.
- * @param {any} config - The configuration object for the Qeen Analytics SDK.
+ * @param {ContentResponse} config - The configuration object for the Qeen Analytics SDK.
  */
 export function initPageSession(config: ContentResponse): void {
   if (Config.noQeen) {
@@ -217,12 +225,14 @@ export function initPageSession(config: ContentResponse): void {
 
   State.qeenDeviceId = config.qeenDeviceId;
   State.pageUrl = window.location.href;
+  State.requestUrl = config.requestUrl;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
   Config.projectId = config.projectId || '0';
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
+  Config.contentStatus = config.contentStatus || '';
   Config.isPdp = config.isPdp || false;
-  Config.idleTime = limit(config.idleTime, 60_000, 599_000, 300_000);
+  Config.idleTime = limit(config.idleTime, 60_000, 599_000) || 300_000;
 
   // Ensure interaction events don't leak through different pages
   Config.clickEvents = Config.clickEvents || [];
