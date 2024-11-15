@@ -46,7 +46,7 @@ const Category = () => {
             xl={3}
             style={{ marginBottom: "20px" }}
           >
-            <ItemCard item={item} />
+            <ItemCard item={item}/>
           </Col>
         ))}
       </Row>

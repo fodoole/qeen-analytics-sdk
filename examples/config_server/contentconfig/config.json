@@ -1,4 +1,5 @@
 {
+  "requestUrl": "",
   "analyticsEndpoint": "http://localhost:8080/log",
   "projectId": "123456789",
   "contentServingId": "",

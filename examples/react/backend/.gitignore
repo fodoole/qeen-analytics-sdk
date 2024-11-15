@@ -3,3 +3,6 @@
 
 # Next.js
 /.next
+
+# dockerfile
+/Dockerfile

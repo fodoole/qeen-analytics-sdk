@@ -1,22 +1,29 @@
+import { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import CartModal from "./CartModal";
+
 const ItemCard = ({ item }) => {
+
+  useEffect(() => {
+    qeen.bindClickEvents([new qeen.InteractionEvent("NAME", "#name")]);
+  }, []);
+
   return (
     <Card style={cardStyles}>
       <Card.Img variant="top" src={item.image} style={cardImageStyles} />
       <Card.Body>
         <a
-          href={`/products/${item.id}`}
+          href={`/products/${item.id}#qeen-dev`}
           style={{ textDecoration: "none", color: "black" }}
         >
-          <Card.Title style={cardTitleStyles} id="name">
-            {item.name}
+          <Card.Title id="name" style={cardTitleStyles}>
+          {item.name}
           </Card.Title>
         </a>
         <Card.Text style={{ marginBottom: "5px" }}>{item.price} JD</Card.Text>
         <div className="tags" style={tagsStyles}>
           {item.tags.map((tag) => (
-            <Card.Link href={`/tags/${tag.id}`} key={tag.id}>
+            <Card.Link href={`/tags/${tag.id}#qeen-dev`} key={tag.id}>
               #{tag.tagname}
             </Card.Link>
           ))}

@@ -84,7 +84,7 @@ qeen.fetchQeenContent(qeenDeviceId)
     // Render your page with optimized content
     renderOptimizedContent(pageData);
     // Set the content served flag if optimized content was rendered
-     if (pageData.contentSelectors) {
+    if (pageData.contentSelectors) {
       qeen.setContentServed();
     }
 
@@ -103,47 +103,62 @@ qeen.fetchQeenContent(qeenDeviceId)
 
 #### Example with ReactJS
 ```jsx
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+// PageDataContext.jsx
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-function AnalyticsWrapper({ children }) {
-  const location = useLocation();
-  const [pageData, setPageData] = useState(null); // State to hold fetched data
+const PageDataContext = createContext();
 
-  useEffect(() => {
-    qeen.fetchQeenContent(qeenDeviceId)
-      .then((fetchedPageData) => {
-        // Store the fetched data in state to render in the children
-        setPageData(fetchedPageData);
-
-        // Initialize the page session
-        qeen.initPageSession(fetchedPageData);
-
-        // Bind click events on a higher level in your app
-        qeen.bindClickEvents(new qeen.InteractionEvent('CLICK_LINK', '.nav'));
-      })
-      .catch((error) => {
-        // Signal to children that no optimized content is available
-        setPageData(null);
-      });
-  }, [location]);
-
-  // Clone the children with the fetched data as a new prop
-  const childrenWithProps = React.Children.map(children, child => 
-    React.cloneElement(child, { pageData })
-  );
-
-  return <>{childrenWithProps}</>;
+export function usePageData() {
+  return useContext(PageDataContext);
 }
 
-// Child component that uses the fetched data
-function ChildComponent({ pageData }) {
+export function PageDataProvider({ children }) {
+  const [pageData, setPageData] = useState(null);
+  const [userDeviceId, setUserDeviceId] = useState(() => {
+    // Retrieve userDeviceId from local storage or generate a new one
+    return localStorage.getItem("userDeviceId") || qeen.randInt();
+  });
+  const PageUrl = window.location.href;
   useEffect(() => {
-    // Set the content served flag; ideally this should correlate to successful rendering of optimized content
-    if (pageData.contentSelectors) {
-      qeen.setContentServed();
-    }
+    localStorage.setItem("userDeviceId", userDeviceId);
 
+    // Fetch optmized content from localhost in Demo app
+    qeen
+      .fetchQeenContent(userDeviceId)
+      .then((fetchedPageData) => {
+        setPageData(fetchedPageData);
+      })
+      .catch((error) => {
+        setPageData(null);
+        console.info(error);
+      });
+  }, [PageUrl]);
+
+  return (
+    <PageDataContext.Provider value={{ pageData }}>
+      {children}
+    </PageDataContext.Provider>
+  );
+}
+```
+```jsx
+// Usage in your app (App.jsx)
+import { PageDataProvider } from './components/PageDataContext'; // Import the provider
+
+function App() {
+  return (
+    <PageDataProvider>
+      <Routes>
+          {/* Your routes and components */}
+      </Routes>
+    </PageDataProvider>
+  );
+}
+```
+```jsx
+// Usage in Child component that uses the binding for events
+function ChildComponent() {
+  useEffect(() => {
     // Bind custom click and scroll events in the child component
     qeen.bindClickEvents(
       [
@@ -151,7 +166,7 @@ function ChildComponent({ pageData }) {
         new qeen.InteractionEvent('PRODUCT_ZOOM', '.product-image')
       ]
     );
-
+  
     qeen.bindScrollEvents(
       [
         new qeen.InteractionEvent('SCROLL_TITLE', '.product-title'),
@@ -160,32 +175,68 @@ function ChildComponent({ pageData }) {
     );
   }, []);
 
+  return ();
+};
+```
+```jsx
+  // Usage in Child component that uses the fetched data
   // Use the pageData prop as needed
+  import { usePageData } from "./PageDataContext"; // Import the custom hook
+  const { pageData, loading } = usePageData(); // Use the context
+
+  // Render Original Content or qeen Content
+  useEffect(() => {
+    if (render) {
+      try {
+        setValues({
+          name: pageData.contentSelectors["elementSelector"] ?? 'originalValue',
+          description:
+            pageData.contentSelectors["elementSelector"] ?? 'originalValue',
+        });
+      } catch (e) {
+        console.info(e);
+        setValues({
+          name: 'originalValue',
+          description: 'originalValue',
+        });
+      }
+      // To check rendering values.
+      setServed(true);
+
+      // Bind custom click and scroll events in the child component
+      qeen.bindClickEvents([new qeen.InteractionEvent("NAME", "#name")]);
+
+      qeen.bindScrollEvents([
+        new qeen.InteractionEvent("DESCRIPTION", "#description"),
+      ]);
+    }
+  }, [render]);
+
+  // Check Rendered Content
+  useEffect(() => {
+    if (served) {
+      // Initialize The Session
+      qeen.initPageSession(pageData);
+      if (
+        // Check if it was succesfully rendered
+        values["elementSelector"] != 'originalValue' &&
+        values["elementSelector"] != 'originalValue'
+      ) {
+        qeen.setContentServed();
+      } else {
+        qeen.resetContentServed();
+      }
+    }
+  }, [served]);
+
   return (
     <div>
       <h2>Child Component</h2>
-      {pageData ? (
         <div>
-          {/* Render something based on pageData */}
-          <p>Page data loaded</p>
+          {pageData?.contentSelectors?.["elementSelector"] || "originalValue"}
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
     </div>
   );
-}
-
-// Usage in your app
-function App() {
-  return (
-    <Router>
-      <AnalyticsWrapper>
-        {/* Your routes and components */}
-      </AnalyticsWrapper>
-    </Router>
-  );
-}
 ```
 
 ## Methods and Properties
