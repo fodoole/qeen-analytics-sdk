@@ -26,6 +26,7 @@ export class PageAnalyticsEvent {
   public csrvid: string = Config.contentServingId;
   public cid: string = Config.contentId;
   public cs: string = Config.contentStatus;
+  public prid: string = Config.productId;
   public uid: string = State.qeenDeviceId;
   public npdp: boolean = !Config.isPdp;
 
@@ -120,6 +121,7 @@ export class fetchContentParams {
  * @property {string} contentServingId - The content serving ID.
  * @property {string} contentId - The content ID.
  * @property {string} contentStatus - The content status.
+ * @property {string} productId - The product ID.
  * @property {boolean} isPdp - The product detail page flag.
  * @property {number} idleTime - The idle time in milliseconds.
  * @property {any[]} rawContentSelectors - The raw content selectors.
@@ -134,6 +136,7 @@ export interface ContentResponse {
   contentServingId: string;
   contentId: string;
   contentStatus: string;
+  productId: string;
   isPdp: boolean;
   rawContentSelectors: any[];
   contentSelectors: Object;
