@@ -231,6 +231,7 @@ export function initPageSession(config: ContentResponse): void {
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.contentStatus = config.contentStatus || '';
+  Config.productId = config.productId || '-';
   Config.isPdp = config.isPdp || false;
   Config.idleTime = limit(config.idleTime, 60_000, 599_000) || 300_000;
 
