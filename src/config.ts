@@ -16,6 +16,7 @@ export const getContentEndpoint: string | undefined = process.env['GET_CONTENT_E
  * @description The configuration class for Qeen Analytics SDK.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
+ * @property {string} websiteId - The website ID.
  * @property {string} contentServingId - The content serving ID.
  * @property {string} contentId - The content ID.
  * @property {string} contentStatus - The content status.
@@ -30,6 +31,7 @@ export const getContentEndpoint: string | undefined = process.env['GET_CONTENT_E
 export class Config {
   public static analyticsEndpoint: string;
   public static projectId: string;
+  public static websiteId: string;
   public static contentServingId: string;
   public static contentId: string;
   public static contentStatus: string;
