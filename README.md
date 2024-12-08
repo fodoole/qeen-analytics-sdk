@@ -250,6 +250,7 @@ The `qeen` namespace provides the following methods and properties:
      - `analyticsEndpoint: string` - The endpoint for sending analytics data.
      - `projectId: string` - The project ID for the domain.
      - `productId: string` - The product ID.
+     - `websiteId: string` - The website ID for the domain.
      - `contentId: string` - The ID of the optimized content.
      - `contentServingId: string` - The ID of the content serving.
      - `contentStatus: string` - The status of the content.

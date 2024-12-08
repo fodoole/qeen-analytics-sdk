@@ -23,6 +23,7 @@ export class PageAnalyticsEvent {
   public ua: string = navigator.userAgent;
   public r: string = document.referrer;
   public p: string = Config.projectId;
+  public wid: string = Config.websiteId;
   public csrvid: string = Config.contentServingId;
   public cid: string = Config.contentId;
   public cs: string = Config.contentStatus;
@@ -118,6 +119,7 @@ export class fetchContentParams {
  * @property {string} requestUrl - The request URL.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
+ * @property {string} websiteId - The website ID.
  * @property {string} contentServingId - The content serving ID.
  * @property {string} contentId - The content ID.
  * @property {string} contentStatus - The content status.
@@ -132,6 +134,7 @@ export interface ContentResponse {
   requestUrl: string;
   analyticsEndpoint: string;
   projectId: string;
+  websiteId: string;
   idleTime: number;
   contentServingId: string;
   contentId: string;
