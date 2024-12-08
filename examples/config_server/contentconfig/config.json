@@ -6,6 +6,7 @@
   "contentServingId": "",
   "contentId": "",
   "contentStatus": "",
+  "productId": "123456789",
   "idleTime": 300000,
   "isPdp": "",
   "rawContentSelectors": [],
