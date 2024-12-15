@@ -1,6 +1,6 @@
 /**
  * @file config.ts
- * @description The configuration objects for Qeen Analytics SDK.
+ * @description The configuration objects for qeen Core SDK.
  */
 
 import { InteractionEvent } from "./models";
@@ -13,7 +13,7 @@ import { BindQueueItem } from "./sessionManager";
 export const getContentEndpoint: string | undefined = process.env['GET_CONTENT_ENDPOINT'];
 /**
  * @class Config
- * @description The configuration class for Qeen Analytics SDK.
+ * @description The configuration class for qeen Core SDK.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
  * @property {string} websiteId - The website ID.
@@ -48,8 +48,8 @@ export class Config {
 
 /**
  * @class State
- * @description The state class for Qeen Analytics SDK.
- * @property {string} qeenDeviceId - The Qeen device ID.
+ * @description The state class for qeen Core SDK.
+ * @property {string} qeenDeviceId - The qeen device ID.
  * @property {boolean} boundThreadEvents - The bound thread events flag.
  * @property {BindQueueItem[]} bindQueue - The bind queue.
  * @property {boolean} contentServed - The content served flag.
