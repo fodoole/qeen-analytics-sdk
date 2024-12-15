@@ -227,8 +227,8 @@ export function initPageSession(config: ContentResponse): void {
   State.pageUrl = window.location.href;
   State.requestUrl = config.requestUrl;
   Config.analyticsEndpoint = config.analyticsEndpoint || '';
-  Config.projectId = config.projectId || '0';
-  Config.websiteId = config.websiteId || '0';
+  Config.projectId = config.projectId || '-';
+  Config.websiteId = config.websiteId || '-';
   Config.contentServingId = config.contentServingId || '0';
   Config.contentId = config.contentId || '-';
   Config.contentStatus = config.contentStatus || '';
