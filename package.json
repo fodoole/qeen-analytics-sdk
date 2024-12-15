@@ -1,7 +1,7 @@
 {
   "name": "qeen-analytics-sdk",
   "version": "1.0.0",
-  "description": "Qeen Analytics SDK",
+  "description": "qeen Core SDK",
   "main": "qeen.ts",
   "scripts": {
     "test": "npx jest test --watchAll=false --testTimeout=90000 --verbose --maxWorkers=1",

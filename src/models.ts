@@ -1,6 +1,6 @@
 /**
  * @file models.ts
- * @description The models for Qeen Analytics SDK.
+ * @description The models for qeen Core SDK.
  */
 
 import { Config, State } from './config';
@@ -51,10 +51,10 @@ export class PageAnalyticsEvent {
    */
   _pushEvent(): void {
     if (!Config.analyticsEndpoint) {
-      throw new AnalyticsEndpointError('Qeen analytics endpoint not set.');
+      throw new AnalyticsEndpointError('qeen analytics endpoint not set.');
     }
     if (!State.qeenDeviceId) {
-      throw new InvalidParameterError('Qeen user device ID is required.');
+      throw new InvalidParameterError('qeen user device ID is required.');
     }
     if (window.location.hash.includes('qeen-dev')) {
       console.info(this);
@@ -71,13 +71,13 @@ export class PageAnalyticsEvent {
 /**
  * Class that handles the parameters for fetching content.
  * @class fetchContentParams
- * @param {string} qeenDeviceId - The Qeen device ID.
+ * @param {string} qeenDeviceId - The qeen device ID.
  * @property {string} pageUrl - The URL of the page.
  * @property {string} referrerUrl - The URL of the referrer.
  * @property {string} locale - The locale of the user.
  * @property {string} langCode - The language code of the page.
  * @property {string} timezone - The timezone of the user.
- * @property {string} userDeviceId - The Qeen device ID.
+ * @property {string} userDeviceId - The qeen device ID.
  * @property {URLSearchParams} params - The URL search parameters.
  * @method toString - Convert the parameters to a string.
  */
@@ -115,7 +115,7 @@ export class fetchContentParams {
 
 /**
  * @interface ContentResponse
- * @property {string} qeenDeviceId - The Qeen device ID.
+ * @property {string} qeenDeviceId - The qeen device ID.
  * @property {string} requestUrl - The request URL.
  * @property {string} analyticsEndpoint - The endpoint for the analytics server.
  * @property {string} projectId - The project ID.
